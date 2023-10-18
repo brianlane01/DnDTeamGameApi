@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\DnDTeamGame.WebApi\DnDTeamGame.WebApi.csproj" />
+    <ProjectReference Include="..\DnDTeamGame.Services\DnDTeamGame.Services.csproj" />
+    <ProjectReference Include="..\DnDTeamGame.Data\DnDTeamGame.Data.csproj" />
+    <ProjectReference Include="..\DnDTeamGame.Models\DnDTeamGame.Models.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

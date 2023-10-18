@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnDTeamGame.Data", "DnDTeamGame.Data\DnDTeamGame.Data.csproj", "{615D8E82-B0A3-42E7-BC01-39A1DBBBFDB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnDTeamGame.Models", "DnDTeamGame.Models\DnDTeamGame.Models.csproj", "{C4EE478D-4CE9-4DA5-9257-B784977523D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnDTeamGame.Services", "DnDTeamGame.Services\DnDTeamGame.Services.csproj", "{48F9C72C-5392-4216-934A-6917DE3BC0FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnDTeamGame.UI", "DnDTeamGame.UI\DnDTeamGame.UI.csproj", "{93E48586-30FF-42C5-8354-266DB9F19491}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnDTeamGame.WebApi", "DnDTeamGame.WebApi\DnDTeamGame.WebApi.csproj", "{4E99E7FD-B9EC-450C-8EEA-7590AB4E4323}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{615D8E82-B0A3-42E7-BC01-39A1DBBBFDB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{615D8E82-B0A3-42E7-BC01-39A1DBBBFDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{615D8E82-B0A3-42E7-BC01-39A1DBBBFDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{615D8E82-B0A3-42E7-BC01-39A1DBBBFDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4EE478D-4CE9-4DA5-9257-B784977523D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4EE478D-4CE9-4DA5-9257-B784977523D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4EE478D-4CE9-4DA5-9257-B784977523D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4EE478D-4CE9-4DA5-9257-B784977523D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F9C72C-5392-4216-934A-6917DE3BC0FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F9C72C-5392-4216-934A-6917DE3BC0FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F9C72C-5392-4216-934A-6917DE3BC0FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F9C72C-5392-4216-934A-6917DE3BC0FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93E48586-30FF-42C5-8354-266DB9F19491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93E48586-30FF-42C5-8354-266DB9F19491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93E48586-30FF-42C5-8354-266DB9F19491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93E48586-30FF-42C5-8354-266DB9F19491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E99E7FD-B9EC-450C-8EEA-7590AB4E4323}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E99E7FD-B9EC-450C-8EEA-7590AB4E4323}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E99E7FD-B9EC-450C-8EEA-7590AB4E4323}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E99E7FD-B9EC-450C-8EEA-7590AB4E4323}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
