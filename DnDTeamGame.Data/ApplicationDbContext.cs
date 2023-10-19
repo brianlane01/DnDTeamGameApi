@@ -9,7 +9,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
-    
+
+    public DbSet<VehicleEntity> Vehicles { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
