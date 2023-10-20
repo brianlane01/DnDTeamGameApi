@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DnDTeamGame.Data.Entities
 {
+    
+
     public class VehicleEntity
     {
         [Key]
@@ -33,9 +33,19 @@ namespace DnDTeamGame.Data.Entities
         [Required]
         public double VehicleHealth { get; set; }
 
-        [Required]
-        [ForeignKey(nameof(CharacterId))]
-        public int CharacterId { get; set; }
-        public CharacterEntity Character { get; set; } = null!
+        public ICollection<CharacterEntity> CharacterList { get; set; }
+        public VehicleEntity()
+        {
+            CharacterList = new HashSet<CharacterEntity>();
+        }
+
     }
 }
+
+
+
+
+
+
+
+
