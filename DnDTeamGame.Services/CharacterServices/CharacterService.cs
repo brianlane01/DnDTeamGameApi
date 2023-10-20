@@ -70,7 +70,9 @@ public class CharacterService : ICharacterService
             CharacterHealth = entity.CharacterHealth,
             CharacterBaseAttackDamage = entity.CharacterBaseAttackDamage,
             CharacterBaseDefense = entity.CharacterBaseDefense,
-            CharacterDescription = entity.CharacterDescription
+            CharacterDescription = entity.CharacterDescription, 
+            HairColorName = entity.HairColor.HairColorName,
+            AbilityName = AbilitiesNameList((entity.AbilitiesList).ToList())
         };
 
         return response;
@@ -144,6 +146,17 @@ public class CharacterService : ICharacterService
         };
     }
 
+    public List<string> AbilitiesNameList(List<AbilityEntity> abilities)
+    {
+        List<string> ListToReturn = new List<string>();
+        foreach( var ability in abilities)
+        {
+            ListToReturn.Add(ability.AbilityName);
+        }
+
+        return ListToReturn;
+        
+    }
     public void AddAbilityToCharacter(List<int> abilityIds, int characterId)
     {
         var newCharacter = _dbContext.Characters.Include(c => c.AbilitiesList).Single(c => c.CharacterId == characterId);
