@@ -6,6 +6,7 @@ using DnDTeamGame.Models.TokenModels;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
 
 namespace DnDTeamGame.Services.TokenServices
 {
@@ -84,8 +85,17 @@ namespace DnDTeamGame.Services.TokenServices
 
         private SecurityTokenDescriptor GetTokenDescriptor(List<Claim> claims)
         {
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
-            var secret = new SymmetricSecurityKey(key);
+            var newKeyBytes = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(newKeyBytes);
+            }
+            string newKeyBase64 = Convert.ToBase64String(newKeyBytes);
+
+            _configuration["Jwt:Key"] = newKeyBase64;
+
+            // var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
+            var secret = new SymmetricSecurityKey(newKeyBytes);
             var signingCredentials = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
 
             SecurityTokenDescriptor tokenDescriptor = new()
