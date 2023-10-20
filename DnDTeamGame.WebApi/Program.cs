@@ -2,6 +2,7 @@ using DnDTeamGame.Data;
 using DnDTeamGame.Data.Entities;
 using DnDTeamGame.Services.UserServices;
 using DnDTeamGame.Services.TokenServices;
+using DnDTeamGame.Services.CharacterServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DnDTeamGame.Services.MapServices;
+using DnDTeamGame.Services.VehicleServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +31,12 @@ builder.Services.AddDefaultIdentity<UserEntity>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
 builder.Services.AddScoped<IMapGenerator, MapGenerator>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
+
+builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
