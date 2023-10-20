@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnDTeamGame.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231018155452_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231018193344_initialcreate")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
