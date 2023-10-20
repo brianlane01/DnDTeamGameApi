@@ -13,5 +13,8 @@ namespace DnDTeamGame.Data.Entities
         
         [Required]
         public DateTime DateCreated { get; set; }
+
+        public virtual List<GameEntity> Games {get; set;} = new List<GameEntity>();
+
     }
 }
