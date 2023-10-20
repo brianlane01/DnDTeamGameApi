@@ -397,6 +397,7 @@ namespace DnDTeamGame.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehicleId"));
 
+
                     b.Property<string>("VehicleAbility")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -431,6 +432,8 @@ namespace DnDTeamGame.Data.Migrations
                     b.ToTable("Vehicles");
                 });
 
+
+
             modelBuilder.Entity("DnDTeamGame.Data.Entities.WeaponEntity", b =>
                 {
                     b.Property<int>("WeaponId")
@@ -447,6 +450,7 @@ namespace DnDTeamGame.Data.Migrations
 
                     b.ToTable("Weapons");
                 });
+
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
                 {

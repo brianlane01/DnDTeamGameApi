@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DnDTeamGame.Data.Entities
 {
     
+
     public class VehicleEntity
     {
         [Key]
@@ -30,6 +32,7 @@ namespace DnDTeamGame.Data.Entities
 
         [Required]
         public double VehicleHealth { get; set; }
+
         public ICollection<CharacterEntity> CharacterList { get; set; }
         public VehicleEntity()
         {
@@ -38,6 +41,7 @@ namespace DnDTeamGame.Data.Entities
 
     }
 }
+
 
 
 
