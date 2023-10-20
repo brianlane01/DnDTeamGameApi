@@ -13,10 +13,5 @@ namespace DnDTeamGame.Data.Entities
         [Required]
         public string CharacterClassName { get; set; } = string.Empty;
 
-        public ICollection<CharacterEntity> CharacterList { get; set; }
-        public CharacterClassEntity()
-        {
-            CharacterList = new HashSet<CharacterEntity>();
-        }
     }
 }

@@ -12,10 +12,5 @@ namespace DnDTeamGame.Data.Entities
         [Required]
         public string BodyTypeName { get; set; } = string.Empty;
 
-        public ICollection<CharacterEntity> CharacterList { get; set; }
-        public BodyTypeEntity()
-        {
-            CharacterList = new HashSet<CharacterEntity>();
-        }
     }
 }

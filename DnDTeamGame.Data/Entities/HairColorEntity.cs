@@ -13,10 +13,5 @@ namespace DnDTeamGame.Data.Entities
         [Required]
         public string HairColorName { get; set; }
 
-        public ICollection<CharacterEntity> CharacterList { get; set; }
-        public HairColorEntity()
-        {
-            CharacterList = new HashSet<CharacterEntity>();
-        }
     }
 }
