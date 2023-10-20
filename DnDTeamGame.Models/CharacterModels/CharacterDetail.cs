@@ -8,6 +8,11 @@ namespace DnDTeamGame.Models.CharacterModels
         public int CharacterHealth { get; set; }
         public double CharacterBaseAttackDamage { get; set; }
         public int CharacterBaseDefense { get; set; }
+
+        public DateTimeOffset DateCreated { get; set; }
+        public DateTimeOffset? DateModified { get; set; }
+
+
         public  List<string> AbilityName { get; set; }
         public string VehicleName  { get; set; }
         public List<string> WeaponName { get; set; }

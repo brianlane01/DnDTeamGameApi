@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+// using Microsoft.AspNetCore.Mvc;
+// using Microsoft.AspNetCore.Authorization;
 
 namespace DnDTeamGame.Services.CharacterServices;
 
@@ -16,18 +16,18 @@ public class CharacterService : ICharacterService
     private readonly ApplicationDbContext _dbContext;
     private readonly int _userId;
     public CharacterService(
-        UserManager<UserEntity> userManager,
-                    SignInManager<UserEntity> signInManager,
+        // UserManager<UserEntity> userManager,
+        //             SignInManager<UserEntity> signInManager,
                     ApplicationDbContext dbContext)
     {
-        var currentUser = signInManager.Context.User;
-        var userIdClaim = userManager.GetUserId(currentUser);
-        var hasValidId = int.TryParse(userIdClaim, out _userId);
+        // var currentUser = signInManager.Context.User;
+        // var userIdClaim = userManager.GetUserId(currentUser);
+        // var hasValidId = int.TryParse(userIdClaim, out _userId);
 
-        if (hasValidId == false)
-        {
-            throw new Exception("Attempted to build CharacterService without Id Claim.");
-        }
+        // if (hasValidId == false)
+        // {
+        //     throw new Exception("Attempted to build CharacterService without Id Claim.");
+        // }
 
         _dbContext = dbContext;
     }
@@ -36,58 +36,85 @@ public class CharacterService : ICharacterService
     {
         CharacterEntity entity = new CharacterEntity()
         {
-            UserId = _userId,
+            UserId = request.UserId,
             CharacterName = request.CharacterName,
             CharacterDescription = request.CharacterDescription,
             CharacterHealth = request.CharacterHealth,
             CharacterBaseAttackDamage = request.CharacterBaseAttackDamage,
             CharacterBaseDefense = request.CharacterBaseDefense,
-            // AbilityId = request.AbilityId,
-            // WeaponId = request.WeaponId,
             HairColorId = request.HairColorId,
             HairStyleId = request.HairStyleId,
             BodyTypeId = request.BodyTypeId,
-            CharacterClassId = request.CharacterClassId
-            // ArmourId = request.ArmourId,
-            // ConsumableId = request.ConsumableId,
-            // VehicleId = request.VehicleId
+            CharacterClassId = request.CharacterClassId,
+            DateCreated = DateTimeOffset.Now
+            // AbilityList = request.AbilityList,
+            // ArmourList = request.ArmourList,
+            // ConsumableList = request.ConsumableList,
+            // VehicleList = request.VehicleList,
+            // WeaponList = request.WeaponList
         };
 
         var newCharacterCreated = _dbContext.Characters.Add(entity);
         var characterAdded = await _dbContext.SaveChangesAsync();
 
-        // AddAbilityToCharacter(request.AbilityList, newCharacterCreated.CharacterId);
-        // AddArmourToCharacter(request.ArmourList, newCharacterCreated.CharacterId);
-        // AddConsumablesToCharacter(request.ConsumableList, newCharacterCreated.CharacterId);
-        // AddVehiclesToCharacter(request.VehicleList, newCharacterCreated.CharacterId);
-        // AddWeaponsToCharacter(request.WeaponList, newCharacterCreated.CharacterId);
+        AddAbilityToCharacter(request.AbilityList, entity.CharacterId);
+        AddArmourToCharacter(request.ArmourList, entity.CharacterId);
+        AddConsumablesToCharacter(request.ConsumableList, entity.CharacterId);
+        AddVehiclesToCharacter(request.VehicleList, entity.CharacterId);
+        AddWeaponsToCharacter(request.WeaponList, entity.CharacterId);
 
         CharacterDetail response = new()
         {
+            CharacterId = entity.CharacterId,
             CharacterName = entity.CharacterName,
             CharacterHealth = entity.CharacterHealth,
             CharacterBaseAttackDamage = entity.CharacterBaseAttackDamage,
             CharacterBaseDefense = entity.CharacterBaseDefense,
-            CharacterDescription = entity.CharacterDescription,
-            // AbilityId = entity.AbilityId,
-            // WeaponId = entity.WeaponId,
-            // HairColorId = entity.HairColorId,
-            // HairStyleId = entity.HairStyleId,
-            // BodyTypeId = entity.BodyTypeId,
-            // ArmourId = entity.ArmourId,
-            // ConsumableId = entity.ConsumableId,
-            // VehicleId = entity.VehicleId,
-            // CharacterClassId = entity.CharacterClassId
+            CharacterDescription = entity.CharacterDescription
         };
 
         return response;
 
     }
 
+    public async Task<bool> UpdateCharacterAsync(CharacterUpdate request)
+    {
+        CharacterEntity? entity = await _dbContext.Characters.FindAsync(request.CharacterId);
+
+        // if (entity?.UserId != _userId)
+        // {
+        //     return false;
+        // }
+
+        entity.CharacterName = request.CharacterName;
+        entity.CharacterDescription = request.CharacterDescription;
+        entity.CharacterHealth = request.CharacterHealth;
+        entity.CharacterBaseAttackDamage = request.CharacterBaseAttackDamage;
+        entity.CharacterBaseDefense = request.CharacterBaseDefense;
+        entity.HairColorId = request.HairColorId;
+        entity.HairStyleId = request.HairStyleId;
+        entity.BodyTypeId = request.BodyTypeId;
+        entity.CharacterClassId = request.CharacterClassId;
+
+        //* Save the changes to the database and capture how many rows were updated
+        int numberOfChanges = await _dbContext.SaveChangesAsync();
+
+        //* numberOfChanges is stated to be equal to 1 because only one row is updated
+        return numberOfChanges == 1;
+    }
+
+    public async Task<bool> DeleteCharacterAsync(int characterId)
+    {
+        var characterEntity = await _dbContext.Characters.FindAsync(characterId);
+        if (characterEntity == null)
+            return false;
+        _dbContext.Characters.Remove(characterEntity);
+        return await _dbContext.SaveChangesAsync() == 1;
+    }
+
     public async Task<IEnumerable<CharacterListItem>> GetAllCharactersAsync()
     {
         List<CharacterListItem> characters = await _dbContext.Characters
-            .Where(entity => entity.UserId == _userId)
             .Select(entity => new CharacterListItem
             {
                 CharacterId = entity.CharacterId,
@@ -98,6 +125,23 @@ public class CharacterService : ICharacterService
             .ToListAsync();
 
         return characters;
+    }
+
+    public async Task<CharacterDetail?> GetCharacterByIdAsync(int characterId)
+    {
+        CharacterEntity? entity = await _dbContext.Characters
+            .FirstOrDefaultAsync(e => e.CharacterId == characterId);
+
+        return entity is null ? null : new CharacterDetail
+        {
+            CharacterId = entity.CharacterId,
+            CharacterName = entity.CharacterName,
+            CharacterHealth = entity.CharacterHealth,
+            CharacterBaseAttackDamage = entity.CharacterBaseAttackDamage,
+            CharacterBaseDefense = entity.CharacterBaseDefense,
+            CharacterDescription = entity.CharacterDescription,
+            DateCreated = entity.DateCreated
+        };
     }
 
     public void AddAbilityToCharacter(List<int> abilityIds, int characterId)

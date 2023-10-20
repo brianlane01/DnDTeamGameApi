@@ -22,11 +22,11 @@ namespace DnDTeamGame.WebApi.Controllers
         {
             _characterService = characterService;
         }
-    
+
         [HttpPost]
         public async Task<IActionResult> CreateCharacter([FromBody] CharacterCreate request)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -46,6 +46,37 @@ namespace DnDTeamGame.WebApi.Controllers
         {
             var characters = await _characterService.GetAllCharactersAsync();
             return Ok(characters);
+        }
+
+        [HttpGet("{characterId:int}")]
+        public async Task<IActionResult> GetCharacterById([FromRoute] int characterId)
+        {
+            CharacterDetail? detail = await _characterService.GetCharacterByIdAsync(characterId);
+            return detail is not null
+            ? Ok(detail)
+            : NotFound();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCharacterById([FromBody] CharacterUpdate request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return await _characterService.UpdateCharacterAsync(request)
+                ? Ok("Character updated successfully.")
+                : BadRequest("Character could not be found.");
+        }
+
+        //!Delete api/Note/5
+        [HttpDelete("{characterId:int}")]
+        public async Task<IActionResult> DeleteCharacter([FromRoute] int characterId)
+        {
+            return await _characterService.DeleteCharacterAsync(characterId)
+                ? Ok($"Character with the ID: {characterId} was deleted successfully.")
+                : BadRequest($"Character with the ID: {characterId} could not be deleted.");
         }
     }
 }
