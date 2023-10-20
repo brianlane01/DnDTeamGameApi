@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DnDTeamGame.Services.Games;
 using DnDTeamGame.Services.MapServices;
 using DnDTeamGame.Services.VehicleServices;
 
@@ -31,6 +32,7 @@ builder.Services.AddDefaultIdentity<UserEntity>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IGameService, GameService>();
 
 builder.Services.AddScoped<IMapGenerator, MapGenerator>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
@@ -82,7 +84,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key" ?? ""])
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "")
             )
         };
     });

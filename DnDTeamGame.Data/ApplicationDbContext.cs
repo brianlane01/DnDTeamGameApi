@@ -11,6 +11,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 
         : base(options) { }
+
+    
+    public DbSet<GameEntity> Games {get; set;} = null!;
     
     public DbSet<CharacterClassEntity> CharacterClasses {get; set;} = null!;
     public DbSet<WeaponEntity> Weapons {get; set;} = null!;

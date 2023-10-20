@@ -22,6 +22,14 @@ namespace DnDTeamGame.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DnDTeamGame.Data.Entities.GameEntity", b =>
+                {
+                    b.Property<int>("GameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GameId"));
+
 
             modelBuilder.Entity("DnDTeamGame.Data.Entities.MapEntity", b =>
                 {
@@ -241,6 +249,25 @@ namespace DnDTeamGame.Data.Migrations
 
                     b.Property<DateTimeOffset?>("DateModified")
                         .HasColumnType("datetimeoffset");
+
+
+                    b.Property<string>("GameDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("GameName")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GameId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Games");
 
                     b.Property<int>("HairColorId")
                         .HasColumnType("int");
@@ -629,6 +656,10 @@ namespace DnDTeamGame.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DnDTeamGame.Data.Entities.GameEntity", b =>
+                {
+                    b.HasOne("DnDTeamGame.Data.Entities.UserEntity", "Games")
+                        .WithMany("Games")
             modelBuilder.Entity("AbilityEntityCharacterEntity", b =>
                 {
                     b.HasOne("DnDTeamGame.Data.Entities.AbilityEntity", null)
@@ -736,6 +767,7 @@ namespace DnDTeamGame.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Games");
                     b.Navigation("BodyType");
 
                     b.Navigation("CharacterClass");
@@ -798,6 +830,9 @@ namespace DnDTeamGame.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DnDTeamGame.Data.Entities.UserEntity", b =>
+                {
+                    b.Navigation("Games");
             modelBuilder.Entity("DnDTeamGame.Data.Entities.BodyTypeEntity", b =>
                 {
                     b.Navigation("CharacterList");
