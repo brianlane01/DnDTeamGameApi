@@ -22,7 +22,7 @@ namespace DnDTeamGame.Services.VehicleServices
         {
             VehicleEntity entity = new VehicleEntity()
             {
-                CharacterId = request.CharacterId,
+                // CharacterId = request.CharacterId,
                 VehicleName = request.VehicleName,
                 VehicleSpeed = request.VehicleSpeed,
                 VehicleAbility = request.VehicleAbility,
@@ -43,7 +43,7 @@ namespace DnDTeamGame.Services.VehicleServices
             VehicleListItem response = new()
             {
                 VehicleId = entity.VehicleId,
-                CharacterId = entity.CharacterId,
+                // CharacterId = entity.CharacterId,
                 VehicleName = entity.VehicleName,
                 VehicleSpeed = entity.VehicleSpeed,
                 VehicleAbility = entity.VehicleAbility,
@@ -73,7 +73,7 @@ namespace DnDTeamGame.Services.VehicleServices
             .Select(entity => new VehicleListItem
             {
                 VehicleId = entity.VehicleId,
-                CharacterId = entity.CharacterId,
+                // CharacterId = entity.CharacterId,
                 VehicleName = entity.VehicleName,
                 VehicleSpeed = entity.VehicleSpeed,
                 VehicleAbility = entity.VehicleAbility,
