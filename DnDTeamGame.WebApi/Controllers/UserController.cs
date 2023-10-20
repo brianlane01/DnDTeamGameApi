@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using DnDTeamGame.Services.UserServices;
 using DnDTeamGame.Services.TokenServices;
-using DnDTeamGame.Models.UserModels; 
-using DnDTeamGame.Models.TokenModels; 
+using DnDTeamGame.Models.UserModels;
+using DnDTeamGame.Models.TokenModels;
 using DnDTeamGame.Models.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,22 +19,22 @@ namespace DnDTeamGame.WebApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        public UserController (IUserService userService, ITokenService tokenService)
+        public UserController(IUserService userService, ITokenService tokenService)
         {
-            _userService = userService; 
+            _userService = userService;
             _tokenService = tokenService;
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegister model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             var registerResult = await _userService.RegisterUserAsync(model);
-            if(registerResult)
+            if (registerResult)
             {
                 TextResponse response = new("User was registered.");
                 return Ok(response);
@@ -68,19 +68,21 @@ namespace DnDTeamGame.WebApi.Controllers
         [HttpPost("~/api/Token")]
         public async Task<IActionResult> GetToken([FromBody] TokenRequest request)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             TokenResponse? response = await _tokenService.GetTokenAsync(request);
 
-            if(response is null)
+            if (response is null)
             {
                 return BadRequest(new TextResponse("Invalid Username or Password."));
             }
 
             return Ok(response);
         }
+
+
     }
 }

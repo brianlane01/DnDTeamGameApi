@@ -7,7 +7,9 @@ namespace DnDTeamGame.Data;
 
 public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<int>, int>
 {
+    public DbSet<MapEntity> Maps { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+
         : base(options) { }
     
     public DbSet<CharacterClassEntity> CharacterClasses {get; set;} = null!;
@@ -21,9 +23,11 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
     public DbSet<BodyTypeEntity> BodyTypes {get; set;} = null!;
     public DbSet<CharacterEntity> Characters {get; set;} = null!;
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<UserEntity>().ToTable("Users");
     }
 }
+

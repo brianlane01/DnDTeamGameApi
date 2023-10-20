@@ -22,6 +22,45 @@ namespace DnDTeamGame.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+
+            modelBuilder.Entity("DnDTeamGame.Data.Entities.MapEntity", b =>
+                {
+                    b.Property<int>("MapId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MapId"));
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDayTime")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MapDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("MapName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MapType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PrecipitationType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("MapId");
+
+                    b.ToTable("Maps");
+
             modelBuilder.Entity("AbilityEntityCharacterEntity", b =>
                 {
                     b.Property<int>("AbilitiesListAbilityId")
@@ -308,6 +347,7 @@ namespace DnDTeamGame.Data.Migrations
                     b.HasKey("HairStyleId");
 
                     b.ToTable("HairStyles");
+
                 });
 
             modelBuilder.Entity("DnDTeamGame.Data.Entities.UserEntity", b =>
