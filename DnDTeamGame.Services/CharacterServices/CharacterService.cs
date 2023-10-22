@@ -64,20 +64,6 @@ public class CharacterService : ICharacterService
         AddWeaponsToCharacter(request.WeaponList, entity.CharacterId);
 
         CharacterDetail response = await GetCharacterDetailWithAssociatedEntities(entity.CharacterId);
-        // {
-        //     CharacterId = entity.CharacterId,
-        //     CharacterName = entity.CharacterName,
-        //     CharacterHealth = entity.CharacterHealth,
-        //     CharacterBaseAttackDamage = entity.CharacterBaseAttackDamage,
-        //     CharacterBaseDefense = entity.CharacterBaseDefense,
-        //     CharacterDescription = entity.CharacterDescription,
-        //     HairColorName = entity.HairColor.HairColorName,
-        //     AbilityName = entity.AbilitiesList.Select(a => a.AbilityName).ToList(),
-        //     ArmourName = entity.ArmoursList.Select(a => a.ArmourName).ToList(),
-        //     ConsumableName = entity.ConsumablesList.Select(c => c.ConsumableName).ToList(),
-        //     VehicleName = entity.VehiclesList.Select(v => v.VehicleName).ToList(),
-        //     WeaponName = entity.WeaponsList.Select(w => w.WeaponName).ToList()
-        // };
 
         return response;
 
@@ -92,15 +78,19 @@ public class CharacterService : ICharacterService
         //     return false;
         // }
 
-        entity.CharacterName = request.CharacterName;
-        entity.CharacterDescription = request.CharacterDescription;
-        entity.CharacterHealth = request.CharacterHealth;
-        entity.CharacterBaseAttackDamage = request.CharacterBaseAttackDamage;
-        entity.CharacterBaseDefense = request.CharacterBaseDefense;
-        entity.HairColorId = request.HairColorId;
-        entity.HairStyleId = request.HairStyleId;
-        entity.BodyTypeId = request.BodyTypeId;
-        entity.CharacterClassId = request.CharacterClassId;
+            entity.UserId = request.UserId;
+            entity.CharacterName = request.CharacterName;
+            entity.CharacterDescription = request.CharacterDescription;
+            entity.HairColorId = request.HairColorId;
+            entity.HairStyleId = request.HairStyleId;
+            entity.BodyTypeId = request.BodyTypeId;
+            entity.DateModified = DateTimeOffset.Now;
+
+        AddAbilityToCharacter(request.AbilityList, entity.CharacterId);
+        AddArmourToCharacter(request.ArmourList, entity.CharacterId);
+        AddConsumablesToCharacter(request.ConsumableList, entity.CharacterId);
+        AddVehiclesToCharacter(request.VehicleList, entity.CharacterId);
+        AddWeaponsToCharacter(request.WeaponList, entity.CharacterId);    
 
         //* Save the changes to the database and capture how many rows were updated
         int numberOfChanges = await _dbContext.SaveChangesAsync();
