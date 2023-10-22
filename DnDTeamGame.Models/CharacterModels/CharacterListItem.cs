@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations;
+using DnDTeamGame.Data.Entities;
+
 namespace DnDTeamGame.Models.CharacterModels
 {
     public class CharacterListItem

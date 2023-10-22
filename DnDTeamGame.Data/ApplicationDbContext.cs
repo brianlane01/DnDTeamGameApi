@@ -134,7 +134,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 BodyTypeId = 5,
                 BodyTypeName = "BigBoned",
             },
-
+    
             new BodyTypeEntity
             {
                 BodyTypeId = 6,
@@ -157,7 +157,12 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 0,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "25 seconds",
-                SpecialAbilityDescription = "As warriors deal or take damage, their rage grows, allowing them to deliver truly crushing attacks in the heat of battle."
+                SpecialAbilityDescription = "As warriors deal or take damage, their rage grows, allowing them to deliver truly crushing attacks in the heat of battle.",
+                ClassBackstoryForCharacter = "You hail from a long line of noble knights sworn to protect the kingdom. Trained in the art of combat \n" +
+                                            "from a young age, you became a renowned warrior and commander of the royal army. Beneath your stoic \n" +
+                                            "exterior lies a burning desire to uncover the truth about a dark prophecy that foretells the return of \n" +
+                                            "an ancient evil. As the kingdom teeters on the brink of chaos, you decide to take up the sword, determined \n"+
+                                            "to fulfill the family's oath and vanquish the looming threat."
             },
 
             new CharacterClassEntity
@@ -174,7 +179,10 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 0,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "45 seconds",
-                SpecialAbilityDescription = "Hunters tame the beasts of the wild, and those beasts serve in return by assaulting their enemies and shielding them from harm."
+                SpecialAbilityDescription = "Hunters tame the beasts of the wild, and those beasts serve in return by assaulting their enemies and shielding them from harm.",
+                ClassBackstoryForCharacter = " You have become a skilled hunter, hailing from the Elven Woodlands. The connection you have with the natural world and mastery of archery have made you\n" +
+                                            "a renowned protector of the forest. You joins the other heroes, using your keen senses to detect the malevolent forces\n" +
+                                            "threatening the realm. This is not only a quest to safeguard the homeland but also to restore the balance of nature."
             },
 
             new CharacterClassEntity
@@ -191,7 +199,11 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 0,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "20 seconds",
-                SpecialAbilityDescription = "Rogues sneak about the battlefield, hiding from enemies and delivering surprise attacks to the unwary when opportunity arises."
+                SpecialAbilityDescription = "Rogues sneak about the battlefield, hiding from enemies and delivering surprise attacks to the unwary when opportunity arises.",
+                ClassBackstoryForCharacter = " You grew up an orphan on the unforgiving streets of the shadowy city of Rogarth. Your life of \n" +
+                                            "petty theft and cunning escapes changed when you discovered a cryptic map, hinting at the existence of an\n" +
+                                            "artifact that could shift the balance of power in the kingdom. Your past as a rogue makes you an invaluable  \n" +
+                                            "asset in infiltrating dangerous territories, and you are driven to find the artifact and secure the future."
             },
 
             new CharacterClassEntity
@@ -208,7 +220,11 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 0,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "",
-                SpecialAbilityDescription = "By calling upon sheets of ice, columns of flame, and waves of arcane power, mages can effectively attack multiple foes at the same time."
+                SpecialAbilityDescription = "By calling upon sheets of ice, columns of flame, and waves of arcane power, mages can effectively attack multiple foes at the same time.",
+                ClassBackstoryForCharacter = " You have becoma a gifted mage, spending your youth studying the arcane arts in the Tower of Mysteries. \n" +
+                                            "You now possess a unique ability to see glimpses of the future through magic. The visions reveal an imminent \n" +
+                                            "cataclysm that threatens to plunge the world into darkness. To avert this fate, you must harness your powers \n" +
+                                            "and unite with other heroes to unlock the secrets hidden within ancient artifacts, preventing the oncoming disaster."
             },
 
             new CharacterClassEntity
@@ -225,7 +241,10 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 0,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "",
-                SpecialAbilityDescription = "Death knight runeblades are empowered with dark magic; they can expend the power of their runes for vicious attacks."
+                SpecialAbilityDescription = "Death knight runeblades are empowered with dark magic; they can expend the power of their runes for vicious attacks.",
+                ClassBackstoryForCharacter = "You were once a valiant knight, but corruption took hold when you were raised from the dead as a death knight by a malevolent necromancer.\n" +
+                                            "tormented by your past deeds, you now seek redemption. Using your unholy powers are harnessing them for a noble cause:\n" +
+                                            "to vanquish the darkness you once served. Your presence serves as a constant reminder of the thin line between light and shadow."
             },
 
             new CharacterClassEntity
@@ -242,7 +261,10 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 25,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "",
-                SpecialAbilityDescription = "Paladins potent healing abilities can ensure that they and their allies remain in fighting shape."
+                SpecialAbilityDescription = "Paladins potent healing abilities can ensure that they and their allies remain in fighting shape.",
+                ClassBackstoryForCharacter = "A Dawnbringer, a devoted paladin of a divine order, you set out on a quest with a sacred purpose.\n" +
+                                            "Your unwavering faith is guided by visions of an ancient prophecy, which you believes holds the key to thwarting the ancient evil.\n" +
+                                            "Armed with holy magic and a deep sense of duty, You represent the light's beacon in the darkest of times."
             },
 
             new CharacterClassEntity
@@ -259,7 +281,10 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 0,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "20 seconds",
-                SpecialAbilityDescription = "An engineer constructs turrets to help defend and control an area. These devices can pound the ground to damage enemies, disperse healing mist to aid allies, fire off rockets, and more."
+                SpecialAbilityDescription = "An engineer constructs turrets to help defend and control an area. These devices can pound the ground to damage enemies, disperse healing mist to aid allies, fire off rockets, and more.",
+                ClassBackstoryForCharacter = " You have become a brilliant engineer, dedicating your life to inventing ingenious contraptions. The mysterious artifacts \n" +
+                                            "discovered in the ruins of the acients reveal their dark secrets to you. As an inventor, your knowledge \n" +
+                                            "of machinery and gadgets makes you a vital ally in deciphering the ancient devices that hold the power to avert the impending catastrophe."
             },
 
             new CharacterClassEntity
@@ -277,6 +302,10 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "20 seconds",
                 SpecialAbilityDescription = "Life force is a special type of energy that necromancers draw from their enemies. Once theyve collected enough life force, necromancers can activate their Death Shroud, entering a spirit form. Life force can be gathered from certain weapon attacks and especially from deaths that happen near the necromancer.",
+                ClassBackstoryForCharacter = "You have been an outcast, shunned for the mastery over the dark arts of necromancy. Your affinity for \n" +
+                                            "communicating with the spirits of the deceased led you to uncover an ancient curse that has bound restless souls\n" +
+                                            "to the world. Your quest is to break the curse, not only to gain acceptance among the living but also to liberate the \n" +
+                                            " tormented spirits. In the course of the journey, you cross paths with other heroes, forming an unlikely alliance to combat the common threat."
             }
         );
 
@@ -954,6 +983,25 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponDamageAmount = 65,
                 WeaponSplashDamageAmount = 20               
             }
+        );
+
+        modelBuilder.Entity<GameEntity>().HasData(
+            new GameEntity
+            {
+                GameId = 1,
+                GameName = "Into the Heart of Darkness",
+                GameDescription = "In a realm where magic and might coexist, the land teeters on the precipice of darkness.\n" +
+                                    "Unlikely heros must rise up, each from vastly different backgrounds, to embark on a journey\n" +
+                                    "that will determine the fate of their world. These four heroes are on separate paths, yet the \n" +
+                                    "echoes of their destinies are inextricably linked. As they come together, they will unlock the secrets \n" +
+                                    "of ancient artifacts, face unspeakable evils, and unite against a malevolent force that threatens to plunge \n" +
+                                    "the world into darkness. Welcome to a world of magic, valor, cunning, and the unknown. The fate of the realm rests \n" +
+                                    "in your hands. Will you rise to the occasion and uncover the truth behind the Rise of the Ancients",
+
+                DateCreated = DateTimeOffset.Now,
+                UserId = 1 
+            }
+            
         );
     }
 }

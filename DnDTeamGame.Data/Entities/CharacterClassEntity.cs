@@ -44,5 +44,7 @@ namespace DnDTeamGame.Data.Entities
         //* Provides a description of the SpecialAbility
         [Required, MinLength(4), MaxLength(750)]
         public string SpecialAbilityDescription { get; set; }
+
+        public string ClassBackstoryForCharacter { get; set; } = string.Empty;
     }
 }
