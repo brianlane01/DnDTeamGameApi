@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DnDTeamGame.Services.AbilityServices
 {
-    public class AbilityService
+    public class AbilityService : IAbilityService
     {
         
     }

@@ -12,6 +12,14 @@ using System.Text;
 using DnDTeamGame.Services.Games;
 using DnDTeamGame.Services.MapServices;
 using DnDTeamGame.Services.VehicleServices;
+using DnDTeamGame.Services.WeaponServices;
+using DnDTeamGame.Services.AbilityServices;
+using DnDTeamGame.Services.ArmourServices;
+using DnDTeamGame.Services.ConsumableServices;
+using DnDTeamGame.Services.CharacterClassServices;
+using DnDTeamGame.Services.HairColorServices;
+using DnDTeamGame.Services.HairStyleServices;
+using DnDTeamGame.Services.BodyTypeServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,10 +41,15 @@ builder.Services.AddDefaultIdentity<UserEntity>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IGameService, GameService>();
-
+builder.Services.AddScoped<IWeaponService, WeaponService>();
 builder.Services.AddScoped<IMapGenerator, MapGenerator>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
-
+builder.Services.AddScoped<IAbilityService, AbilityService>();
+builder.Services.AddScoped<IArmourService, ArmourService>();
+builder.Services.AddScoped<IConsumableService, ConsumableService>();
+builder.Services.AddScoped<IHairStyleService, HairStyleService>();
+builder.Services.AddScoped<IHairColorService, HairColorService>();
+builder.Services.AddScoped<ICharacterClassService, CharacterClassService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();

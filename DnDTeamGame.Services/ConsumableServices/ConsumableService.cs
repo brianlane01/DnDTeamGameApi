@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DnDTeamGame.Services.ConsumableServices
 {
-    public class ConsumableService
+    public class ConsumableService : IConsumableService
     {
         
     }

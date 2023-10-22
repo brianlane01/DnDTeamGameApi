@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DnDTeamGame.Services.ArmourServices
 {
-    public class ArmourService
+    public class ArmourService : IArmourService
     {
         
     }

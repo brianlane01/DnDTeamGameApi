@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DnDTeamGame.Services.CharacterClassServices
 {
-    public class CharacterClassService
+    public class CharacterClassService : ICharacterClassService
     {
         
     }

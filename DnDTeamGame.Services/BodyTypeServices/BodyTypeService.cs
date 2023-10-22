@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DnDTeamGame.Services.BodyTypeServices
 {
-    public class BodyTypeService
+    public class BodyTypeService : IBodyTypeService
     {
         
     }
