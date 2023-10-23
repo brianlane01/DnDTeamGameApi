@@ -13,8 +13,8 @@ namespace DnDTeamGame.Data.Entities
         [Required, MaxLength(50)]
         public string ConsumableName { get; set; }
 
-        [Required, Range(0, 10)]
-        public double Quantity { get; set; }
+        // [Required, Range(0, 10)]
+        // public double Quantity { get; set; }
 
         [Required, MinLength(1), MaxLength(250)]
         public string ConsumableDescription { get; set; }
@@ -31,9 +31,13 @@ namespace DnDTeamGame.Data.Entities
         [Required]
         public bool ConsumableIncreaseAttack { get; set; }
 
+        [Required]
+        public bool ConsumableDoesDamageToEnemy { get; set; }
+
         public int? ConsumableHealthIncreaseAmount { get; set; }
         public int? ConsumableDefenseIncreaseAmount { get; set; }
         public int? ConsumableAttackIncreaseAmount { get; set; }
+        public string? ConsumableDamageToEnemy { get; set; } = string.Empty;
 
         public ICollection<CharacterEntity> CharacterList { get; set; }
         public ConsumableEntity()

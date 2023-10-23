@@ -12,14 +12,21 @@ namespace DnDTeamGame.Models.CharacterModels
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset? DateModified { get; set; }
 
+        public string? HairColorName { get; set; }
+        public string? HairStyleName { get; set; }
+        public string? CharacterClassName { get; set; }
+        public string? CharacterClassDescription { get; set; }
 
         public  List<string> AbilityName { get; set; }
-        public string VehicleName  { get; set; }
+        public  List<string> AbilityDescription { get; set; }
+        public List<string> VehicleName  { get; set; }
+        public List<string> VehicleDescription  { get; set; }
         public List<string> WeaponName { get; set; }
+        public List<string> WeaponDescription { get; set; }
         public List<string> ArmourName { get; set; }
-        public string HairColorName { get; set; }
-        public string HairStyleName { get; set; }
+        public List<string> ArmourDescription { get; set; }
         public List<string> ConsumableName { get; set; }
+        public List<string> ConsumableDescription { get; set; }
 
     }
 }

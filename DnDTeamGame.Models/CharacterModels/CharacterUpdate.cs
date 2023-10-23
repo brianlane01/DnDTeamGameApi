@@ -10,14 +10,8 @@ namespace DnDTeamGame.Models.CharacterModels
         [Required, MinLength(4, ErrorMessage = "{0} must be at least {1} characters long."), MaxLength(25)]
         public string CharacterName { get; set; } = string.Empty;
 
-        [Required, Range(1, 350)]
-        public int CharacterHealth { get; set; } 
+        public DateTimeOffset? DateModified { get; set; }
 
-        [Required, Range(1, 10)]
-        public double CharacterBaseAttackDamage { get; set; }
-
-        [Required, Range(1, 10)]
-        public int CharacterBaseDefense { get; set; } 
 
         [Required]
         public string CharacterDescription { get; set; } = string.Empty;
@@ -25,7 +19,7 @@ namespace DnDTeamGame.Models.CharacterModels
         public int HairColorId { get; set; }
         public int HairStyleId { get; set; }
         public int BodyTypeId { get; set; }
-        public int CharacterClassId { get; set; }
+        // public int CharacterClassId { get; set; }
         public int UserId { get; set; }
 
         public List<int> AbilityList { get; set; }

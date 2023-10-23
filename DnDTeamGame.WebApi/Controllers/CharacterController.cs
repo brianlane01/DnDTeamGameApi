@@ -40,11 +40,15 @@ namespace DnDTeamGame.WebApi.Controllers
             return BadRequest(new TextResponse("Could not create Character."));
         }
 
-        [HttpGet]
+        [HttpGet("CharacterByUser/{userId:int}")]
         [ProducesResponseType(typeof(IEnumerable<CharacterListItem>), 200)]
-        public async Task<IActionResult> GetAllCharacters()
+        public async Task<IActionResult> GetAllCharacters([FromRoute] int userId)
         {
-            var characters = await _characterService.GetAllCharactersAsync();
+            var characters = await _characterService.GetAllCharactersAsync(userId);
+            if (characters == null || !characters.Any())
+            {
+                return NotFound("No characters found for the given user.");
+            }
             return Ok(characters);
         }
 
@@ -70,7 +74,7 @@ namespace DnDTeamGame.WebApi.Controllers
                 : BadRequest("Character could not be found.");
         }
 
-        //!Delete api/Note/5
+        //!Delete api/Charater/5
         [HttpDelete("{characterId:int}")]
         public async Task<IActionResult> DeleteCharacter([FromRoute] int characterId)
         {

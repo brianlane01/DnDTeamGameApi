@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace DnDTeamGame.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class SeedingDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +19,19 @@ namespace DnDTeamGame.Data.Migrations
                 {
                     AbilityId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AbilityName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AbilityName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AbilityDescription = table.Column<string>(type: "nvarchar(max)", maxLength: 7500, nullable: false),
+                    AbilityEffectType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AbilityEffectAttack = table.Column<bool>(type: "bit", nullable: false),
+                    AbilityEffectHealthEnhancement = table.Column<bool>(type: "bit", nullable: false),
+                    AbilityEffectDefenseEnhancement = table.Column<bool>(type: "bit", nullable: false),
+                    AbilityHasStatusEffect = table.Column<bool>(type: "bit", nullable: false),
+                    AbilityDamageSingleEnemy = table.Column<bool>(type: "bit", nullable: false),
+                    AbilityDamageMultipleEnemy = table.Column<bool>(type: "bit", nullable: false),
+                    AbilityAttackDamage = table.Column<int>(type: "int", nullable: false),
+                    AbilityHealingAmount = table.Column<int>(type: "int", nullable: false),
+                    AbilityDefenseIncrease = table.Column<int>(type: "int", nullable: false),
+                    AbilityEffectTimeLimit = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,7 +44,16 @@ namespace DnDTeamGame.Data.Migrations
                 {
                     ArmourId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ArmourName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ArmourName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ArmourDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ArmourProvidesDefense = table.Column<bool>(type: "bit", nullable: false),
+                    ArmourIncreasesHealth = table.Column<bool>(type: "bit", nullable: false),
+                    ArmourIncreasesSwordAttacks = table.Column<bool>(type: "bit", nullable: false),
+                    ArmourIncreasesRangedAttacks = table.Column<bool>(type: "bit", nullable: false),
+                    IncreasedHealthAmount = table.Column<int>(type: "int", nullable: false),
+                    IncreasedSwordDamageAmount = table.Column<int>(type: "int", nullable: false),
+                    IncreasedRangeAttackDamageAmount = table.Column<int>(type: "int", nullable: false),
+                    IncreasedDefenseAmount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,7 +94,18 @@ namespace DnDTeamGame.Data.Migrations
                 {
                     CharacterClassId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CharacterClassName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CharacterClassName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CharacterClassDescription = table.Column<string>(type: "nvarchar(750)", maxLength: 750, nullable: false),
+                    CharacterClassSpecialAbility = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SpecialAbilityIsAnAttack = table.Column<bool>(type: "bit", nullable: false),
+                    SpecialAbilityHeals = table.Column<bool>(type: "bit", nullable: false),
+                    SpecialAbilityProvidesDefense = table.Column<bool>(type: "bit", nullable: false),
+                    SpecialAbilityProvidesStatusEffect = table.Column<bool>(type: "bit", nullable: false),
+                    SpecialAbilityDamage = table.Column<int>(type: "int", nullable: false),
+                    SpecialAbilityHealingAmount = table.Column<int>(type: "int", nullable: false),
+                    SpeacialAbilityDefenseAmount = table.Column<int>(type: "int", nullable: false),
+                    SpecialAbilityDuration = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SpecialAbilityDescription = table.Column<string>(type: "nvarchar(750)", maxLength: 750, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,15 +119,16 @@ namespace DnDTeamGame.Data.Migrations
                     ConsumableId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ConsumableName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Quantity = table.Column<double>(type: "float", nullable: false),
                     ConsumableDescription = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     ConsumableEffect = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     ConsumableIncreaseHealth = table.Column<bool>(type: "bit", nullable: false),
                     ConsumableIncreaseDefense = table.Column<bool>(type: "bit", nullable: false),
                     ConsumableIncreaseAttack = table.Column<bool>(type: "bit", nullable: false),
+                    ConsumableDoesDamageToEnemy = table.Column<bool>(type: "bit", nullable: false),
                     ConsumableHealthIncreaseAmount = table.Column<int>(type: "int", nullable: true),
                     ConsumableDefenseIncreaseAmount = table.Column<int>(type: "int", nullable: true),
-                    ConsumableAttackIncreaseAmount = table.Column<int>(type: "int", nullable: true)
+                    ConsumableAttackIncreaseAmount = table.Column<int>(type: "int", nullable: true),
+                    ConsumableDamageToEnemy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -198,7 +233,15 @@ namespace DnDTeamGame.Data.Migrations
                 {
                     WeaponId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    WeaponName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    WeaponName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WeaponType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WeaponDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WeaponIsARangedWeapon = table.Column<bool>(type: "bit", nullable: false),
+                    WeaponIsAMeleeWeapon = table.Column<bool>(type: "bit", nullable: false),
+                    WeaponGeneratesSplashDamage = table.Column<bool>(type: "bit", nullable: false),
+                    RangedWeaponDistance = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WeaponDamageAmount = table.Column<int>(type: "int", nullable: false),
+                    WeaponSplashDamageAmount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -506,6 +549,150 @@ namespace DnDTeamGame.Data.Migrations
                         principalTable: "Weapons",
                         principalColumn: "WeaponId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Abilities",
+                columns: new[] { "AbilityId", "AbilityAttackDamage", "AbilityDamageMultipleEnemy", "AbilityDamageSingleEnemy", "AbilityDefenseIncrease", "AbilityDescription", "AbilityEffectAttack", "AbilityEffectDefenseEnhancement", "AbilityEffectHealthEnhancement", "AbilityEffectTimeLimit", "AbilityEffectType", "AbilityHasStatusEffect", "AbilityHealingAmount", "AbilityName" },
+                values: new object[,]
+                {
+                    { 1, 0, false, false, 0, "Invisibility, considered to be the supreme form of camouflage, as it does not reveal to the viewer any kind of vital signs, visual effects, or any frequencies of the electromagnetic spectrum detectable to the human eye, instead making use of radio, infrared or ultraviolet wavelengths.", false, false, false, "30 Seconds", "Physical Status Effect", true, 0, "Invisibility" },
+                    { 2, 0, false, false, 0, "Restores a portion of your health.", false, false, true, "", "Healing Ability", false, 20, "Rejuvenation" },
+                    { 3, 35, false, false, 0, "A seven-hit skill that consists of various slashes, several full circle spins and a backwards somersault.", true, false, false, "", "Sword Attack Ability", false, 0, "Deadly Sins" },
+                    { 4, 0, false, false, 100, "A defence skill that increases the player's Defence for a single second to such an extent that their entire body becomes harder than a set of full plate armour. Activation requires the player to be unarmed and only wearing non-metallic armour.", false, true, false, "", "Defensive Ability", false, 0, "Haganeri" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Armours",
+                columns: new[] { "ArmourId", "ArmourDescription", "ArmourIncreasesHealth", "ArmourIncreasesRangedAttacks", "ArmourIncreasesSwordAttacks", "ArmourName", "ArmourProvidesDefense", "IncreasedDefenseAmount", "IncreasedHealthAmount", "IncreasedRangeAttackDamageAmount", "IncreasedSwordDamageAmount" },
+                values: new object[,]
+                {
+                    { 1, "A suit of armor made from the scales of a dragon, offering excellent protection against fire and other elemental attacks.", true, false, false, "Dragon Scale Mail", true, 15, 5, 0, 0 },
+                    { 2, "Lightweight and finely crafted armor of the elves, known for its flexibility and grace.", false, true, true, "Elven Chainmail", false, 0, 0, 10, 5 },
+                    { 3, "An ornate and majestic suit of armor that grants the wearer resistance to fire damage and the ability to rise from the ashes once per day.", true, false, false, "Plate Armor of the Phoenix", true, 35, 100, 0, 0 },
+                    { 4, "A dark and stealthy cloak that shrouds the wearer in shadows, making them harder to detect.", false, false, false, "Shadow Cloak", true, 35, 0, 0, 0 },
+                    { 5, "A set of dark and silent attire, designed for stealthy assassins, allowing them to move undetected.", false, true, false, "Assassin's Shadow Garb", true, 55, 0, 25, 0 },
+                    { 6, "The regal attire of a powerful archmage, granting immense magical prowess and defenses.", false, true, true, "Archmage's Regalia", false, 0, 0, 25, 25 },
+                    { 7, "Enigmatic robes that empower warlocks with eldritch magic and otherworldly abilities.", false, true, false, "Warlock's Eldritch Vestments", true, 35, 0, 25, 0 },
+                    { 8, "A lightweight, silvery chainmail made from mithril, providing excellent protection without hindering mobility.", false, false, false, "Mithril Chain", true, 40, 0, 0, 0 },
+                    { 9, "Crafted from the hide of a kraken, this armor provides resistance to aquatic threats and great flexibility.", false, false, true, "Kraken Hide Armor", true, 25, 0, 0, 15 },
+                    { 10, "A sleek and agile leather vest favored by rogues and thieves, providing ease of movement and subtlety.", true, true, false, "Leather Vest of the Rogue", true, 15, 15, 35, 0 },
+                    { 11, "Massive and imposing armor fit for a giant, offering incredible strength and resilience.", true, false, true, "Titan's Plate", true, 40, 15, 0, 40 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "BodyTypes",
+                columns: new[] { "BodyTypeId", "BodyTypeName" },
+                values: new object[,]
+                {
+                    { 1, "Muscular" },
+                    { 2, "Atheletic" },
+                    { 3, "SlimSkinny" },
+                    { 4, "Giant" },
+                    { 5, "BigBoned" },
+                    { 6, "SlimMuscular" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CharacterClasses",
+                columns: new[] { "CharacterClassId", "CharacterClassDescription", "CharacterClassName", "CharacterClassSpecialAbility", "SpeacialAbilityDefenseAmount", "SpecialAbilityDamage", "SpecialAbilityDescription", "SpecialAbilityDuration", "SpecialAbilityHealingAmount", "SpecialAbilityHeals", "SpecialAbilityIsAnAttack", "SpecialAbilityProvidesDefense", "SpecialAbilityProvidesStatusEffect" },
+                values: new object[,]
+                {
+                    { 1, "Warriors equip themselves carefully for combat and engage their enemies head-on, letting attacks glance off their heavy armor. They use diverse combat tactics and a wide variety of weapon types to protect their more vulnerable allies. Warriors must carefully master their rage – the power behind their strongest attacks – in order to maximize their effectiveness in combat.", "Warrior", "Rage", 0, 55, "As warriors deal or take damage, their rage grows, allowing them to deliver truly crushing attacks in the heat of battle.", "25 seconds", 0, false, true, false, false },
+                    { 2, "Hunters battle their foes at a distance or up close, commanding their pets to attack while they nock their arrows, fire their guns, or ready their polearms. Though their weapons are effective at short and long ranges, hunters are also highly mobile. They can evade or restrain their foes to control the arena of battle", "Hunter", "Tamer of the Wilds", 0, 25, "Hunters tame the beasts of the wild, and those beasts serve in return by assaulting their enemies and shielding them from harm.", "45 seconds", 0, false, true, false, false },
+                    { 3, "Rogues often initiate combat with a surprise attack from the shadows, leading with vicious melee strikes. When in protracted battles, they utilize a successive combination of carefully chosen attacks to soften the enemy up for a killing blow. Rogues must take special care when selecting targets so that their combo attacks are not wasted, and they must be conscious of when to hide or flee if a battle turns against them.", "Rogue", "Stealth Attack", 0, 30, "Rogues sneak about the battlefield, hiding from enemies and delivering surprise attacks to the unwary when opportunity arises.", "20 seconds", 0, false, true, false, true },
+                    { 4, "Mages demolish their foes with arcane incantations. Although they wield powerful offensive spells, mages are fragile and lightly armored, making them particularly vulnerable to close-range attacks. Wise mages make careful use of their spells to keep their foes at a distance or hold them in place.", "Mage", "Elemental Nova Blast", 0, 40, "By calling upon sheets of ice, columns of flame, and waves of arcane power, mages can effectively attack multiple foes at the same time.", "", 0, false, true, false, false },
+                    { 5, "Death Knights engage their foes up-close, supplementing swings of their weapons with dark magic that renders enemies vulnerable or damages them with unholy power. They drag foes into one-on-one conflicts, compelling them to focus their attacks away from weaker companions. To prevent their enemies from fleeing their grasp, death knights must remain mindful of the power they call forth from runes, and pace their attacks appropriately.", "Death Knight", "RuneForged Starburst Stream", 0, 45, "Death knight runeblades are empowered with dark magic; they can expend the power of their runes for vicious attacks.", "", 0, false, true, false, false },
+                    { 6, "Paladins stand directly in front of their enemies, relying on heavy armor and healing in order to survive incoming attacks. Whether with massive shields or crushing two-handed weapons, Paladins are able to keep claws and swords from their weaker fellows or they use healing magic to ensure that they remain on their feet.", "Paladin", "Healing Nova Blessing", 0, 0, "Paladins potent healing abilities can ensure that they and their allies remain in fighting shape.", "", 25, true, false, false, false },
+                    { 7, "Masters of mechanical mayhem, engineers love to tinker with explosives, elixirs, and all manner of hazardous gadgets. They support their allies with alchemic weaponry, deploy ingenious inventions, or lay waste to foes with a wide array of mines, bombs, and grenades.", "Engineer", "Rapid Turret Deployment", 0, 30, "An engineer constructs turrets to help defend and control an area. These devices can pound the ground to damage enemies, disperse healing mist to aid allies, fire off rockets, and more.", "20 seconds", 0, false, true, false, false },
+                    { 8, "Practitioners of the dark arts, necromancers summon minions, wield the power of ritual, and heal themselves with blood magic. Necromancers feed on life force, which they can leverage offensively or use to delay their own demise.", "Necromancer", "Life Force Drain", 0, 15, "Life force is a special type of energy that necromancers draw from their enemies. Once theyve collected enough life force, necromancers can activate their Death Shroud, entering a spirit form. Life force can be gathered from certain weapon attacks and especially from deaths that happen near the necromancer.", "20 seconds", 30, true, true, false, false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Consumables",
+                columns: new[] { "ConsumableId", "ConsumableAttackIncreaseAmount", "ConsumableDamageToEnemy", "ConsumableDefenseIncreaseAmount", "ConsumableDescription", "ConsumableDoesDamageToEnemy", "ConsumableEffect", "ConsumableHealthIncreaseAmount", "ConsumableIncreaseAttack", "ConsumableIncreaseDefense", "ConsumableIncreaseHealth", "ConsumableName" },
+                values: new object[,]
+                {
+                    { 1, 0, "", 0, "A magical potion that restores a portion of your health.", false, "Restores 50 health points.", 50, false, false, true, "Health Potion" },
+                    { 2, 0, "", 20, "A potent elixir that temporarily enhances your defensive capabilities.", false, "Increases your defense by 20% for 3 minutes.", 0, false, true, false, "Elixir of Protection" },
+                    { 3, 30, "", 15, "A strong potion that grants you temporary, furious strength in battle.", false, "Increases your attack damage by 30% for 2 minutes but decreases defense by 15%.", 0, true, true, false, "Berserker's Brew" },
+                    { 4, 30, "Paralyze Enemy for 15 Seconds", 0, "A mystical stone with the petrifying power of the Gorgon.", true, "Can be used to temporarily paralyze or petrify enemies.", 0, false, false, false, "Gorgon's Gaze Stone" },
+                    { 5, 0, "Paralyze Enemy for 15 Seconds", 50, " A luminous elixir that temporarily creates a protective energy shield.", false, "Grants a temporary energy shield that reflects incoming projectiles.", 0, false, true, false, "Mirror Shield Elixir" },
+                    { 6, 0, "", 0, "An ancient scroll with the power to instantly teleport the user to a previously visited location.", false, "Teleports you to a known location on the map.", 0, false, false, false, "Scroll of Teleportation" },
+                    { 7, 0, "", 100, "A rare and delicious fruit said to grant immortality in mythology.", false, "Fully restores health and grants temporary invincibility.", 100, false, true, true, "Ambrosia Fruit" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "HairColors",
+                columns: new[] { "HairColorId", "HairColorName" },
+                values: new object[,]
+                {
+                    { 1, "Red" },
+                    { 2, "Blonde" },
+                    { 3, "Silver" },
+                    { 4, "Pink" },
+                    { 5, "Purple" },
+                    { 6, "Orange" },
+                    { 7, "Blue" },
+                    { 8, "Indigo" },
+                    { 9, "Rainbow" },
+                    { 10, "AquaMarine" },
+                    { 11, "Teal" },
+                    { 12, "Green" },
+                    { 13, "Black" },
+                    { 14, "Brown" },
+                    { 15, "White" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "HairStyles",
+                columns: new[] { "HairStyleId", "HairStyleName" },
+                values: new object[,]
+                {
+                    { 1, "Long Hair" },
+                    { 2, "Karen's Hair Style" },
+                    { 3, "Short Hair" },
+                    { 4, "Long Flowing Locks" },
+                    { 5, "Braided Warrior's Tresses" },
+                    { 6, "Windswept Curls" },
+                    { 7, "Elven Pointed Braid" },
+                    { 8, "Shaved Sides with Top Knot" },
+                    { 9, "Sorceress's Long Braid" },
+                    { 10, "Half-Shaved, Half-Long" },
+                    { 11, "Pirate's Dreadlocks with Beads" },
+                    { 12, "Spiky Anime Style" },
+                    { 13, "Bald and Tattooed" },
+                    { 14, "Braided Beard with Rings" },
+                    { 15, "Mohawk with Tribal Tattoos" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Vehicles",
+                columns: new[] { "VehicleId", "VehicleAbility", "VehicleAttackDamage", "VehicleDescription", "VehicleHealth", "VehicleName", "VehicleSpeed", "VehicleType" },
+                values: new object[,]
+                {
+                    { 1, "Charge", 10, "A powerful warhorse trained for battle, capable of charging into enemy lines.", 100.0, "Warhorse", 60.0, "Mount" },
+                    { 2, "Aerial Maneuverability", 30, "A majestic airship that soars through the skies, offering great mobility and firepower.", 300.0, "Airship", 120.0, "Flying Vehicle" },
+                    { 3, "Heavy Armor", 50, "A massive mechanical walker armed with heavy artillery, capable of withstanding immense damage.", 500.0, "Mechanical Walker", 40.0, "Mechanical" },
+                    { 4, "Crunch", 75, "A massive, fearsome wolf that serves as a mount for those brave enough to tame it. Known for its speed and strength, it's a formidable ally in battle.", 250.0, "DireWolf Mount", 35.0, "Mount" },
+                    { 5, "Crunch", 25, " A graceful and magical mount used by the elves, capable of running on water and through dense forests with ease.", 250.0, "Elven Leafstrider", 55.0, "Mount" },
+                    { 6, "Crunch", 25, " A majestic creature with the body of a lion and wings of an eagle, perfect for aerial combat and reconnaissance.", 200.0, "BuckBeak The Griffon", 65.0, " Flying Mount" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Weapons",
+                columns: new[] { "WeaponId", "RangedWeaponDistance", "WeaponDamageAmount", "WeaponDescription", "WeaponGeneratesSplashDamage", "WeaponIsAMeleeWeapon", "WeaponIsARangedWeapon", "WeaponName", "WeaponSplashDamageAmount", "WeaponType" },
+                values: new object[,]
+                {
+                    { 1, "20 meters", 35, "A radiant bow blessed by celestial beings, firing arrows of divine light that can smite darkness and heal allies.", true, false, true, "Celestial Bow of Radiance", 10, "Bow and Arrow" },
+                    { 2, "", 35, " A concealed dagger used by rogues for stealthy assassinations, designed to leave no trace behind.", false, true, false, "Rogue's Dagger of Shadows", 0, "Dagger" },
+                    { 3, "20 meters", 40, " A staff that channels the power of dragons, allowing the caster to unleash devastating fire spells.", true, false, true, "Dragonfire Staff", 15, "Mage Staff" },
+                    { 4, "", 65, " A razor-sharp sword that can sever heads with a single swing, a weapon favored by those seeking decapitating strikes.", false, true, false, "Vorpal Blade", 0, "Katana" },
+                    { 5, "", 45, "A massive and sturdy warhammer forged in dwarven forges, able to crush opponents and breach defenses.", true, true, false, "Dwarven Warhammer", 15, "WarHammer" },
+                    { 6, "", 50, "A menacing scythe associated with necromancers, capable of harvesting souls and controlling the undead.", false, true, false, "Necromancer's Scythe", 0, "Scythe" },
+                    { 7, "5 meters", 30, "A cane with concealed tricks and traps, used by jesters and pranksters for both entertainment and subterfuge.", true, true, true, "Jester's Trickster Cane", 15, "Sword" },
+                    { 8, "35 meters", 45, "A cane with concealed tricks and traps, used by jesters and pranksters for both entertainment and subterfuge.", true, false, true, "Elven Longbow", 15, "Bow And Arrow" },
+                    { 9, "35 meters", 65, "The legendary sword of King Arthur, said to be the most powerful and righteous weapon in the realm, capable of vanquishing evil.", true, true, false, "Excalibur", 20, "Sword" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -11,7 +11,7 @@ namespace DnDTeamGame.Data.Entities
         [MaxLength(250)]
         public string? GameName {get; set;}
 
-        [Required,MaxLength(500)]
+        [Required,MaxLength(7500)]
         public string? GameDescription {get; set;}
 
         [Required]
