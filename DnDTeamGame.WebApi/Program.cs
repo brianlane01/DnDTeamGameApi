@@ -105,6 +105,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAutoMapper(typeof(AbilityAutoMapProfile));
 builder.Services.AddAutoMapper(typeof(ArmourAutoMapProfile));
 builder.Services.AddAutoMapper(typeof(CharacterClassAutoMapProfile));
+builder.Services.AddAutoMapper(typeof(ConsumableAutoMapProfile));
+builder.Services.AddAutoMapper(typeof(HairStyleAutoMapProfile));
+builder.Services.AddAutoMapper(typeof(HairColorAutoMapProfile));
 
 var app = builder.Build();
 

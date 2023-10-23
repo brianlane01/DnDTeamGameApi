@@ -86,16 +86,14 @@ public class CharacterService : ICharacterService
             entity.BodyTypeId = request.BodyTypeId;
             entity.DateModified = DateTimeOffset.Now;
 
+        int numberOfChanges = await _dbContext.SaveChangesAsync();
+
         AddAbilityToCharacter(request.AbilityList, entity.CharacterId);
         AddArmourToCharacter(request.ArmourList, entity.CharacterId);
         AddConsumablesToCharacter(request.ConsumableList, entity.CharacterId);
         AddVehiclesToCharacter(request.VehicleList, entity.CharacterId);
         AddWeaponsToCharacter(request.WeaponList, entity.CharacterId);    
 
-        //* Save the changes to the database and capture how many rows were updated
-        int numberOfChanges = await _dbContext.SaveChangesAsync();
-
-        //* numberOfChanges is stated to be equal to 1 because only one row is updated
         return numberOfChanges == 1;
     }
 
