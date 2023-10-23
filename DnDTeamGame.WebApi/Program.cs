@@ -50,6 +50,8 @@ builder.Services.AddScoped<IArmourService, ArmourService>();
 builder.Services.AddScoped<IConsumableService, ConsumableService>();
 builder.Services.AddScoped<IHairStyleService, HairStyleService>();
 builder.Services.AddScoped<IHairColorService, HairColorService>();
+builder.Services.AddScoped<IBodyTypeService, BodyTypeService>();
+
 builder.Services.AddScoped<ICharacterClassService, CharacterClassService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddHttpContextAccessor();

@@ -7,6 +7,7 @@ namespace DnDTeamGame.Models.BodyTypeModels
 {
     public class BodyTypeCreate
     {
-        
+
+        public string BodyTypeName { get; set; } = string.Empty;
     }
 }
