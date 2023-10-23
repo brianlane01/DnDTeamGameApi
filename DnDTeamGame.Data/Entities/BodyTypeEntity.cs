@@ -12,5 +12,7 @@ namespace DnDTeamGame.Data.Entities
         [Required]
         public string BodyTypeName { get; set; } = string.Empty;
 
+
+
     }
 }

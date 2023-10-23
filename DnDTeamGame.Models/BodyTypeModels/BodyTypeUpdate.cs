@@ -7,6 +7,8 @@ namespace DnDTeamGame.Models.BodyTypeModels
 {
     public class BodyTypeUpdate
     {
-        
+
+        public int BodyTypeId { get; set; }
+        public string BodyTypeName { get; set; } = string.Empty;
     }
 }

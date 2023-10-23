@@ -643,7 +643,7 @@ namespace DnDTeamGame.Data.Migrations
                             CharacterClassDescription = "Masters of mechanical mayhem, engineers love to tinker with explosives, elixirs, and all manner of hazardous gadgets. They support their allies with alchemic weaponry, deploy ingenious inventions, or lay waste to foes with a wide array of mines, bombs, and grenades.",
                             CharacterClassName = "Engineer",
                             CharacterClassSpecialAbility = "Rapid Turret Deployment",
-                            ClassBackstoryForCharacter = " a brilliant engineer, has dedicated his life to inventing ingenious contraptions. The mysterious artifacts \ndiscovered in the ruins of the acients reveal their dark secrets to you. As an inventor, your knowledge \nof machinery and gadgets makes you a vital ally in deciphering the ancient devices that hold the power to avert the impending catastrophe.",
+                            ClassBackstoryForCharacter = " You have become a brilliant engineer, dedicating your life to inventing ingenious contraptions. The mysterious artifacts \ndiscovered in the ruins of the acients reveal their dark secrets to you. As an inventor, your knowledge \nof machinery and gadgets makes you a vital ally in deciphering the ancient devices that hold the power to avert the impending catastrophe.",
                             SpeacialAbilityDefenseAmount = 0,
                             SpecialAbilityDamage = 30,
                             SpecialAbilityDescription = "An engineer constructs turrets to help defend and control an area. These devices can pound the ground to damage enemies, disperse healing mist to aid allies, fire off rockets, and more.",
@@ -925,16 +925,6 @@ namespace DnDTeamGame.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Games");
-
-                    b.HasData(
-                        new
-                        {
-                            GameId = 1,
-                            DateCreated = new DateTimeOffset(new DateTime(2023, 10, 22, 14, 30, 26, 833, DateTimeKind.Unspecified).AddTicks(5300), new TimeSpan(0, -4, 0, 0, 0)),
-                            GameDescription = "In a realm where magic and might coexist, the land teeters on the precipice of darkness.\nUnlikely heros must rise up, each from vastly different backgrounds, to embark on a journey\nthat will determine the fate of their world. These four heroes are on separate paths, yet the \nechoes of their destinies are inextricably linked. As they come together, they will unlock the secrets \nof ancient artifacts, face unspeakable evils, and unite against a malevolent force that threatens to plunge \nthe world into darkness. Welcome to a world of magic, valor, cunning, and the unknown. The fate of the realm rests \nin your hands. Will you rise to the occasion and uncover the truth behind the Rise of the Ancients",
-                            GameName = "Into the Heart of Darkness",
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("DnDTeamGame.Data.Entities.HairColorEntity", b =>
