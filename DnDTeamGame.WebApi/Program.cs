@@ -108,6 +108,8 @@ builder.Services.AddAutoMapper(typeof(CharacterClassAutoMapProfile));
 builder.Services.AddAutoMapper(typeof(ConsumableAutoMapProfile));
 builder.Services.AddAutoMapper(typeof(HairStyleAutoMapProfile));
 builder.Services.AddAutoMapper(typeof(HairColorAutoMapProfile));
+builder.Services.AddAutoMapper(typeof(WeaponAutoMapProfile));
+
 
 var app = builder.Build();
 
