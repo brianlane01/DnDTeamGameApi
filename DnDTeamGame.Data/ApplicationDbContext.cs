@@ -134,7 +134,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 BodyTypeId = 5,
                 BodyTypeName = "BigBoned",
             },
-    
+
             new BodyTypeEntity
             {
                 BodyTypeId = 6,
@@ -161,7 +161,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 ClassBackstoryForCharacter = "You hail from a long line of noble knights sworn to protect the kingdom. Trained in the art of combat \n" +
                                             "from a young age, you became a renowned warrior and commander of the royal army. Beneath your stoic \n" +
                                             "exterior lies a burning desire to uncover the truth about a dark prophecy that foretells the return of \n" +
-                                            "an ancient evil. As the kingdom teeters on the brink of chaos, you decide to take up the sword, determined \n"+
+                                            "an ancient evil. As the kingdom teeters on the brink of chaos, you decide to take up the sword, determined \n" +
                                             "to fulfill the family's oath and vanquish the looming threat."
             },
 
@@ -515,7 +515,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             },
 
             new ConsumableEntity
-            { 
+            {
                 ConsumableId = 3,
                 ConsumableName = "Berserker's Brew",
                 // Quantity = 1.0,
@@ -563,7 +563,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 ConsumableHealthIncreaseAmount = 0,
                 ConsumableDefenseIncreaseAmount = 50,
                 ConsumableAttackIncreaseAmount = 0
-            },   
+            },
 
             new ConsumableEntity
             {
@@ -597,12 +597,12 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 ConsumableHealthIncreaseAmount = 100,
                 ConsumableDefenseIncreaseAmount = 100,
                 ConsumableAttackIncreaseAmount = 0
-            }            
+            }
 
         );
 
         modelBuilder.Entity<VehicleEntity>().HasData(
-            new VehicleEntity       
+            new VehicleEntity
             {
                 VehicleId = 1,
                 VehicleName = "Warhorse",
@@ -663,7 +663,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             new VehicleEntity
             {
                 VehicleId = 6,
-                VehicleName =  "BuckBeak The Griffon",
+                VehicleName = "BuckBeak The Griffon",
                 VehicleSpeed = 65.0,
                 VehicleAbility = "Crunch",
                 VehicleType = " Flying Mount",
@@ -751,7 +751,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 HairColorId = 13,
                 HairColorName = "Black"
             },
-            
+
             new HairColorEntity
             {
                 HairColorId = 14,
@@ -869,7 +869,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = true,
                 RangedWeaponDistance = "20 meters",
                 WeaponDamageAmount = 35,
-                WeaponSplashDamageAmount = 10                
+                WeaponSplashDamageAmount = 10
             },
 
             new WeaponEntity
@@ -883,7 +883,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = false,
                 RangedWeaponDistance = "",
                 WeaponDamageAmount = 35,
-                WeaponSplashDamageAmount = 0                
+                WeaponSplashDamageAmount = 0
             },
 
             new WeaponEntity
@@ -897,7 +897,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = true,
                 RangedWeaponDistance = "20 meters",
                 WeaponDamageAmount = 40,
-                WeaponSplashDamageAmount = 15                
+                WeaponSplashDamageAmount = 15
             },
 
             new WeaponEntity
@@ -911,7 +911,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = false,
                 RangedWeaponDistance = "",
                 WeaponDamageAmount = 65,
-                WeaponSplashDamageAmount = 0               
+                WeaponSplashDamageAmount = 0
             },
 
             new WeaponEntity
@@ -925,7 +925,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = true,
                 RangedWeaponDistance = "",
                 WeaponDamageAmount = 45,
-                WeaponSplashDamageAmount = 15               
+                WeaponSplashDamageAmount = 15
             },
 
             new WeaponEntity
@@ -939,7 +939,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = false,
                 RangedWeaponDistance = "",
                 WeaponDamageAmount = 50,
-                WeaponSplashDamageAmount = 0               
+                WeaponSplashDamageAmount = 0
             },
 
             new WeaponEntity
@@ -953,7 +953,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = true,
                 RangedWeaponDistance = "5 meters",
                 WeaponDamageAmount = 30,
-                WeaponSplashDamageAmount = 15               
+                WeaponSplashDamageAmount = 15
             },
 
             new WeaponEntity
@@ -967,7 +967,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = true,
                 RangedWeaponDistance = "35 meters",
                 WeaponDamageAmount = 45,
-                WeaponSplashDamageAmount = 15               
+                WeaponSplashDamageAmount = 15
             },
 
             new WeaponEntity
@@ -981,28 +981,28 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 WeaponGeneratesSplashDamage = true,
                 RangedWeaponDistance = "35 meters",
                 WeaponDamageAmount = 65,
-                WeaponSplashDamageAmount = 20               
+                WeaponSplashDamageAmount = 20
             }
         );
 
-        modelBuilder.Entity<GameEntity>().HasData(
-            new GameEntity
-            {
-                GameId = 1,
-                GameName = "Into the Heart of Darkness",
-                GameDescription = "In a realm where magic and might coexist, the land teeters on the precipice of darkness.\n" +
-                                    "Unlikely heros must rise up, each from vastly different backgrounds, to embark on a journey\n" +
-                                    "that will determine the fate of their world. These four heroes are on separate paths, yet the \n" +
-                                    "echoes of their destinies are inextricably linked. As they come together, they will unlock the secrets \n" +
-                                    "of ancient artifacts, face unspeakable evils, and unite against a malevolent force that threatens to plunge \n" +
-                                    "the world into darkness. Welcome to a world of magic, valor, cunning, and the unknown. The fate of the realm rests \n" +
-                                    "in your hands. Will you rise to the occasion and uncover the truth behind the Rise of the Ancients",
+        // modelBuilder.Entity<GameEntity>().HasData(
+        //     new GameEntity
+        //     {
+        //         GameId = 1,
+        //         GameName = "Into the Heart of Darkness",
+        //         GameDescription = "In a realm where magic and might coexist, the land teeters on the precipice of darkness.\n" +
+        //                             "Unlikely heros must rise up, each from vastly different backgrounds, to embark on a journey\n" +
+        //                             "that will determine the fate of their world. These four heroes are on separate paths, yet the \n" +
+        //                             "echoes of their destinies are inextricably linked. As they come together, they will unlock the secrets \n" +
+        //                             "of ancient artifacts, face unspeakable evils, and unite against a malevolent force that threatens to plunge \n" +
+        //                             "the world into darkness. Welcome to a world of magic, valor, cunning, and the unknown. The fate of the realm rests \n" +
+        //                             "in your hands. Will you rise to the occasion and uncover the truth behind the Rise of the Ancients",
 
-                DateCreated = DateTimeOffset.Now,
-                UserId = 1 
-            }
-            
-        );
+        //         DateCreated = DateTimeOffset.Now,
+        //         UserId = 1 
+        //     }
+
+        // );
     }
 }
 
