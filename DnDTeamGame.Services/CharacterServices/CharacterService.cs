@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DnDTeamGame.Services.CharacterServices;
 
@@ -16,8 +16,8 @@ public class CharacterService : ICharacterService
     private readonly ApplicationDbContext _dbContext;
     private readonly int _userId;
     public CharacterService(
-        // UserManager<UserEntity> userManager,
-        //             SignInManager<UserEntity> signInManager,
+                    // UserManager<UserEntity> userManager,
+                    //             SignInManager<UserEntity> signInManager,
                     ApplicationDbContext dbContext)
     {
         // var currentUser = signInManager.Context.User;
@@ -63,17 +63,7 @@ public class CharacterService : ICharacterService
         AddVehiclesToCharacter(request.VehicleList, entity.CharacterId);
         AddWeaponsToCharacter(request.WeaponList, entity.CharacterId);
 
-        CharacterDetail response = new()
-        {
-            CharacterId = entity.CharacterId,
-            CharacterName = entity.CharacterName,
-            CharacterHealth = entity.CharacterHealth,
-            CharacterBaseAttackDamage = entity.CharacterBaseAttackDamage,
-            CharacterBaseDefense = entity.CharacterBaseDefense,
-            CharacterDescription = entity.CharacterDescription, 
-            HairColorName = entity.HairColor.HairColorName,
-            AbilityName = AbilitiesNameList((entity.AbilitiesList).ToList())
-        };
+        CharacterDetail response = await GetCharacterDetailWithAssociatedEntities(entity.CharacterId);
 
         return response;
 
@@ -88,20 +78,22 @@ public class CharacterService : ICharacterService
         //     return false;
         // }
 
-        entity.CharacterName = request.CharacterName;
-        entity.CharacterDescription = request.CharacterDescription;
-        entity.CharacterHealth = request.CharacterHealth;
-        entity.CharacterBaseAttackDamage = request.CharacterBaseAttackDamage;
-        entity.CharacterBaseDefense = request.CharacterBaseDefense;
-        entity.HairColorId = request.HairColorId;
-        entity.HairStyleId = request.HairStyleId;
-        entity.BodyTypeId = request.BodyTypeId;
-        entity.CharacterClassId = request.CharacterClassId;
+            entity.UserId = request.UserId;
+            entity.CharacterName = request.CharacterName;
+            entity.CharacterDescription = request.CharacterDescription;
+            entity.HairColorId = request.HairColorId;
+            entity.HairStyleId = request.HairStyleId;
+            entity.BodyTypeId = request.BodyTypeId;
+            entity.DateModified = DateTimeOffset.Now;
 
-        //* Save the changes to the database and capture how many rows were updated
         int numberOfChanges = await _dbContext.SaveChangesAsync();
 
-        //* numberOfChanges is stated to be equal to 1 because only one row is updated
+        AddAbilityToCharacter(request.AbilityList, entity.CharacterId);
+        AddArmourToCharacter(request.ArmourList, entity.CharacterId);
+        AddConsumablesToCharacter(request.ConsumableList, entity.CharacterId);
+        AddVehiclesToCharacter(request.VehicleList, entity.CharacterId);
+        AddWeaponsToCharacter(request.WeaponList, entity.CharacterId);    
+
         return numberOfChanges == 1;
     }
 
@@ -114,9 +106,10 @@ public class CharacterService : ICharacterService
         return await _dbContext.SaveChangesAsync() == 1;
     }
 
-    public async Task<IEnumerable<CharacterListItem>> GetAllCharactersAsync()
+    public async Task<IEnumerable<CharacterListItem>> GetAllCharactersAsync(int userId)
     {
         List<CharacterListItem> characters = await _dbContext.Characters
+            .Where(entity => entity.UserId == userId)
             .Select(entity => new CharacterListItem
             {
                 CharacterId = entity.CharacterId,
@@ -134,7 +127,38 @@ public class CharacterService : ICharacterService
         CharacterEntity? entity = await _dbContext.Characters
             .FirstOrDefaultAsync(e => e.CharacterId == characterId);
 
-        return entity is null ? null : new CharacterDetail
+        return entity is null ? null : await GetCharacterDetailWithAssociatedEntities(entity.CharacterId);
+        // {
+        //     CharacterId = entity.CharacterId,
+        //     CharacterName = entity.CharacterName,
+        //     CharacterHealth = entity.CharacterHealth,
+        //     CharacterBaseAttackDamage = entity.CharacterBaseAttackDamage,
+        //     CharacterBaseDefense = entity.CharacterBaseDefense,
+        //     CharacterDescription = entity.CharacterDescription,
+        //     DateCreated = entity.DateCreated
+        // };
+    }
+
+    private async Task<CharacterDetail> GetCharacterDetailWithAssociatedEntities(int characterId)
+    {
+        CharacterEntity? entity = await _dbContext.Characters
+            .Include(c => c.AbilitiesList)
+            .Include(c => c.ArmoursList)
+            .Include(c => c.ConsumablesList)
+            .Include(c => c.VehiclesList)
+            .Include(c => c.WeaponsList)
+            .Include(c => c.HairColor)
+            .Include(c => c.HairStyle)
+            .Include(c => c.CharacterClass)
+            .Include(c => c.BodyType)
+            .FirstOrDefaultAsync(e => e.CharacterId == characterId);
+
+        if (entity is null)
+        {
+            return null;
+        }
+
+        CharacterDetail response = new CharacterDetail()
         {
             CharacterId = entity.CharacterId,
             CharacterName = entity.CharacterName,
@@ -142,20 +166,39 @@ public class CharacterService : ICharacterService
             CharacterBaseAttackDamage = entity.CharacterBaseAttackDamage,
             CharacterBaseDefense = entity.CharacterBaseDefense,
             CharacterDescription = entity.CharacterDescription,
-            DateCreated = entity.DateCreated
+
+            HairColorName = entity.HairColor.HairColorName,
+            HairStyleName = entity.HairStyle.HairStyleName,
+            CharacterClassName = entity.CharacterClass.CharacterClassName,
+            CharacterClassDescription = entity.CharacterClass.CharacterClassDescription,
+
+            //* ICollection properties of the CharacterEntity
+            AbilityName = entity.AbilitiesList.Select(a => a.AbilityName).ToList(),
+            AbilityDescription = entity.AbilitiesList.Select(a => a.AbilityDescription).ToList(),
+            VehicleName = entity.VehiclesList.Select(v => v.VehicleName).ToList(),
+            VehicleDescription = entity.VehiclesList.Select(a => a.VehicleDescription).ToList(),
+            WeaponName = entity.WeaponsList.Select(w => w.WeaponName).ToList(),
+            WeaponDescription = entity.WeaponsList.Select(a => a.WeaponDescription).ToList(),
+            ArmourName = entity.ArmoursList.Select(a => a.ArmourName).ToList(),
+            ArmourDescription = entity.ArmoursList.Select(a => a.ArmourDescription).ToList(),
+            ConsumableName = entity.ConsumablesList.Select(c => c.ConsumableName).ToList(),
+            ConsumableDescription = entity.ConsumablesList.Select(a => a.ConsumableDescription).ToList()
         };
+
+        return response;
     }
+
 
     public List<string> AbilitiesNameList(List<AbilityEntity> abilities)
     {
         List<string> ListToReturn = new List<string>();
-        foreach( var ability in abilities)
+        foreach (var ability in abilities)
         {
             ListToReturn.Add(ability.AbilityName);
         }
 
         return ListToReturn;
-        
+
     }
     public void AddAbilityToCharacter(List<int> abilityIds, int characterId)
     {

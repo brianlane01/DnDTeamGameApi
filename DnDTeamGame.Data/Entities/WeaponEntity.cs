@@ -11,6 +11,27 @@ namespace DnDTeamGame.Data.Entities
 
         [Required]
         public string WeaponName { get; set; } = string.Empty;
+
+        [Required]
+        public string WeaponType { get; set; }
+
+        [Required]
+        public string WeaponDescription { get; set; }
+
+        [Required]
+        public bool WeaponIsARangedWeapon { get; set; }
+        [Required]
+        public bool WeaponIsAMeleeWeapon { get; set; }
+        [Required]
+        public bool WeaponGeneratesSplashDamage { get; set; }
+
+        [Required]
+        public string RangedWeaponDistance { get; set; }
+        [Required]
+        public int WeaponDamageAmount { get; set; }
+        [Required]
+        public int WeaponSplashDamageAmount { get; set; }
+
         public ICollection<CharacterEntity> CharacterList { get; set; }
         public WeaponEntity()
         {
