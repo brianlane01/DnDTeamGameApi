@@ -74,7 +74,7 @@ namespace DnDTeamGame.WebApi.Controllers
                 : BadRequest("Character could not be found.");
         }
 
-        //!Delete api/Note/5
+        //!Delete api/Charater/5
         [HttpDelete("{characterId:int}")]
         public async Task<IActionResult> DeleteCharacter([FromRoute] int characterId)
         {

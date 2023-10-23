@@ -8,6 +8,7 @@ namespace DnDTeamGame.Models.AbilityModels
 {
     public class AbilityUpdate
     {
+        public int AbilityId { get; set; }
         [Required, MinLength(8), MaxLength(7500)]
         public string AbilityDescription { get; set; } = string.Empty;
 

@@ -20,6 +20,7 @@ using DnDTeamGame.Services.CharacterClassServices;
 using DnDTeamGame.Services.HairColorServices;
 using DnDTeamGame.Services.HairStyleServices;
 using DnDTeamGame.Services.BodyTypeServices;
+using DnDTeamGame.Models.MapProfile;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,7 +102,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             )
         };
     });
-
+builder.Services.AddAutoMapper(typeof(AbilityAutoMapProfile));
+builder.Services.AddAutoMapper(typeof(ArmourAutoMapProfile));
+builder.Services.AddAutoMapper(typeof(CharacterClassAutoMapProfile));
 
 var app = builder.Build();
 

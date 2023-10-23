@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DnDTeamGame.Models.AbilityModels
 {
-    public class AbilityList
+    public class AbilityListItem
     {
         public int AbilityId { get; set; }
 
