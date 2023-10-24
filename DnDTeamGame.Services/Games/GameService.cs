@@ -60,7 +60,7 @@ namespace DnDTeamGame.Services.Games
         public async Task<GameDetails?> GetGameByIdAsync(int gameId)
         {
             GameEntity? entity = await _dbContext.Games
-                .FirstOrDefaultAsync(e => e.GameId == gameId && e.UserId == _userId);
+                .FindAsync(gameId);
 
             return entity is null ? null : new GameDetails
             {
@@ -80,6 +80,7 @@ namespace DnDTeamGame.Services.Games
             if(entity == null)
                 return false;
             
+            entity.GameId = request.GameId;
             entity.GameName = request.GameName;
             entity.GameDescription = request.GameDescription;
             entity.UserId = request.UserId;
