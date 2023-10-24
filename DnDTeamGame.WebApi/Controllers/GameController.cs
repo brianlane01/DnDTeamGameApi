@@ -37,8 +37,6 @@ namespace DnDTeamGame.WebApi.Controllers
 
         //httpget get game by id
         [HttpGet("{gameId:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetGamesById([FromRoute] int gameId)
         {
             GameDetails? details = await _gameService.GetGameByIdAsync(gameId);
