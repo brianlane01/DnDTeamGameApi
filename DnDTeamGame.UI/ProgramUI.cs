@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text;
+using System.Net.Http.Json;
 using Newtonsoft.Json;
 using static System.Console;
 using DnDTeamGame.Data;
@@ -41,7 +43,7 @@ public class ProgramUI
         {
             Clear();
             ForegroundColor = ConsoleColor.Blue;
-            WriteLine("|==========================================|\n" +
+            WriteLine("|===========================================|\n" +
                      "|                                           |\n" +
                      "|  Welcome to The New Dungeons and Dragons  |\n" +
                      "|  A Game of Fantasy and Destiny            |\n" +
@@ -147,7 +149,7 @@ public class ProgramUI
         // httpClient.BaseAddress = new Uri("http://localhost:5211/api");
     }
 
-    private void ViewAllUsers()
+    private void ViewUserById()
     {   
         Clear();
         ForegroundColor = ConsoleColor.Green;
@@ -162,12 +164,12 @@ public class ProgramUI
             UserDetailUI users = response.Content.ReadAsAsync<UserDetailUI>().Result;
             // var users = JsonSerializer.Deserialize<UserDetailUI>(content);
             // var users = _userService.GetUserByIdAsync(userId).Result;
-        System.Console.WriteLine($"{users.FirstName} {users.LastName} - {users.UserName}");
+            System.Console.WriteLine($"Welcome to the Game {users.FirstName} {users.LastName}! Your UserName is - {users.UserName}");
             PressAnyKeyToContinue();
         }
     }
 
-    private void ViewUserById()
+    private void ViewAllUsers()
     {
 
     }
@@ -177,24 +179,95 @@ public class ProgramUI
 
     }
 
-    private void AddANewUser()
+    private async void AddANewUser()
     {
         Clear();
-        ForegroundColor = ConsoleColor.Red;
+        ForegroundColor = ConsoleColor.Magenta;
         WriteLine("|=========================================|\n" +
                     "|                                       |\n" +
                     "| Thanks for Choosing to Play!          |\n" +
-                    "|  What would you like to do with the   |\n" +
-                    "|  Users?                               |\n" +
-                    "|=======================================|\n" +
+                    "|  To begin what is your First Name?    |\n" +
                     "|                                       |\n" +
-                    "|  1. View All Users                    |\n" +
-                    "|  2. View User By Id                   |\n" +
-                    "|  3. Update Existing User              |\n" +
-                    "|  4. Add a New User                    |\n" +
-                    "|  5. Delete a User                     |\n" +
-                    "|  0. Return to Main Menu               |\n" +
-                    "|=======================================|");
+                    "|=======================================|\n" );
+        string userFirstName = Console.ReadLine();
+        PressAnyKeyToContinue();
+        Clear();
+        ForegroundColor = ConsoleColor.Magenta;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "|  What is your Last Name?              |\n" +
+                    "|                                       |\n" +
+                    "|=======================================|\n" );
+        string userLastName = Console.ReadLine();
+        PressAnyKeyToContinue();
+        Clear();
+        ForegroundColor = ConsoleColor.Magenta;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "|       Please enter a UserName:        |\n" +
+                    "|                                       |\n" +
+                    "|=======================================|\n" );
+        string newUserName = Console.ReadLine();
+        PressAnyKeyToContinue();
+        Clear();
+        ForegroundColor = ConsoleColor.Magenta;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "|    Please enter an Email Address:     |\n" +
+                    "|                                       |\n" +
+                    "|=======================================|\n" );
+        string userEmail = Console.ReadLine();
+        PressAnyKeyToContinue();
+        Clear();
+        ForegroundColor = ConsoleColor.Magenta;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "|    Please enter a Password:           |\n" +
+                    "|                                       |\n" +
+                    "|=======================================|\n" );
+        string userPassword = Console.ReadLine();
+        PressAnyKeyToContinue();
+        Clear();
+        ForegroundColor = ConsoleColor.Magenta;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "|    Please enter Confirm Password:     |\n" +
+                    "|                                       |\n" +
+                    "|=======================================|\n" );
+        string userConfirmPassword = Console.ReadLine();
+
+        HttpClient httpClient = new HttpClient();
+        // httpClient.BaseAddress = new Uri("http://localhost:5211/api/User/");
+        UserRegisterUI registerUser = new UserRegisterUI
+        {
+            UserName = newUserName,
+            Password = userPassword,
+            ConfirmPassword = userConfirmPassword,
+            FirstName = userFirstName,
+            LastName = userLastName,
+            Email = userEmail
+        };
+        // System.Console.WriteLine(user);
+        // PressAnyKeyToContinue();
+
+        // // var content = new StringContent(user);
+        var userContent = new StringContent(JsonConvert.SerializeObject(registerUser), Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/User/Register", userContent).Result;
+        ReadKey();
+        if (response.IsSuccessStatusCode)
+            {
+                UserDetailUI userCreated = response.Content.ReadAsAsync<UserDetailUI>().Result;
+                Console.Clear();
+
+                System.Console.WriteLine($"Welcome to the Game {registerUser.FirstName} {registerUser.LastName}! Your UserName is - {registerUser.UserName}");
+                PressAnyKeyToContinue();
+            }
+            else
+            {
+                Console.WriteLine("Internal server Error");
+                PressAnyKeyToContinue();
+            }
     }
 
     private void DeleteExistingUser()
