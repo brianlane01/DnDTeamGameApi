@@ -17,6 +17,7 @@ using DnDTeamGame.Models.HairColorModels;
 using DnDTeamGame.Models.BodyTypeModels;
 using DnDTeamGame.Models.CharacterClassModels;
 using System.Text;
+using DnDTeamGame.Models.WeaponModels;
 
 public class ProgramUI
 {
@@ -47,7 +48,7 @@ public class ProgramUI
                      "|                                           |\n" +
                      "|  What Would You Like To Do?               |\n" +
                      "|  1. Manage Users                          |\n" +
-                     "|  2. Manage a Game                         |\n" +
+                     "|  2. Manage A Game                           |\n" +
                      "|  3. Start Game                            |\n" +
                      "|  4. Manage Game Item Details              |\n" +
                      "|  0. Close Application                     |\n" +
@@ -72,6 +73,12 @@ public class ProgramUI
 
                     case 4:
                         ManageGameItemDetails();
+                        break;
+                    case 3:
+                        MakeAWeapon();
+                        break;
+                    case 4:
+                        MakeAVehicle();
                         break;
 
                     case 0:
@@ -302,6 +309,8 @@ public class ProgramUI
         PressAnyKeyToContinue();
     }
 
+// ============= Game UI ========= \\
+
     private void ManageAGame()
     {
         Clear();
@@ -458,7 +467,7 @@ public class ProgramUI
 
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("Game updated successfully.");
+                WriteLine("Game is updated successfully.");
             }
             else
             {
@@ -778,6 +787,297 @@ public class ProgramUI
             "Please enter a Body Type ID to assign a Body Type to your Character");
         int newBodyTypeId = int.Parse(Console.ReadLine()!);
 
+// ============= Weapons UI ========= \\
+    private void MakeAWeapon()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("  |=======================================|\n" +
+                    "|                                       |\n" +
+                    "| Thanks for Choosing to Play!          |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Game?                                |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All Weapons                  |\n" +
+                    "|  2. View Weapon By Id                 |\n" +
+                    "|  3. Update Existing Weapon            |\n" +
+                    "|  4. Add a New Weapon                  |\n" +
+                    "|  5. Delete a Weapon                   |\n" +
+                    "|  0. Return to Main Menu               |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllWeapons();
+                    break;
+
+                case 2:
+                    ViewWeaponById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingWeapon();
+                    break;
+
+                case 4:
+                    AddANewWeapon();
+                    break;
+
+                case 5:
+                    DeleteExistingWeapon();
+                    break;
+
+                case 0:
+                    Run();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+    }
+
+    private void AddANewWeapon()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the details for the new Weapon:");
+
+        Write("Weapon Name: ");
+        string weaponName = ReadLine()!;
+
+        Write("Weapon Type: ");
+        string weaponType =ReadLine()!;
+
+
+        Write("Weapon Description: ");
+        string weaponDescription = ReadLine()!;
+
+        Write("Weapon Range: ");
+        bool weaponIsARangedWeapon = bool.Parse(Console.ReadLine()!);
+
+        Write("Weapon Melee: ");
+        bool weaponIsAMeleeWeapon = bool.Parse(Console.ReadLine()!);
+
+        Write("Weapon Generates Splash Damage: ");
+        bool weaponGeneratesSplashDamage = bool.Parse(Console.ReadLine()!);
+
+        Write("Range Distance Weapon: ");
+        string rangedWeaponDistance = ReadLine()!;
+
+        Write("Weapon Splash Damage Amount: ");
+        int weaponSplashDamageAmount = int.Parse(Console.ReadLine()!);
+
+        // Write("Weapon Damage Amount: ");
+        // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
+        
+
+    
+
+        WriteLine("Weapon Damage Amount: ");
+        if(int.TryParse(ReadLine(),out int weaponDamageAmount))
+        {
+            var newWeapon = new WeaponDetailUI
+            {
+                WeaponName = weaponName,
+                WeaponType = weaponType,
+                WeaponDescription = weaponDescription,
+                WeaponIsARangedWeapon = weaponIsARangedWeapon,
+                WeaponIsAMeleeWeapon = weaponIsAMeleeWeapon,
+                WeaponGeneratesSplashDamage = weaponGeneratesSplashDamage,
+                RangedWeaponDistance = rangedWeaponDistance,
+                WeaponSplashDamageAmount = weaponSplashDamageAmount,
+                WeaponDamageAmount = weaponDamageAmount
+
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var weaponContent = new StringContent(JsonConvert.SerializeObject(newWeapon), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Weapon", weaponContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("new game added successfully");
+            }
+            else
+            {
+                WriteLine("Failed to add new Game");
+            }
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void ViewAllWeapons()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Weapon").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<WeaponDetailUI> weapons = response.Content.ReadAsAsync<List<WeaponDetailUI>>().Result;
+            
+            foreach (var weapon in weapons)
+            {
+                WriteLine(
+                          $"WeaponId {weapon.WeaponId} \n" +
+                          $"GameName: {weapon.WeaponName} \n" +
+                          $"WeaponType: {weapon.WeaponType} \n" +
+                          $"WeaponDescription: {weapon.WeaponDescription} \n" +
+                          $"WeaponRange: {weapon.WeaponIsARangedWeapon} \n" +
+                          $"WeaponMelee: {weapon.WeaponIsAMeleeWeapon} \n" +
+                          $"WeaponGenerateSplashDamage: {weapon.WeaponGeneratesSplashDamage} \n" +
+                          $"RangeDistanceWeapon: {weapon.RangedWeaponDistance} \n" +
+                          $"WeaponSplashDamageAmount: {weapon.WeaponSplashDamageAmount} \n" +
+                          $"WeaponDamageAmount: {weapon.WeaponDamageAmount} \n");
+            }
+
+            PressAnyKeyToContinue();
+        }    }
+
+    private void ViewWeaponById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Black;
+        WriteLine("Please enter a WeaponId to look up a Weapons.");
+        var weaponId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Weapon/{weaponId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            WeaponDetailUI weapon = response.Content.ReadAsAsync<WeaponDetailUI>().Result;
+                WriteLine(
+                          $"WeaponId {weapon.WeaponId} \n" +
+                          $"GameName: {weapon.WeaponName} \n" +
+                          $"WeaponType: {weapon.WeaponType} \n" +
+                          $"WeaponDescription: {weapon.WeaponDescription} \n" +
+                          $"WeaponRange: {weapon.WeaponIsARangedWeapon} \n" +
+                          $"WeaponMelee: {weapon.WeaponIsAMeleeWeapon} \n" +
+                          $"WeaponGenerateSplashDamage: {weapon.WeaponGeneratesSplashDamage} \n" +
+                          $"RangeDistanceWeapon: {weapon.RangedWeaponDistance} \n" +
+                          $"WeaponSplashDamageAmount: {weapon.WeaponSplashDamageAmount} \n" +
+                          $"WeaponDamageAmount: {weapon.WeaponDamageAmount} \n");            
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void UpdateAnExistingWeapon()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the ID of the weapon you want to update:");
+        int weaponId = int.Parse(ReadLine()!);
+
+        Write("Weapon Name: ");
+        string weaponName = ReadLine()!;
+
+        Write("Weapon Type: ");
+        string weaponType =ReadLine()!;
+
+
+        Write("Weapon Description: ");
+        string weaponDescription = ReadLine()!;
+
+        Write("Weapon Range: ");
+        bool weaponIsARangedWeapon = bool.Parse(Console.ReadLine()!);
+
+        Write("Weapon Melee: ");
+        bool weaponIsAMeleeWeapon = bool.Parse(Console.ReadLine()!);
+
+        Write("Weapon Generates Splash Damage: ");
+        bool weaponGeneratesSplashDamage = bool.Parse(Console.ReadLine()!);
+
+        Write("Range Distance Weapon: ");
+        string rangedWeaponDistance = ReadLine()!;
+
+        Write("Weapon Splash Damage Amount: ");
+        int weaponSplashDamageAmount = int.Parse(Console.ReadLine()!);
+
+        // Write("Weapon Damage Amount: ");
+        // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
+        
+
+    
+
+        WriteLine("Weapon Damage Amount: ");
+        if(int.TryParse(ReadLine(),out int weaponDamageAmount))
+        {
+            var updateWeapon = new WeaponDetailUI
+            {
+                WeaponName = weaponName,
+                WeaponType = weaponType,
+                WeaponDescription = weaponDescription,
+                WeaponIsARangedWeapon = weaponIsARangedWeapon,
+                WeaponIsAMeleeWeapon = weaponIsAMeleeWeapon,
+                WeaponGeneratesSplashDamage = weaponGeneratesSplashDamage,
+                RangedWeaponDistance = rangedWeaponDistance,
+                WeaponSplashDamageAmount = weaponSplashDamageAmount,
+                WeaponDamageAmount = weaponDamageAmount
+
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var weaponContent = new StringContent(JsonConvert.SerializeObject(updateWeapon), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Weapon", weaponContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("Weapon is updated successfully");
+            }
+            else
+            {
+                WriteLine("Failed to updated a weapon. Status Code: " + response.StatusCode);
+            }
+            PressAnyKeyToContinue();
+        }    
+    }
+
+    private void DeleteExistingWeapon()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Cyan;
+        WriteLine("Please enter the WeaponID of the weapon you want to delete:");
+        int weaponId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Weapon/{weaponId}").Result;
+        
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("Weapon was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete a weapon. Status Code: " + response.StatusCode);
+        }
+
+        PressAnyKeyToContinue();
+    }
+
+// ============= Vehicles UI ========= \\
+
+    private void MakeAVehicle()
+    {
+        throw new NotImplementedException();
+    }
+
+    static void Main(string[] args)
         Clear();
         ForegroundColor = ConsoleColor.DarkBlue;
         WriteLine("|===============================================|\n" +
