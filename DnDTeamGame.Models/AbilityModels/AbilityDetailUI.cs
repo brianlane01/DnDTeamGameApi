@@ -10,46 +10,62 @@ namespace DnDTeamGame.Models.AbilityModels
 {
     public class AbilityDetailUI
     {
-        [Key]
+
+        [JsonProperty("AbilityId")]
+        [JsonPropertyName("AbilityId")]
         public int AbilityId { get; set; }
 
-        [Required, MinLength(4), MaxLength(50)]
+        [JsonProperty("AbilityName")]
+        [JsonPropertyName("AbilityName")]
         public string AbilityName { get; set; } = string.Empty;
 
-        [Required, MinLength(8), MaxLength(7500)]
+        [JsonProperty("AbilityDescription")]
+        [JsonPropertyName("AbilityDescription")]
         public string AbilityDescription { get; set; } = string.Empty;
 
         //* State if the ability is going to be an Attack, Healing, Defensive, 
-        [Required]
+        [JsonProperty("AbilityEffectType")]
+        [JsonPropertyName("AbilityEffectType")]
         public string AbilityEffectType { get; set; }
 
         //* Determines what the effect of the Ability is going to have
-        [Required]
+        [JsonProperty("AbilityEffectAttack")]
+        [JsonPropertyName("AbilityEffectAttack")]
         public bool AbilityEffectAttack { get; set; }
-        [Required]
+        [JsonProperty("AbilityEffectHealthEnhancement")]
+        [JsonPropertyName("AbilityEffectHealthEnhancement")]
         public bool AbilityEffectHealthEnhancement { get; set; }
-        [Required]
+        [JsonProperty("AbilityEffectDefenseEnhancement")]
+        [JsonPropertyName("AbilityEffectDefenseEnhancement")]
         public bool AbilityEffectDefenseEnhancement { get; set; }
-        [Required]
+        [JsonProperty("AbilityHasStatusEffect")]
+        [JsonPropertyName("AbilityHasStatusEffect")]
         public bool AbilityHasStatusEffect { get; set; }
 
         //*Determines if the ability is going to affect one or more enemies if it is an attack type Ability
-        [Required]
+        [JsonProperty("AbilityDamageSingleEnemy")]
+        [JsonPropertyName("AbilityDamageSingleEnemy")]
         public bool AbilityDamageSingleEnemy { get; set; }
-        [Required]
+        [JsonProperty("AbilityDamageMultipleEnemy")]
+        [JsonPropertyName("AbilityDamageMultipleEnemy")]
         public bool AbilityDamageMultipleEnemy { get; set; }
 
         //* These Determine how much of something the Ability does or How long it may last.
-        [Required, Range(0, 40)]
+        [JsonProperty("AbilityAttackDamage")]
+        [JsonPropertyName("AbilityAttackDamage")]
         public int AbilityAttackDamage { get; set; }
 
-        [Required, Range(0, 100)]
+        [JsonProperty("AbilityHealingAmount")]
+        [JsonPropertyName("AbilityHealingAmount")]
         public int AbilityHealingAmount { get; set; }
 
-        [Required, Range(0, 100)]
+        [JsonProperty("AbilityDefenseIncrease")]
+        [JsonPropertyName("AbilityDefenseIncrease")]
         public int AbilityDefenseIncrease { get; set; }
 
-        [Range(0, 180)]
+        [JsonProperty("AbilityEffectTimeLimit")]
+        [JsonPropertyName("AbilityEffectTimeLimit")]
         public string? AbilityEffectTimeLimit { get; set; } = string.Empty;
+
     }
 }
