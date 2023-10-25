@@ -1481,6 +1481,7 @@ public class ProgramUI
                 case 5:
                     ManageArmours();
                     break;
+
                 case 6:
                     ManageConsumables();
                     break;

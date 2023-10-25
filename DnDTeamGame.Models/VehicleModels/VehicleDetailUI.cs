@@ -43,6 +43,5 @@ namespace DnDTeamGame.Models.VehicleModels
         [JsonProperty("vehicleHealth")]
         [JsonPropertyName("vehicleHealth")]
         public double VehicleHealth { get; set; }
-
     }
 }
