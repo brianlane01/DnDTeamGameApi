@@ -16,6 +16,7 @@ using DnDTeamGame.Models.HairStyleModels;
 using DnDTeamGame.Models.HairColorModels;
 using DnDTeamGame.Models.BodyTypeModels;
 using DnDTeamGame.Models.CharacterClassModels;
+using DnDTeamGame.Models.AbilityModels;
 using System.Text;
 using DnDTeamGame.Models.WeaponModels;
 
@@ -73,12 +74,6 @@ public class ProgramUI
 
                     case 4:
                         ManageGameItemDetails();
-                        break;
-                    case 3:
-                        MakeAWeapon();
-                        break;
-                    case 4:
-                        MakeAVehicle();
                         break;
 
                     case 0:
@@ -309,7 +304,7 @@ public class ProgramUI
         PressAnyKeyToContinue();
     }
 
-// ============= Game UI ========= \\
+    // ============= Game UI ========= \\
 
     private void ManageAGame()
     {
@@ -787,8 +782,18 @@ public class ProgramUI
             "Please enter a Body Type ID to assign a Body Type to your Character");
         int newBodyTypeId = int.Parse(Console.ReadLine()!);
 
-// ============= Weapons UI ========= \\
-    private void MakeAWeapon()
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, tell me what class |\n" +
+                    "|  have you chosen to become proficient in?   |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllCharacterClasses();
+    }
+
+    private void ManageWeapons()
     {
         Clear();
         ForegroundColor = ConsoleColor.White;
@@ -858,7 +863,7 @@ public class ProgramUI
         string weaponName = ReadLine()!;
 
         Write("Weapon Type: ");
-        string weaponType =ReadLine()!;
+        string weaponType = ReadLine()!;
 
 
         Write("Weapon Description: ");
@@ -881,12 +886,12 @@ public class ProgramUI
 
         // Write("Weapon Damage Amount: ");
         // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
-        
 
-    
+
+
 
         WriteLine("Weapon Damage Amount: ");
-        if(int.TryParse(ReadLine(),out int weaponDamageAmount))
+        if (int.TryParse(ReadLine(), out int weaponDamageAmount))
         {
             var newWeapon = new WeaponDetailUI
             {
@@ -929,7 +934,7 @@ public class ProgramUI
         if (response.IsSuccessStatusCode)
         {
             List<WeaponDetailUI> weapons = response.Content.ReadAsAsync<List<WeaponDetailUI>>().Result;
-            
+
             foreach (var weapon in weapons)
             {
                 WriteLine(
@@ -946,7 +951,8 @@ public class ProgramUI
             }
 
             PressAnyKeyToContinue();
-        }    }
+        }
+    }
 
     private void ViewWeaponById()
     {
@@ -961,17 +967,17 @@ public class ProgramUI
         if (response.IsSuccessStatusCode)
         {
             WeaponDetailUI weapon = response.Content.ReadAsAsync<WeaponDetailUI>().Result;
-                WriteLine(
-                          $"WeaponId {weapon.WeaponId} \n" +
-                          $"GameName: {weapon.WeaponName} \n" +
-                          $"WeaponType: {weapon.WeaponType} \n" +
-                          $"WeaponDescription: {weapon.WeaponDescription} \n" +
-                          $"WeaponRange: {weapon.WeaponIsARangedWeapon} \n" +
-                          $"WeaponMelee: {weapon.WeaponIsAMeleeWeapon} \n" +
-                          $"WeaponGenerateSplashDamage: {weapon.WeaponGeneratesSplashDamage} \n" +
-                          $"RangeDistanceWeapon: {weapon.RangedWeaponDistance} \n" +
-                          $"WeaponSplashDamageAmount: {weapon.WeaponSplashDamageAmount} \n" +
-                          $"WeaponDamageAmount: {weapon.WeaponDamageAmount} \n");            
+            WriteLine(
+                      $"WeaponId {weapon.WeaponId} \n" +
+                      $"GameName: {weapon.WeaponName} \n" +
+                      $"WeaponType: {weapon.WeaponType} \n" +
+                      $"WeaponDescription: {weapon.WeaponDescription} \n" +
+                      $"WeaponRange: {weapon.WeaponIsARangedWeapon} \n" +
+                      $"WeaponMelee: {weapon.WeaponIsAMeleeWeapon} \n" +
+                      $"WeaponGenerateSplashDamage: {weapon.WeaponGeneratesSplashDamage} \n" +
+                      $"RangeDistanceWeapon: {weapon.RangedWeaponDistance} \n" +
+                      $"WeaponSplashDamageAmount: {weapon.WeaponSplashDamageAmount} \n" +
+                      $"WeaponDamageAmount: {weapon.WeaponDamageAmount} \n");
             PressAnyKeyToContinue();
         }
     }
@@ -987,7 +993,7 @@ public class ProgramUI
         string weaponName = ReadLine()!;
 
         Write("Weapon Type: ");
-        string weaponType =ReadLine()!;
+        string weaponType = ReadLine()!;
 
 
         Write("Weapon Description: ");
@@ -1010,12 +1016,12 @@ public class ProgramUI
 
         // Write("Weapon Damage Amount: ");
         // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
-        
 
-    
+
+
 
         WriteLine("Weapon Damage Amount: ");
-        if(int.TryParse(ReadLine(),out int weaponDamageAmount))
+        if (int.TryParse(ReadLine(), out int weaponDamageAmount))
         {
             var updateWeapon = new WeaponDetailUI
             {
@@ -1044,7 +1050,7 @@ public class ProgramUI
                 WriteLine("Failed to updated a weapon. Status Code: " + response.StatusCode);
             }
             PressAnyKeyToContinue();
-        }    
+        }
     }
 
     private void DeleteExistingWeapon()
@@ -1057,7 +1063,7 @@ public class ProgramUI
         HttpClient httpClient = new HttpClient();
 
         HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Weapon/{weaponId}").Result;
-        
+
         if (response.IsSuccessStatusCode)
         {
             WriteLine("Weapon was deleted successfully.");
@@ -1068,27 +1074,6 @@ public class ProgramUI
         }
 
         PressAnyKeyToContinue();
-    }
-
-// ============= Vehicles UI ========= \\
-
-    private void MakeAVehicle()
-    {
-        throw new NotImplementedException();
-    }
-
-    static void Main(string[] args)
-        Clear();
-        ForegroundColor = ConsoleColor.DarkBlue;
-        WriteLine("|===============================================|\n" +
-                    "|                                             |\n" +
-                    $"| Now {newCharacterName}, tell me what class |\n" +
-                    "|  have you chosen to become proficient in?   |\n" +
-                    "|   Please choose from the following:         |\n" +
-                    "|=============================================|\n");
-        ViewAllCharacterClasses();
-
-
     }
 
     private void ViewCharacterById()
@@ -1237,21 +1222,21 @@ public class ProgramUI
             {
                 WriteLine("=================================================================================================================|\n" +
                           "|                                                                                                                |\n" +
-                          $"| Ability ID: {characterClass.CharacterClassId} | Ability Name: {characterClass.CharacterClassName}|\n" +
+                          $"| Ability ID: {ability.AbilityId} | Ability Name: {ability.AbilityName}|\n" +
                           "|================================================================================================================|\n" +
-                          "| Character Class Description:                                                                                   |\n" +
+                          "| Ability Description:                                                                                           |\n" +
                           "|________________________________________________________________________________________________________________|\n" +
                           "|                                                                                                                |\n" +
-                          $" {characterClass.CharacterClassDescription}                         \n" +
+                          $" {ability.AbilityDescription}                         \n" +
                           "                                                                                                                 ");
             }
 
             PressAnyKeyToContinue();
         }
-        
-        private void ManageGameItemDetails()
-        {
-            Clear();
+    }
+    private void ManageGameItemDetails()
+    {
+        Clear();
         ForegroundColor = ConsoleColor.Red;
         WriteLine("|=========================================|\n" +
                     "|                                       |\n" +
@@ -1281,22 +1266,6 @@ public class ProgramUI
                     ManageWeapons();
                     break;
 
-                case 2:
-                    ViewUserById();
-                    break;
-
-                case 3:
-                    UpdateAnExistingUser();
-                    break;
-
-                case 4:
-                    AddANewUser();
-                    break;
-
-                case 5:
-                    DeleteExistingUser();
-                    break;
-
                 case 0:
                     Run();
                     break;
@@ -1314,11 +1283,11 @@ public class ProgramUI
             Console.ReadKey();
         }
 
-        }
+    }
 
-        private void ManageWeapon()
-        {
-            Clear();
+    private void ManageWeapon()
+    {
+        Clear();
         ForegroundColor = ConsoleColor.White;
         WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
@@ -1348,7 +1317,7 @@ public class ProgramUI
                     break;
 
                 case 3:
-                    UpdateAnWeaponGame();
+                    UpdateAnExistingWeapon();
                     break;
 
                 case 4:
@@ -1374,28 +1343,30 @@ public class ProgramUI
             System.Console.WriteLine("Bad selection.. Press any key to continue");
             Console.ReadKey();
         }
-        }
-
-        private bool ExitApplication()
-        {
-            return false;
-        }
-
-        private void DisplayDataValidationError(int userInputValue)
-        {
-            ForegroundColor = ConsoleColor.Blue;
-            WriteLine($"Invalid Id Entry: {userInputValue}!");
-            ResetColor();
-            return;
-        }
-
-        private void PressAnyKeyToContinue()
-        {
-            WriteLine("Press any key to continue...");
-            ReadKey();
-        }
-
     }
+
+    private bool ExitApplication()
+    {
+        return false;
+    }
+
+    private void DisplayDataValidationError(int userInputValue)
+    {
+        ForegroundColor = ConsoleColor.Blue;
+        WriteLine($"Invalid Id Entry: {userInputValue}!");
+        ResetColor();
+        return;
+    }
+
+    private void PressAnyKeyToContinue()
+    {
+        WriteLine("Press any key to continue...");
+        ReadKey();
+    }
+}
+
+
+
 
 
 
