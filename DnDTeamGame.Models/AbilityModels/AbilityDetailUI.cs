@@ -10,6 +10,7 @@ namespace DnDTeamGame.Models.AbilityModels
 {
     public class AbilityDetailUI
     {
+
         [JsonProperty("AbilityId")]
         [JsonPropertyName("AbilityId")]
         public int AbilityId { get; set; }
@@ -65,5 +66,6 @@ namespace DnDTeamGame.Models.AbilityModels
         [JsonProperty("AbilityEffectTimeLimit")]
         [JsonPropertyName("AbilityEffectTimeLimit")]
         public string? AbilityEffectTimeLimit { get; set; } = string.Empty;
+
     }
 }

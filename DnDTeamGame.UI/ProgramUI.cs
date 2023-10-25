@@ -17,8 +17,9 @@ using DnDTeamGame.Models.HairColorModels;
 using DnDTeamGame.Models.BodyTypeModels;
 using DnDTeamGame.Models.CharacterClassModels;
 using DnDTeamGame.Models.AbilityModels;
-using DnDTeamGame.Models.ArmourModels;
 using System.Text;
+using DnDTeamGame.Models.WeaponModels;
+using DnDTeamGame.Models.ArmourModels;
 
 public class ProgramUI
 {
@@ -49,8 +50,9 @@ public class ProgramUI
                      "|                                           |\n" +
                      "|  What Would You Like To Do?               |\n" +
                      "|  1. Manage Users                          |\n" +
-                     "|  2. Manage a Game                         |\n" +
+                     "|  2. Manage A Game                           |\n" +
                      "|  3. Start Game                            |\n" +
+                     "|  4. Manage Game Item Details              |\n" +
                      "|  0. Close Application                     |\n" +
                      "|                                           |\n" +
                      "|===========================================|");
@@ -70,6 +72,11 @@ public class ProgramUI
                     case 3:
                         StartAGame();
                         break;
+
+                    case 4:
+                        ManageGameItemDetails();
+                        break;
+
                     case 0:
                         IsRunning = ExitApplication();
                         break;
@@ -298,6 +305,8 @@ public class ProgramUI
         PressAnyKeyToContinue();
     }
 
+    // ============= Game UI ========= \\
+
     private void ManageAGame()
     {
         Clear();
@@ -454,7 +463,7 @@ public class ProgramUI
 
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("Game updated successfully.");
+                WriteLine("Game is updated successfully.");
             }
             else
             {
@@ -503,11 +512,11 @@ public class ProgramUI
             WriteLine($"Thank you for choosing to Play: {game.GameName}");
             PressAnyKeyToContinue();
             Clear();
-            WriteLine("==============================================================================================================\n" +
+            WriteLine("=========================================================================================================================\n" +
                         "  \n" +
                        $"{game.GameDescription}\n" +
                         "     \n" +
-                        "==============================================================================================================");
+                        "========================================================================================================================");
         }
     }
 
@@ -783,8 +792,289 @@ public class ProgramUI
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
         ViewAllCharacterClasses();
+    }
+
+    private void ManageWeapons()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("  |=======================================|\n" +
+                    "|                                       |\n" +
+                    "| Thanks for Choosing to Play!          |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Game?                                |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All Weapons                  |\n" +
+                    "|  2. View Weapon By Id                 |\n" +
+                    "|  3. Update Existing Weapon            |\n" +
+                    "|  4. Add a New Weapon                  |\n" +
+                    "|  5. Delete a Weapon                   |\n" +
+                    "|  0. Return to Main Menu               |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllWeapons();
+                    break;
+
+                case 2:
+                    ViewWeaponById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingWeapon();
+                    break;
+
+                case 4:
+                    AddANewWeapon();
+                    break;
+
+                case 5:
+                    DeleteExistingWeapon();
+                    break;
+
+                case 0:
+                    Run();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+    }
+
+    private void AddANewWeapon()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the details for the new Weapon:");
+
+        Write("Weapon Name: ");
+        string weaponName = ReadLine()!;
+
+        Write("Weapon Type: ");
+        string weaponType = ReadLine()!;
 
 
+        Write("Weapon Description: ");
+        string weaponDescription = ReadLine()!;
+
+        Write("Weapon Range: ");
+        bool weaponIsARangedWeapon = bool.Parse(Console.ReadLine()!);
+
+        Write("Weapon Melee: ");
+        bool weaponIsAMeleeWeapon = bool.Parse(Console.ReadLine()!);
+
+        Write("Weapon Generates Splash Damage: ");
+        bool weaponGeneratesSplashDamage = bool.Parse(Console.ReadLine()!);
+
+        Write("Range Distance Weapon: ");
+        string rangedWeaponDistance = ReadLine()!;
+
+        Write("Weapon Splash Damage Amount: ");
+        int weaponSplashDamageAmount = int.Parse(Console.ReadLine()!);
+
+        // Write("Weapon Damage Amount: ");
+        // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
+
+
+
+
+        WriteLine("Weapon Damage Amount: ");
+        if (int.TryParse(ReadLine(), out int weaponDamageAmount))
+        {
+            var newWeapon = new WeaponDetailUI
+            {
+                WeaponName = weaponName,
+                WeaponType = weaponType,
+                WeaponDescription = weaponDescription,
+                WeaponIsARangedWeapon = weaponIsARangedWeapon,
+                WeaponIsAMeleeWeapon = weaponIsAMeleeWeapon,
+                WeaponGeneratesSplashDamage = weaponGeneratesSplashDamage,
+                RangedWeaponDistance = rangedWeaponDistance,
+                WeaponSplashDamageAmount = weaponSplashDamageAmount,
+                WeaponDamageAmount = weaponDamageAmount
+
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var weaponContent = new StringContent(JsonConvert.SerializeObject(newWeapon), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Weapon", weaponContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("new weapon added successfully");
+            }
+            else
+            {
+                WriteLine("Failed to add new Weapon");
+            }
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void ViewAllWeapons()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Weapon").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<WeaponDetailUI> weapons = response.Content.ReadAsAsync<List<WeaponDetailUI>>().Result;
+
+            foreach (var weapon in weapons)
+            {
+                WriteLine(
+                          $"WeaponId {weapon.WeaponId} \n" +
+                          $"GameName: {weapon.WeaponName} \n" +
+                          $"WeaponType: {weapon.WeaponType} \n" +
+                          $"WeaponDescription: {weapon.WeaponDescription} \n" +
+                          $"WeaponRange: {weapon.WeaponIsARangedWeapon} \n" +
+                          $"WeaponMelee: {weapon.WeaponIsAMeleeWeapon} \n" +
+                          $"WeaponGenerateSplashDamage: {weapon.WeaponGeneratesSplashDamage} \n" +
+                          $"RangeDistanceWeapon: {weapon.RangedWeaponDistance} \n" +
+                          $"WeaponSplashDamageAmount: {weapon.WeaponSplashDamageAmount} \n" +
+                          $"WeaponDamageAmount: {weapon.WeaponDamageAmount} \n");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void ViewWeaponById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Black;
+        WriteLine("Please enter a WeaponId to look up a Weapons.");
+        var weaponId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Weapon/{weaponId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            WeaponDetailUI weapon = response.Content.ReadAsAsync<WeaponDetailUI>().Result;
+            WriteLine(
+                      $"WeaponId {weapon.WeaponId} \n" +
+                      $"GameName: {weapon.WeaponName} \n" +
+                      $"WeaponType: {weapon.WeaponType} \n" +
+                      $"WeaponDescription: {weapon.WeaponDescription} \n" +
+                      $"WeaponRange: {weapon.WeaponIsARangedWeapon} \n" +
+                      $"WeaponMelee: {weapon.WeaponIsAMeleeWeapon} \n" +
+                      $"WeaponGenerateSplashDamage: {weapon.WeaponGeneratesSplashDamage} \n" +
+                      $"RangeDistanceWeapon: {weapon.RangedWeaponDistance} \n" +
+                      $"WeaponSplashDamageAmount: {weapon.WeaponSplashDamageAmount} \n" +
+                      $"WeaponDamageAmount: {weapon.WeaponDamageAmount} \n");
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void UpdateAnExistingWeapon()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the ID of the weapon you want to update:");
+        int weaponId = int.Parse(ReadLine()!);
+
+        Write("Weapon Name: ");
+        string weaponName = ReadLine()!;
+
+        Write("Weapon Type: ");
+        string weaponType = ReadLine()!;
+
+
+        Write("Weapon Description: ");
+        string weaponDescription = ReadLine()!;
+
+        Write("Weapon Range: ");
+        bool weaponIsARangedWeapon = bool.Parse(Console.ReadLine()!);
+
+        Write("Weapon Melee: ");
+        bool weaponIsAMeleeWeapon = bool.Parse(Console.ReadLine()!);
+
+        Write("Weapon Generates Splash Damage: ");
+        bool weaponGeneratesSplashDamage = bool.Parse(Console.ReadLine()!);
+
+        Write("Range Distance Weapon: ");
+        string rangedWeaponDistance = ReadLine()!;
+
+        Write("Weapon Splash Damage Amount: ");
+        int weaponSplashDamageAmount = int.Parse(Console.ReadLine()!);
+
+        // Write("Weapon Damage Amount: ");
+        // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
+
+
+
+
+        WriteLine("Weapon Damage Amount: ");
+        if (int.TryParse(ReadLine(), out int weaponDamageAmount))
+        {
+            var updateWeapon = new WeaponDetailUI
+            {
+                WeaponName = weaponName,
+                WeaponType = weaponType,
+                WeaponDescription = weaponDescription,
+                WeaponIsARangedWeapon = weaponIsARangedWeapon,
+                WeaponIsAMeleeWeapon = weaponIsAMeleeWeapon,
+                WeaponGeneratesSplashDamage = weaponGeneratesSplashDamage,
+                RangedWeaponDistance = rangedWeaponDistance,
+                WeaponSplashDamageAmount = weaponSplashDamageAmount,
+                WeaponDamageAmount = weaponDamageAmount
+
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var weaponContent = new StringContent(JsonConvert.SerializeObject(updateWeapon), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Weapon", weaponContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("Weapon is updated successfully");
+            }
+            else
+            {
+                WriteLine("Failed to updated a weapon. Status Code: " + response.StatusCode);
+            }
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void DeleteExistingWeapon()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Cyan;
+        WriteLine("Please enter the WeaponID of the weapon you want to delete:");
+        int weaponId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Weapon/{weaponId}").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("Weapon was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete a weapon. Status Code: " + response.StatusCode);
+        }
+
+        PressAnyKeyToContinue();
     }
 
     private void ViewCharacterById()
@@ -819,7 +1109,7 @@ public class ProgramUI
 
     private void ViewAllHairStyles()
     {
-        Clear();
+
         ForegroundColor = ConsoleColor.DarkMagenta;
 
         HttpClient httpClient = new HttpClient();
@@ -843,7 +1133,7 @@ public class ProgramUI
 
     private void ViewAllCharacterClasses()
     {
-        Clear();
+
         ForegroundColor = ConsoleColor.DarkRed;
 
         HttpClient httpClient = new HttpClient();
@@ -855,16 +1145,15 @@ public class ProgramUI
 
             foreach (var characterClass in characterClasses)
             {
-                WriteLine("======================================================================|\n" +
-                          "|                                                                     |\n" +
-                          $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}\n" +
-                          "|=====================================================================|\n" +
-                          "| Character Class Description:                                        |\n" +
-                          "|_____________________________________________________________________|\n" +
-                          "|                                                                     |\n" +
-                          $"| {characterClass.CharacterClassDescription}                         |\n" +
-                          "|                                                                     |\n" +
-                          "|=====================================================================|");
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Character Class Description:                                                                                   |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {characterClass.CharacterClassDescription}                         \n" +
+                          "                                                                                                                 ");
             }
 
             PressAnyKeyToContinue();
@@ -873,7 +1162,7 @@ public class ProgramUI
 
     private void ViewAllHairColors()
     {
-        Clear();
+
         ForegroundColor = ConsoleColor.DarkGreen;
 
         HttpClient httpClient = new HttpClient();
@@ -897,7 +1186,7 @@ public class ProgramUI
 
     private void ViewAllBodyTypes()
     {
-        Clear();
+
         ForegroundColor = ConsoleColor.DarkCyan;
 
         HttpClient httpClient = new HttpClient();
@@ -919,27 +1208,120 @@ public class ProgramUI
         }
     }
 
-    private void ViewAllAbilities()
+    private void ManageGameItemDetails()
     {
         Clear();
-        ForegroundColor = ConsoleColor.DarkCyan;
-
-        HttpClient httpClient = new HttpClient();
-
-        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Abilities").Result;
-        if (response.IsSuccessStatusCode)
+        ForegroundColor = ConsoleColor.Red;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "|  DnDTeamGame Game Item Management     |\n" +
+                    "|  What would you like to do?           |\n" +
+                    "|  m                                    |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. Manage Weapons                    |\n" +
+                    "|  2. Manage Vehicles                   |\n" +
+                    "|  3. Manage Character Classes          |\n" +
+                    "|  4. Manage Abilities                  |\n" +
+                    "|  5. Manage Armours                    |\n" +
+                    "|  6. Manage Consumables                |\n" +
+                    "|  7. Manage Body Types                 |\n" +
+                    "|  8. Manage Hair Styles                |\n" +
+                    "|  9. Manage Hair Colors                |\n" +
+                    "| 10. Manage Maps                       |\n" +
+                    "|  0. Return to Main Menu               |\n" +
+                    "|=======================================|");
+        try
         {
-            List<AbilityDetailUI> Abilities = response.Content.ReadAsAsync<List<AbilityDetailUI>>().Result;
-
-            foreach (var Ability in Abilities)
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
             {
-                WriteLine("======================================================================|\n" +
-                          "|                                                                     |\n" +
-                          $"|  Ability Id: {Ability.AbilityId} | Body Type Name: {Ability.AbilityName}\n" +
-                          "                                                                      ");
-            }
+                case 1:
+                    ManageWeapons();
+                    break;
+                case 4:
+                    ManageAbilities();
+                    break;
+                case 5:
+                    ManageArmours();
+                    break;
 
-            PressAnyKeyToContinue();
+                case 0:
+                    Run();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+
+    }
+
+    private void ManageWeapon()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Weapons?                             |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All Weapons                  |\n" +
+                    "|  2. View Weapons By Id                |\n" +
+                    "|  3. Update Existing Weapon            |\n" +
+                    "|  4. Add a New Weapon                  |\n" +
+                    "|  5. Delete a Weapon                   |\n" +
+                    "|  0. Return to Manage Game Items       |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllWeapons();
+                    break;
+
+                case 2:
+                    ViewWeaponById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingWeapon();
+                    break;
+
+                case 4:
+                    AddANewWeapon();
+                    break;
+
+                case 5:
+                    DeleteExistingWeapon();
+                    break;
+
+                case 0:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
         }
     }
 
@@ -967,7 +1349,588 @@ public class ProgramUI
         }
     }
 
+    private void ViewArmourById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|====================================================|\n" +
+                    "|                                                   |\n" +
+                    "|  Please enter an Armour Id to View an Armour: |\n" +
+                    "|                                                   |\n" +
+                    "|===================================================|\n");
+        int armourId = int.Parse(Console.ReadLine()!);
+        HttpClient httpClient = new HttpClient();
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Armours/{armourId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            // var content = response.Content.ReadAsStringAsync().Result;
+            // var characters = JsonConvert.DeserializeObject<CharacterListUI>(content);
 
+            ArmourDetailUI armour = response.Content.ReadAsAsync<ArmourDetailUI>().Result;
+            Clear();
+            WriteLine("==================================================");
+            WriteLine(armour.ArmourName);
+            Write("You have choosen: ");
+            WriteLine(armour.ArmourDescription);
+            WriteLine("==================================================");
+            ReadKey();
+            StartAGame();
+        }
+    }
+
+    private void UpdateAnExistingArmour()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the ID of the Armour you want to update:");
+        int armourId = int.Parse(ReadLine()!);
+
+        Write("Armour Name: ");
+        string armourName = ReadLine()!;
+
+        Write("Armour Description: ");
+        string armourDescription = ReadLine()!;
+
+        Write("Armour Provides Defense: ");
+        bool armourProvidesDefense = bool.Parse(Console.ReadLine()!);
+
+        Write("Armour Increases Health: ");
+        bool armourIncreasesHealth = bool.Parse(Console.ReadLine()!);
+
+        Write("Armour Increases Sword Attacks: ");
+        bool armourIncreasesSwordAttacks = bool.Parse(Console.ReadLine()!);
+
+        Write("Armour Increases Ranged Attacks: ");
+        bool armourIncreasesRangedAttacks = bool.Parse(Console.ReadLine()!);
+
+        Write("Health Increase: ");
+        int increasedHealthAmount = int.Parse(Console.ReadLine()!);
+
+        Write("Sword Damage Increase: ");
+        int increasedSwordDamageAmount = int.Parse(Console.ReadLine()!);
+
+        Write("Ranged Damage Increase: ");
+        int increasedRangeAttackDamageAmount = int.Parse(Console.ReadLine()!);
+
+        Write("Defense Increase: ");
+        int increasedDefenseAmount = int.Parse(Console.ReadLine()!);
+
+
+
+        // Write("Weapon Damage Amount: ");
+        // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
+
+
+
+
+        WriteLine("Armour Protection Amount: ");
+        if (int.TryParse(ReadLine(), out int armourprotectionAmount))
+        {
+            var updateArmour = new ArmourDetailUI
+            {
+                ArmourName = armourName,
+                ArmourDescription = armourDescription,
+                ArmourProvidesDefense = armourProvidesDefense,
+                ArmourIncreasesHealth = armourIncreasesHealth,
+                ArmourIncreasesSwordAttacks = armourIncreasesSwordAttacks,
+                ArmourIncreasesRangedAttacks = armourIncreasesRangedAttacks,
+
+
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var armourContent = new StringContent(JsonConvert.SerializeObject(updateArmour), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Armour", armourContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("Armour is updated successfully");
+            }
+            else
+            {
+                WriteLine("Failed to update armour. Status Code: " + response.StatusCode);
+            }
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void DeleteExistingArmour()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Cyan;
+        WriteLine("Please enter the ArmourID of the armour you want to delete:");
+        int armourId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Armour/{armourId}").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("Armour was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete an armour. Status Code: " + response.StatusCode);
+        }
+
+        PressAnyKeyToContinue();
+    }
+
+    private void AddANewArmour()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the details for the new Armour:");
+
+        Write("Armour Name: ");
+        string armourName = ReadLine()!;
+
+        Write("Armour Description: ");
+        string armourDescription = ReadLine()!;
+
+        Write("Armour Provides Defense: ");
+        bool armourProvidesDefense = bool.Parse(Console.ReadLine()!);
+
+        Write("Armour Increases Health: ");
+        bool armourIncreasesHealth = bool.Parse(Console.ReadLine()!);
+
+        Write("Armour Increases Sword Attacks: ");
+        bool armourIncreasesSwordAttacks = bool.Parse(Console.ReadLine()!);
+
+        Write("Armour Increases Ranged Attacks: ");
+        bool armourIncreasesRangedAttacks = bool.Parse(Console.ReadLine()!);
+
+        Write("Health Increase: ");
+        int increasedHealthAmount = int.Parse(Console.ReadLine()!);
+
+        Write("Sword Damage Increase: ");
+        int increasedSwordDamageAmount = int.Parse(Console.ReadLine()!);
+
+        Write("Ranged Damage Increase: ");
+        int increasedRangeAttackDamageAmount = int.Parse(Console.ReadLine()!);
+
+        Write("Defense Increase: ");
+        int increasedDefenseAmount = int.Parse(Console.ReadLine()!);
+
+        // Write("Weapon Damage Amount: ");
+        // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
+
+
+
+
+        WriteLine("Armour Protection Amount: ");
+        if (int.TryParse(ReadLine(), out int armourProtectionAmount))
+        {
+            var newArmour = new ArmourDetailUI
+            {
+                ArmourName = armourName,
+                ArmourDescription = armourDescription,
+                ArmourProvidesDefense = armourProvidesDefense,
+                ArmourIncreasesHealth = armourIncreasesHealth,
+                ArmourIncreasesSwordAttacks = armourIncreasesSwordAttacks,
+                ArmourIncreasesRangedAttacks = armourIncreasesRangedAttacks,
+                IncreasedHealthAmount = increasedHealthAmount,
+                IncreasedSwordDamageAmount = increasedSwordDamageAmount,
+                IncreasedRangeAttackDamageAmount = increasedRangeAttackDamageAmount,
+                IncreasedDefenseAmount = increasedDefenseAmount,
+
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var armourContent = new StringContent(JsonConvert.SerializeObject(newArmour), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Armour", armourContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("new armour added successfully");
+            }
+            else
+            {
+                WriteLine("Failed to add new Armour");
+            }
+            PressAnyKeyToContinue();
+        }
+    }
+    private void ManageArmours()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Armours?                             |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All Armours                  |\n" +
+                    "|  2. View Armours By Id                |\n" +
+                    "|  3. Update Existing Armour            |\n" +
+                    "|  4. Add a New Armour                  |\n" +
+                    "|  5. Delete an Armour                   |\n" +
+                    "|  0. Return to Manage Game Items       |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllArmours();
+                    break;
+
+                case 2:
+                    ViewArmourById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingArmour();
+                    break;
+
+                case 4:
+                    AddANewArmour();
+                    break;
+
+                case 5:
+                    DeleteExistingArmour();
+                    break;
+
+                case 0:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+    }
+
+
+    private void ManageAbilities()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Abilities?                           |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All Abilities                |\n" +
+                    "|  2. View Abilities By Id              |\n" +
+                    "|  3. Update Existing Ability           |\n" +
+                    "|  4. Add a New Ability                 |\n" +
+                    "|  5. Delete an Ability                  |\n" +
+                    "|  0. Return to Manage Game Items       |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllAbilities();
+                    break;
+
+                case 2:
+                    ViewAbilityById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingAbility();
+                    break;
+
+                case 4:
+                    AddANewAbility();
+                    break;
+
+                case 5:
+                    DeleteExistingAbility();
+                    break;
+
+                case 0:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+    }
+
+    private void ViewAllAbilities()
+    {
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Ability").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<AbilityDetailUI> abilities = response.Content.ReadAsAsync<List<AbilityDetailUI>>().Result;
+
+            foreach (var ability in abilities)
+            {
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Ability ID: {ability.AbilityId} | Ability Name: {ability.AbilityName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Ability Description:                                                                                           |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {ability.AbilityDescription}                         \n" +
+                          "                                                                                                                 ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+    private void ViewAbilityById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|====================================================|\n" +
+                    "|                                                   |\n" +
+                    "|  Please enter an Ability Id to View an Ability: |\n" +
+                    "|                                                   |\n" +
+                    "|===================================================|\n");
+        int abilityId = int.Parse(Console.ReadLine()!);
+        HttpClient httpClient = new HttpClient();
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Ability/{abilityId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            // var content = response.Content.ReadAsStringAsync().Result;
+            // var characters = JsonConvert.DeserializeObject<CharacterListUI>(content);
+
+            AbilityDetailUI ability = response.Content.ReadAsAsync<AbilityDetailUI>().Result;
+            Clear();
+            WriteLine("==================================================");
+            WriteLine(ability.AbilityName);
+            Write("You have choosen: ");
+            WriteLine(ability.AbilityDescription);
+            WriteLine("==================================================");
+            ReadKey();
+            StartAGame();
+        }
+    }
+
+    private void UpdateAnExistingAbility()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the ID of the Ability you want to update:");
+        int abilityId = int.Parse(ReadLine()!);
+
+        Write("Ability Name: ");
+        string abilityName = ReadLine()!;
+
+        Write("Ability Description: ");
+        string abilityDescription = ReadLine()!;
+
+        Write("Ability Effect Type: ");
+        string abilityEffectType = ReadLine()!;
+
+        Write("Ability Effects Attack: ");
+        bool abilityEffectAttack = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Enhances Health: ");
+        bool abilityEffectHealthEnhancement = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Enhances Defense: ");
+        bool abilityEffectDefenseEnhancement = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Has Status Effect: ");
+        bool abilityHasStatusEffect = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Has Single Enemy Damage: ");
+        bool abilityDamageSingleEnemy = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Has Multiple Enemy Damage: ");
+        bool abilityDamageMultipleEnemy = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Attack Damage: ");
+        int abilityAttackDamage = int.Parse(Console.ReadLine()!);
+
+        Write("Ability Healing Amount: ");
+        int abilityHealingAmount = int.Parse(Console.ReadLine()!);
+
+        Write("Ability Defense Increase: ");
+        int abilityDefenseIncrease = int.Parse(Console.ReadLine()!);
+
+        Write("Ability Effect Time Limit: ");
+        string? abilityEffectTimeLimit = ReadLine()!;
+
+
+
+        // Write("Weapon Damage Amount: ");
+        // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
+
+
+
+
+        WriteLine("Ability: ");
+        if (int.TryParse(ReadLine(), out int abilityDamageAmount))
+        {
+            var updateAbility = new AbilityDetailUI
+            {
+                AbilityName = abilityName,
+                AbilityDescription = abilityDescription,
+                AbilityEffectType = abilityEffectType,
+                AbilityEffectAttack = abilityEffectAttack,
+                AbilityEffectHealthEnhancement = abilityEffectHealthEnhancement,
+                AbilityEffectDefenseEnhancement = abilityEffectDefenseEnhancement,
+                AbilityHasStatusEffect = abilityHasStatusEffect,
+                AbilityHealingAmount = abilityHealingAmount,
+                AbilityDamageSingleEnemy = abilityDamageSingleEnemy,
+                AbilityDamageMultipleEnemy = abilityDamageMultipleEnemy,
+                AbilityAttackDamage = abilityAttackDamage,
+                AbilityDefenseIncrease = abilityDefenseIncrease,
+                AbilityEffectTimeLimit = abilityEffectTimeLimit
+
+
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var abilityContent = new StringContent(JsonConvert.SerializeObject(updateAbility), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Ability", abilityContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("Ability is updated successfully");
+            }
+            else
+            {
+                WriteLine("Failed to update an ability. Status Code: " + response.StatusCode);
+            }
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void AddANewAbility()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the details for the new Abililty:");
+
+        Write("Ability Name: ");
+        string abilityName = ReadLine()!;
+
+        Write("Ability Description: ");
+        string abilityDescription = ReadLine()!;
+
+        Write("Ability Effect Type: ");
+        string abilityEffectType = ReadLine()!;
+
+        Write("Ability Effects Attack: ");
+        bool abilityEffectAttack = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Enhances Health: ");
+        bool abilityEffectHealthEnhancement = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Enhances Defense: ");
+        bool abilityEffectDefenseEnhancement = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Has Status Effect: ");
+        bool abilityHasStatusEffect = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Has Single Enemy Damage: ");
+        bool abilityDamageSingleEnemy = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Has Multiple Enemy Damage: ");
+        bool abilityDamageMultipleEnemy = bool.Parse(Console.ReadLine()!);
+
+        Write("Ability Attack Damage: ");
+        int abilityAttackDamage = int.Parse(Console.ReadLine()!);
+
+        Write("Ability Healing Amount: ");
+        int abilityHealingAmount = int.Parse(Console.ReadLine()!);
+
+        Write("Ability Defense Increase: ");
+        int abilityDefenseIncrease = int.Parse(Console.ReadLine()!);
+
+        Write("Ability Effect Time Limit: ");
+        string? abilityEffectTimeLimit = ReadLine()!;
+
+        // Write("Weapon Damage Amount: ");
+        // int weaponDamageAmount = int.Parse(Console.ReadLine()!);
+
+
+
+
+        WriteLine("Ability Damage and Protection Amount: ");
+        if (int.TryParse(ReadLine(), out int abilityDamageAmount))
+        {
+            var newAbility = new AbilityDetailUI
+            {
+                AbilityName = abilityName,
+                AbilityDescription = abilityDescription,
+                AbilityEffectType = abilityEffectType,
+                AbilityEffectAttack = abilityEffectAttack,
+                AbilityEffectHealthEnhancement = abilityEffectHealthEnhancement,
+                AbilityEffectDefenseEnhancement = abilityEffectDefenseEnhancement,
+                AbilityHasStatusEffect = abilityHasStatusEffect,
+                AbilityHealingAmount = abilityHealingAmount,
+                AbilityDamageSingleEnemy = abilityDamageSingleEnemy,
+                AbilityDamageMultipleEnemy = abilityDamageMultipleEnemy,
+                AbilityAttackDamage = abilityAttackDamage,
+                AbilityDefenseIncrease = abilityDefenseIncrease,
+                AbilityEffectTimeLimit = abilityEffectTimeLimit
+
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var abilityContent = new StringContent(JsonConvert.SerializeObject(newAbility), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Ability", abilityContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("new ability added successfully");
+            }
+            else
+            {
+                WriteLine("Failed to add new Ability");
+            }
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void DeleteExistingAbility()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Cyan;
+        WriteLine("Please enter the AbilityID of the ability you want to delete:");
+        int abilityId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Ability/{abilityId}").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("Ability was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete an ability. Status Code: " + response.StatusCode);
+        }
+
+        PressAnyKeyToContinue();
+    }
     private bool ExitApplication()
     {
         return false;
@@ -986,8 +1949,9 @@ public class ProgramUI
         WriteLine("Press any key to continue...");
         ReadKey();
     }
-
 }
+
+
 
 
 
