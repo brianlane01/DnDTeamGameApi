@@ -49,6 +49,7 @@ public class ProgramUI
                      "|  1. Manage Users                          |\n" +
                      "|  2. Manage a Game                         |\n" +
                      "|  3. Start Game                            |\n" +
+                     "|  4. Manage Game Item Details              |\n" +
                      "|  0. Close Application                     |\n" +
                      "|                                           |\n" +
                      "|===========================================|");
@@ -64,10 +65,15 @@ public class ProgramUI
                     case 2:
                         ManageAGame();
                         break;
-                    
+
                     case 3:
                         StartAGame();
                         break;
+
+                    case 4:
+                        ManageGameItemDetails();
+                        break;
+
                     case 0:
                         IsRunning = ExitApplication();
                         break;
@@ -501,11 +507,11 @@ public class ProgramUI
             WriteLine($"Thank you for choosing to Play: {game.GameName}");
             PressAnyKeyToContinue();
             Clear();
-            WriteLine( "==============================================================================================================\n" +
-                        "  \n"+
+            WriteLine("=========================================================================================================================\n" +
+                        "  \n" +
                        $"{game.GameDescription}\n" +
-                        "     \n"+
-                        "==============================================================================================================");
+                        "     \n" +
+                        "========================================================================================================================");
         }
     }
 
@@ -528,9 +534,9 @@ public class ProgramUI
                           "GameDescription: \n" +
                           "  \n" +
                           "==============================================================================================================\n" +
-                          "  \n"+
+                          "  \n" +
                           $"{game.GameDescription}\n" +
-                          "     \n"+
+                          "     \n" +
                           "==============================================================================================================");
             }
 
@@ -611,7 +617,7 @@ public class ProgramUI
                                  "|  0. Return to Main Menu               |\n" +
                                  "|=======================================|");
 
-         try
+        try
         {
             var userInput = int.Parse(Console.ReadLine()!);
             switch (userInput)
@@ -682,7 +688,7 @@ public class ProgramUI
                                  $"|  You now have {skillPoints} points to spend      |\n" +
                                  "|        on Defense                                 |\n" +
                                  "|===================================================|\n");
-        
+
         ForegroundColor = ConsoleColor.DarkCyan;
         System.Console.WriteLine("|===================================================|\n" +
                                  "|                                                   |\n" +
@@ -690,7 +696,7 @@ public class ProgramUI
                                  "|      for your Base Defense.                       |\n" +
                                  "|===================================================|\n");
         int baseDefense = int.Parse(Console.ReadLine()!);
-        
+
         Clear();
         ForegroundColor = ConsoleColor.DarkRed;
         System.Console.WriteLine("|===================================================|\n" +
@@ -698,7 +704,7 @@ public class ProgramUI
                                  $"|  Now {newCharacterName}, we  need to ensure that \n" +
                                  "|      your health is restored.                     |\n" +
                                  "|===================================================|\n");
-        if(baseDefense > 3)
+        if (baseDefense > 3)
         {
             ForegroundColor = ConsoleColor.DarkRed;
             System.Console.WriteLine("|===================================================|\n" +
@@ -740,13 +746,13 @@ public class ProgramUI
                     "|  have on this adventure.              |\n" +
                     "|   Please choose from the following:   |\n" +
                     "|=======================================|\n");
-        
+
         ViewAllHairStyles();
         System.Console.WriteLine("\n" +
             "Please enter a Hair Style ID to assign a Hair Style to your Character");
         int newHairStyleId = int.Parse(Console.ReadLine()!);
 
-        Clear(); 
+        Clear();
         ForegroundColor = ConsoleColor.DarkGreen;
         WriteLine("|=========================================|\n" +
                     "|                                       |\n" +
@@ -817,7 +823,7 @@ public class ProgramUI
 
     private void ViewAllHairStyles()
     {
-        Clear();
+
         ForegroundColor = ConsoleColor.DarkMagenta;
 
         HttpClient httpClient = new HttpClient();
@@ -831,8 +837,8 @@ public class ProgramUI
             {
                 WriteLine("======================================================================|\n" +
                           "|                                                                     |\n" +
-                          $"|  Hair Style ID: {hairStyle.HairStyleId} | Hair Style Name: {hairStyle.HairStyleName}\n"+
-                          "                                                                      "); 
+                          $"|  Hair Style ID: {hairStyle.HairStyleId} | Hair Style Name: {hairStyle.HairStyleName}\n" +
+                          "                                                                      ");
             }
 
             PressAnyKeyToContinue();
@@ -841,7 +847,7 @@ public class ProgramUI
 
     private void ViewAllCharacterClasses()
     {
-        Clear();
+
         ForegroundColor = ConsoleColor.DarkRed;
 
         HttpClient httpClient = new HttpClient();
@@ -853,16 +859,15 @@ public class ProgramUI
 
             foreach (var characterClass in characterClasses)
             {
-                WriteLine("======================================================================|\n" +
-                          "|                                                                     |\n" +
-                          $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}\n"+
-                          "|=====================================================================|\n" +
-                          "| Character Class Description:                                        |\n" +
-                          "|_____________________________________________________________________|\n" +
-                          "|                                                                     |\n" +
-                          $"| {characterClass.CharacterClassDescription}                         |\n" +
-                          "|                                                                     |\n" +
-                          "|=====================================================================|"); 
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Character Class Description:                                                                                   |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {characterClass.CharacterClassDescription}                         \n" +
+                          "                                                                                                                 ");
             }
 
             PressAnyKeyToContinue();
@@ -871,7 +876,7 @@ public class ProgramUI
 
     private void ViewAllHairColors()
     {
-        Clear();
+
         ForegroundColor = ConsoleColor.DarkGreen;
 
         HttpClient httpClient = new HttpClient();
@@ -885,8 +890,8 @@ public class ProgramUI
             {
                 WriteLine("======================================================================|\n" +
                           "|                                                                     |\n" +
-                          $"|  Hair Color ID: {hairColor.HairColorId} | Hair Color Name: {hairColor.HairColorName}\n"+
-                          "                                                                      "); 
+                          $"|  Hair Color ID: {hairColor.HairColorId} | Hair Color Name: {hairColor.HairColorName}\n" +
+                          "                                                                      ");
             }
 
             PressAnyKeyToContinue();
@@ -895,7 +900,7 @@ public class ProgramUI
 
     private void ViewAllBodyTypes()
     {
-        Clear();
+
         ForegroundColor = ConsoleColor.DarkCyan;
 
         HttpClient httpClient = new HttpClient();
@@ -909,34 +914,188 @@ public class ProgramUI
             {
                 WriteLine("======================================================================|\n" +
                           "|                                                                     |\n" +
-                          $"|  Body Type Id: {bodyType.BodyTypeId} | Body Type Name: {bodyType.BodyTypeName}\n"+
-                          "                                                                      "); 
+                          $"|  Body Type Id: {bodyType.BodyTypeId} | Body Type Name: {bodyType.BodyTypeName}\n" +
+                          "                                                                      ");
             }
 
             PressAnyKeyToContinue();
         }
     }
 
-    private bool ExitApplication()
+    private void ViewAllAbilities()
     {
-        return false;
-    }
+        ForegroundColor = ConsoleColor.DarkCyan;
 
-    private void DisplayDataValidationError(int userInputValue)
-    {
-        ForegroundColor = ConsoleColor.Blue;
-        WriteLine($"Invalid Id Entry: {userInputValue}!");
-        ResetColor();
-        return;
-    }
+        HttpClient httpClient = new HttpClient();
 
-    private void PressAnyKeyToContinue()
-    {
-        WriteLine("Press any key to continue...");
-        ReadKey();
-    }
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Ability").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<AbilityDetailUI> abilities = response.Content.ReadAsAsync<List<AbilityDetailUI>>().Result;
 
-}
+            foreach (var ability in abilities)
+            {
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Ability ID: {characterClass.CharacterClassId} | Ability Name: {characterClass.CharacterClassName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Character Class Description:                                                                                   |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {characterClass.CharacterClassDescription}                         \n" +
+                          "                                                                                                                 ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+        
+        private void ManageGameItemDetails()
+        {
+            Clear();
+        ForegroundColor = ConsoleColor.Red;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "|  DnDTeamGame Game Item Management     |\n" +
+                    "|  What would you like to do?           |\n" +
+                    "|  m                                    |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. Manage Weapons                    |\n" +
+                    "|  2. Manage Vehicles                   |\n" +
+                    "|  3. Manage Character Classes          |\n" +
+                    "|  4. Manage Abilities                  |\n" +
+                    "|  5. Manage Armours                    |\n" +
+                    "|  6. Manage Consumables                |\n" +
+                    "|  7. Manage Body Types                 |\n" +
+                    "|  8. Manage Hair Styles                |\n" +
+                    "|  9. Manage Hair Colors                |\n" +
+                    "| 10. Manage Maps                       |\n" +
+                    "|  0. Return to Main Menu               |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ManageWeapons();
+                    break;
+
+                case 2:
+                    ViewUserById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingUser();
+                    break;
+
+                case 4:
+                    AddANewUser();
+                    break;
+
+                case 5:
+                    DeleteExistingUser();
+                    break;
+
+                case 0:
+                    Run();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+
+        }
+
+        private void ManageWeapon()
+        {
+            Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Weapons?                             |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All Weapons                  |\n" +
+                    "|  2. View Weapons By Id                |\n" +
+                    "|  3. Update Existing Weapon            |\n" +
+                    "|  4. Add a New Weapon                  |\n" +
+                    "|  5. Delete a Weapon                   |\n" +
+                    "|  0. Return to Manage Game Items       |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllWeapons();
+                    break;
+
+                case 2:
+                    ViewWeaponById();
+                    break;
+
+                case 3:
+                    UpdateAnWeaponGame();
+                    break;
+
+                case 4:
+                    AddANewWeapon();
+                    break;
+
+                case 5:
+                    DeleteExistingWeapon();
+                    break;
+
+                case 0:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+        }
+
+        private bool ExitApplication()
+        {
+            return false;
+        }
+
+        private void DisplayDataValidationError(int userInputValue)
+        {
+            ForegroundColor = ConsoleColor.Blue;
+            WriteLine($"Invalid Id Entry: {userInputValue}!");
+            ResetColor();
+            return;
+        }
+
+        private void PressAnyKeyToContinue()
+        {
+            WriteLine("Press any key to continue...");
+            ReadKey();
+        }
+
+    }
 
 
 
