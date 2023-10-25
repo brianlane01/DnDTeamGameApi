@@ -17,9 +17,15 @@ using DnDTeamGame.Models.HairColorModels;
 using DnDTeamGame.Models.BodyTypeModels;
 using DnDTeamGame.Models.CharacterClassModels;
 using DnDTeamGame.Models.AbilityModels;
+using DnDTeamGame.Models.ArmourModels;
+using DnDTeamGame.Models.ConsumableModels;
+using DnDTeamGame.Models.VehicleModels;
 using System.Text;
 using DnDTeamGame.Models.WeaponModels;
+
 using DnDTeamGame.Models.ArmourModels;
+
+using DnDTeamGame.Models.VehicleModels;
 
 public class ProgramUI
 {
@@ -50,7 +56,7 @@ public class ProgramUI
                      "|                                           |\n" +
                      "|  What Would You Like To Do?               |\n" +
                      "|  1. Manage Users                          |\n" +
-                     "|  2. Manage A Game                           |\n" +
+                     "|  2. Manage A Game                         |\n" +
                      "|  3. Start Game                            |\n" +
                      "|  4. Manage Game Item Details              |\n" +
                      "|  0. Close Application                     |\n" +
@@ -792,6 +798,152 @@ public class ProgramUI
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
         ViewAllCharacterClasses();
+        System.Console.WriteLine("\n" +
+            "Please enter a Character Class ID to assign a Character Class to your Character");
+        int newCharacterClassId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  two abilities to help you with the journey.|\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+
+        ViewAllAbilities();
+        System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
+        string userInput = Console.ReadLine();
+
+        List<int> newAbilityIds = userInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  an armour to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllArmours();
+        System.Console.WriteLine("Please enter the Armour Id separated by commas (e.g., 1,2) to assign your Armours to your Character:");
+        string userArmourInput = Console.ReadLine();
+
+        List<int> newArmourIds = userArmourInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  a weapon to help you with the journey.     |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllWeapons();
+        System.Console.WriteLine("Please enter the Weapon ID separated by commas (e.g., 1,2) to assign Weapons to your Character:");
+        string userWeaponInput = Console.ReadLine();
+
+        List<int> newWeaponIds = userWeaponInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  a consumable to help you with the journey. |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllConsumables();
+        System.Console.WriteLine("Please enter the Consumable ID(s) separated by commas (e.g., 1,2) to assign Consumable(s) to your Character:");
+        string userConsumableInput = Console.ReadLine();
+
+        List<int> newConsumableIds = userConsumableInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Finally {newCharacterName}, you need       |\n" +
+                    "|  a vehicle to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllVehicles();
+        System.Console.WriteLine("Please enter the Vehicle ID(s) separated by commas (e.g., 1,2) to assign Vehicle(s) to your Character:");
+        string userVehicleInput = Console.ReadLine();
+
+        List<int> newVehicleIds = userVehicleInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Please Enter your User ID to save your     |\n" +
+                    "|     Character.                              |\n" +
+                    "|                                             |\n" +
+                    "|=============================================|\n");
+        int userId = int.Parse(Console.ReadLine()!); 
+
+
+        CharacterCreate createCharacter = new CharacterCreate
+        {
+            CharacterName = newCharacterName,
+            CharacterHealth = baseHealth,
+            CharacterBaseAttackDamage = baseAttack,
+            CharacterBaseDefense = baseDefense,
+            CharacterDescription = newCharacterDescription,
+            HairColorId = newHairColorId,
+            HairStyleId = newHairStyleId,
+            BodyTypeId = newBodyTypeId,
+            CharacterClassId = newCharacterClassId,
+            UserId = userId,
+            AbilityList = newAbilityIds,
+            WeaponList = newWeaponIds,
+            ArmourList = newArmourIds,
+            ConsumableList = newConsumableIds,
+            VehicleList = newVehicleIds,
+        };
+
+        var characterContent = new StringContent(JsonConvert.SerializeObject(createCharacter), Encoding.UTF8, "application/json");
+        
+        HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Character", characterContent).Result;
+        ReadKey();
+        if (response.IsSuccessStatusCode)
+        {
+            CharacterListUI characterCreated = response.Content.ReadAsAsync<CharacterListUI>().Result;
+            Console.Clear();
+            ForegroundColor = ConsoleColor.Cyan;
+            WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| You have successfully create a new         |\n" +
+                    "|     Character. Here is the information on   |\n" +
+                    "|       the character you created             |\n" +
+                    "|=============================================|\n");
+
+            System.Console.WriteLine($"{characterCreated.CharacterName}\n" +
+                                     $"{characterCreated.CharacterDescription}\n" +
+                                     $"{characterCreated.CharacterClassDescription}");
+            PressAnyKeyToContinue();
+            StartAGame();
+        }
+        else
+        {
+            Console.WriteLine("Internal server Error");
+            PressAnyKeyToContinue();
+        }
     }
 
     private void ManageWeapons()
@@ -1026,6 +1178,7 @@ public class ProgramUI
         {
             var updateWeapon = new WeaponDetailUI
             {
+                WeaponId = weaponId,
                 WeaponName = weaponName,
                 WeaponType = weaponType,
                 WeaponDescription = weaponDescription,
@@ -1160,6 +1313,35 @@ public class ProgramUI
         }
     }
 
+    private void ViewAllConsumables()
+    {
+
+        ForegroundColor = ConsoleColor.DarkRed;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Consumable").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<ConsumableDetailUI> consumables = response.Content.ReadAsAsync<List<ConsumableDetailUI>>().Result;
+
+            foreach (var consumable in consumables)
+            {
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Consumable ID: {consumable.ConsumableId} | Consumable Name: {consumable.ConsumableName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Consumable Description:                                                                                        |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {consumable.ConsumableDescription}                         \n" +
+                          "                                                                                                                 ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
     private void ViewAllHairColors()
     {
 
@@ -1208,6 +1390,92 @@ public class ProgramUI
         }
     }
 
+
+
+    // private void ViewAllAbilities()
+    // {
+    //     ForegroundColor = ConsoleColor.DarkCyan;
+
+    //     HttpClient httpClient = new HttpClient();
+
+    //     HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Ability").Result;
+    //     if (response.IsSuccessStatusCode)
+    //     {
+    //         List<AbilityDetailUI> abilities = response.Content.ReadAsAsync<List<AbilityDetailUI>>().Result;
+
+    //         foreach (var ability in abilities)
+    //         {
+    //             WriteLine("=================================================================================================================|\n" +
+    //                       "|                                                                                                                |\n" +
+    //                       $"| Ability ID: {ability.AbilityId} | Ability Name: {ability.AbilityName}|\n" +
+    //                       "|================================================================================================================|\n" +
+    //                       "| Ability Description:                                                                                           |\n" +
+    //                       "|________________________________________________________________________________________________________________|\n" +
+    //                       "|                                                                                                                |\n" +
+    //                       $" {ability.AbilityDescription}                         \n" +
+    //                       "                                                                                                                 ");
+    //         }
+
+    //         PressAnyKeyToContinue();
+    //     }
+    // }
+    private void ManageGameItemDetails()
+    {
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Ability").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<AbilityDetailUI> abilities = response.Content.ReadAsAsync<List<AbilityDetailUI>>().Result;
+
+            foreach (var ability in abilities)
+            {
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Ability ID: {ability.AbilityId} | Ability Name: {ability.AbilityName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Ability Description:                                                                                           |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {ability.AbilityDescription}                         \n" +
+                          "                                                                                                                 ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void ViewAllArmours()
+    {
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Armour").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<ArmourDetailUI> armours = response.Content.ReadAsAsync<List<ArmourDetailUI>>().Result;
+
+            foreach (var armour in armours)
+            {
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Armour ID: {armour.ArmourId} | Armour Name: {armour.ArmourName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Armour Description:                                                                                            |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {armour.ArmourDescription}                         \n" +
+                          "                                                                                                                 ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
+
     private void ManageGameItemDetails()
     {
         Clear();
@@ -1239,11 +1507,16 @@ public class ProgramUI
                 case 1:
                     ManageWeapons();
                     break;
+
                 case 4:
                     ManageAbilities();
                     break;
                 case 5:
                     ManageArmours();
+                    break;
+                case 2:
+                    ManageVehicles();
+
                     break;
 
                 case 0:
@@ -1324,6 +1597,7 @@ public class ProgramUI
             Console.ReadKey();
         }
     }
+
 
     private void ViewAllArmours()
     {
@@ -1569,6 +1843,27 @@ public class ProgramUI
                     "|  4. Add a New Armour                  |\n" +
                     "|  5. Delete an Armour                   |\n" +
                     "|  0. Return to Manage Game Items       |\n" +
+
+
+    // =========================================== Vehicle UI ============================================= //
+    private void ManageVehicles()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("  |=======================================|\n" +
+                    "|                                       |\n" +
+                    "| Thanks for Choosing to Play!          |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Game?                                |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All Vehicles                  |\n" +
+                    "|  2. View Vehicle By Id                 |\n" +
+                    "|  3. Update Existing Vehicle            |\n" +
+                    "|  4. Add a New Vehicle                  |\n" +
+                    "|  5. Delete a Vehicle                   |\n" +
+                    "|  0. Return to Main Menu               |\n" +
+
                     "|=======================================|");
         try
         {
@@ -1576,6 +1871,7 @@ public class ProgramUI
             switch (userInput)
             {
                 case 1:
+
                     ViewAllArmours();
                     break;
 
@@ -1597,6 +1893,29 @@ public class ProgramUI
 
                 case 0:
                     ManageGameItemDetails();
+
+                    ViewAllVehicles();
+                    break;
+
+                case 2:
+                    ViewVehicleById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingVehicle();
+                    break;
+
+                case 4:
+                    AddANewVehicle();
+                    break;
+
+                case 5:
+                    DeleteExistingVehicle();
+                    break;
+
+                case 0:
+                    Run();
+
                     break;
 
                 default:
@@ -1611,6 +1930,7 @@ public class ProgramUI
             Console.ReadKey();
         }
     }
+
 
 
     private void ManageAbilities()
@@ -1931,6 +2251,177 @@ public class ProgramUI
 
         PressAnyKeyToContinue();
     }
+
+    private void AddANewVehicle()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the details for the new Vehicles:");
+
+        Write("Vehicle Name: ");
+        string vehicleName = ReadLine()!;
+
+        Write("Vehicle Spped: ");
+        double vehicleSpeed = double.Parse(ReadLine()!);
+
+        Write("Vehicle Ability: ");
+        string vehicleAbility = ReadLine()!;
+
+        Write("Vehicle Type: ");
+        string vehicleType = ReadLine()!;
+
+
+        Write("vehicle Description: ");
+        string vehicleDescription = ReadLine()!;
+
+        Write("Vehicle Health: ");
+        double vehicleHealth = double.Parse(Console.ReadLine()!);
+
+
+        WriteLine("Vehicle Attack Damage: ");
+        if (int.TryParse(ReadLine(), out int vehicleAttackDamage))
+        {
+            var newVehicle = new VehicleDetailUI
+            {
+                VehicleName = vehicleName,
+                VehicleSpeed = vehicleSpeed,
+                VehicleAbility = vehicleAbility,
+                VehicleType = vehicleType,
+                VehicleDescription = vehicleDescription,
+                VehicleAttackDamage = vehicleAttackDamage,
+                VehicleHealth = vehicleHealth
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var VehicleContent = new StringContent(JsonConvert.SerializeObject(newVehicle), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Vehicle", VehicleContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("new game added successfully");
+            }
+            else
+            {
+                WriteLine("Failed to add new Game");
+            }
+            PressAnyKeyToContinue();
+        }    
+    }
+
+    private void ViewAllVehicles()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Vehicle").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<VehicleDetailUI> vehicles = response.Content.ReadAsAsync<List<VehicleDetailUI>>().Result;
+
+            foreach (var vehicle in vehicles)
+            {
+                WriteLine(
+                          $"VehicleId {vehicle.VehicleId} \n" +
+                          $"VehicleName: {vehicle.VehicleName} \n" +
+                          $"VehicleSpeed: {vehicle.VehicleSpeed} \n" +
+                          $"VehicleAbility: {vehicle.VehicleAbility} \n" +
+                          $"VehicleType: {vehicle.VehicleType} \n" +
+                          $"VehicleDescription: {vehicle.VehicleDescription} \n" +
+                          $"VehicleAttackDamage: {vehicle.VehicleAttackDamage} \n" +
+                          $"VehicleHealth: {vehicle.VehicleHealth} \n");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void ViewVehicleById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Black;
+        WriteLine("Please enter a VehicleId to look up a Vehicle Details.");
+        var vehicleId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Vehicle/{vehicleId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            VehicleDetailUI vehicle = response.Content.ReadAsAsync<VehicleDetailUI>().Result;
+                    WriteLine(
+                          $"VehicleId {vehicle.VehicleId} \n" +
+                          $"VehicleName: {vehicle.VehicleName} \n" +
+                          $"VehicleSpeed: {vehicle.VehicleSpeed} \n" +
+                          $"VehicleAbility: {vehicle.VehicleAbility} \n" +
+                          $"VehicleType: {vehicle.VehicleType} \n" +
+                          $"VehicleDescription: {vehicle.VehicleDescription} \n" +
+                          $"VehicleAttackDamage: {vehicle.VehicleAttackDamage} \n" +
+                          $"VehicleHealth: {vehicle.VehicleHealth} \n"
+                          );
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void UpdateAnExistingVehicle()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the ID of the Vehicle you want to update:");
+        int vehicleId = int.Parse(ReadLine()!);
+
+        Write("Vehicle Name: ");
+        string vehicleName = ReadLine()!;
+
+        Write("Vehicle Spped: ");
+        double vehicleSpeed = double.Parse(ReadLine()!);
+
+        Write("Vehicle Ability: ");
+        string vehicleAbility = ReadLine()!;
+
+        Write("Vehicle Type: ");
+        string vehicleType = ReadLine()!;
+
+
+        Write("vehicle Description: ");
+        string vehicleDescription = ReadLine()!;
+
+        Write("Vehicle Health: ");
+        double vehicleHealth = double.Parse(Console.ReadLine()!);
+
+
+        WriteLine("Vehicle Attack Damage: ");
+        if (int.TryParse(ReadLine(), out int vehicleAttackDamage))
+        {
+            var updateVehicle = new VehicleDetailUI
+            {
+                VehicleId = vehicleId,
+                VehicleName = vehicleName,
+                VehicleSpeed = vehicleSpeed,
+                VehicleAbility = vehicleAbility,
+                VehicleType = vehicleType,
+                VehicleDescription = vehicleDescription,
+                VehicleAttackDamage = vehicleAttackDamage,
+                VehicleHealth = vehicleHealth
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var VehicleContent = new StringContent(JsonConvert.SerializeObject(updateVehicle), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Vehicle", VehicleContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("Vehicle Updated Successfully");
+            }
+            else
+            {
+                WriteLine("Failed to Upate a Vehicle!" + response.StatusCode);
+            }
+            PressAnyKeyToContinue();
+        }    
+
+
     private bool ExitApplication()
     {
         return false;
@@ -1954,5 +2445,48 @@ public class ProgramUI
 
 
 
+    private void DeleteExistingVehicle()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Green;
+        WriteLine("Please enter the VehicleId of the vehicle you want to delete:");
+        int vehicleId = int.Parse(Console.ReadLine()!);
 
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Vehicle/{vehicleId}").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("Vehicle was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete the Vehicle. Status Code: " + response.StatusCode);
+        }
+
+
+
+        PressAnyKeyToContinue();
+    }
+
+    private bool ExitApplication()
+    {
+        return false;
+    }
+
+    private void DisplayDataValidationError(int userInputValue)
+    {
+        ForegroundColor = ConsoleColor.Blue;
+        WriteLine($"Invalid Id Entry: {userInputValue}!");
+        ResetColor();
+        return;
+    }
+
+    private void PressAnyKeyToContinue()
+    {
+        WriteLine("Press any key to continue...");
+        ReadKey();
+    }
+}
 
