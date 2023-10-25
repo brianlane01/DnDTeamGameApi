@@ -49,7 +49,7 @@ public class ProgramUI
                      "|                                           |\n" +
                      "|  What Would You Like To Do?               |\n" +
                      "|  1. Manage Users                          |\n" +
-                     "|  2. Manage A Game                           |\n" +
+                     "|  2. Manage A Game                         |\n" +
                      "|  3. Start Game                            |\n" +
                      "|  4. Manage Game Item Details              |\n" +
                      "|  0. Close Application                     |\n" +
@@ -791,6 +791,26 @@ public class ProgramUI
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
         ViewAllCharacterClasses();
+        System.Console.WriteLine("\n" +
+            "Please enter a Character Class ID to assign a Character Class to your Character");
+        int newCharacterClassId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  two abilities to help you with the journey.|\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllAbilities();
+        System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
+        string userInput = Console.ReadLine();
+
+        List<int> newAbilityIds = userInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
     }
 
     private void ManageWeapons()
