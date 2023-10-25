@@ -16,6 +16,8 @@ using DnDTeamGame.Models.HairStyleModels;
 using DnDTeamGame.Models.HairColorModels;
 using DnDTeamGame.Models.BodyTypeModels;
 using DnDTeamGame.Models.CharacterClassModels;
+using DnDTeamGame.Models.AbilityModels;
+using DnDTeamGame.Models.ArmourModels;
 using System.Text;
 
 public class ProgramUI
@@ -64,7 +66,7 @@ public class ProgramUI
                     case 2:
                         ManageAGame();
                         break;
-                    
+
                     case 3:
                         StartAGame();
                         break;
@@ -501,10 +503,10 @@ public class ProgramUI
             WriteLine($"Thank you for choosing to Play: {game.GameName}");
             PressAnyKeyToContinue();
             Clear();
-            WriteLine( "==============================================================================================================\n" +
-                        "  \n"+
+            WriteLine("==============================================================================================================\n" +
+                        "  \n" +
                        $"{game.GameDescription}\n" +
-                        "     \n"+
+                        "     \n" +
                         "==============================================================================================================");
         }
     }
@@ -528,9 +530,9 @@ public class ProgramUI
                           "GameDescription: \n" +
                           "  \n" +
                           "==============================================================================================================\n" +
-                          "  \n"+
+                          "  \n" +
                           $"{game.GameDescription}\n" +
-                          "     \n"+
+                          "     \n" +
                           "==============================================================================================================");
             }
 
@@ -611,7 +613,7 @@ public class ProgramUI
                                  "|  0. Return to Main Menu               |\n" +
                                  "|=======================================|");
 
-         try
+        try
         {
             var userInput = int.Parse(Console.ReadLine()!);
             switch (userInput)
@@ -682,7 +684,7 @@ public class ProgramUI
                                  $"|  You now have {skillPoints} points to spend      |\n" +
                                  "|        on Defense                                 |\n" +
                                  "|===================================================|\n");
-        
+
         ForegroundColor = ConsoleColor.DarkCyan;
         System.Console.WriteLine("|===================================================|\n" +
                                  "|                                                   |\n" +
@@ -690,7 +692,7 @@ public class ProgramUI
                                  "|      for your Base Defense.                       |\n" +
                                  "|===================================================|\n");
         int baseDefense = int.Parse(Console.ReadLine()!);
-        
+
         Clear();
         ForegroundColor = ConsoleColor.DarkRed;
         System.Console.WriteLine("|===================================================|\n" +
@@ -698,7 +700,7 @@ public class ProgramUI
                                  $"|  Now {newCharacterName}, we  need to ensure that \n" +
                                  "|      your health is restored.                     |\n" +
                                  "|===================================================|\n");
-        if(baseDefense > 3)
+        if (baseDefense > 3)
         {
             ForegroundColor = ConsoleColor.DarkRed;
             System.Console.WriteLine("|===================================================|\n" +
@@ -740,13 +742,13 @@ public class ProgramUI
                     "|  have on this adventure.              |\n" +
                     "|   Please choose from the following:   |\n" +
                     "|=======================================|\n");
-        
+
         ViewAllHairStyles();
         System.Console.WriteLine("\n" +
             "Please enter a Hair Style ID to assign a Hair Style to your Character");
         int newHairStyleId = int.Parse(Console.ReadLine()!);
 
-        Clear(); 
+        Clear();
         ForegroundColor = ConsoleColor.DarkGreen;
         WriteLine("|=========================================|\n" +
                     "|                                       |\n" +
@@ -831,8 +833,8 @@ public class ProgramUI
             {
                 WriteLine("======================================================================|\n" +
                           "|                                                                     |\n" +
-                          $"|  Hair Style ID: {hairStyle.HairStyleId} | Hair Style Name: {hairStyle.HairStyleName}\n"+
-                          "                                                                      "); 
+                          $"|  Hair Style ID: {hairStyle.HairStyleId} | Hair Style Name: {hairStyle.HairStyleName}\n" +
+                          "                                                                      ");
             }
 
             PressAnyKeyToContinue();
@@ -855,14 +857,14 @@ public class ProgramUI
             {
                 WriteLine("======================================================================|\n" +
                           "|                                                                     |\n" +
-                          $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}\n"+
+                          $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}\n" +
                           "|=====================================================================|\n" +
                           "| Character Class Description:                                        |\n" +
                           "|_____________________________________________________________________|\n" +
                           "|                                                                     |\n" +
                           $"| {characterClass.CharacterClassDescription}                         |\n" +
                           "|                                                                     |\n" +
-                          "|=====================================================================|"); 
+                          "|=====================================================================|");
             }
 
             PressAnyKeyToContinue();
@@ -885,8 +887,8 @@ public class ProgramUI
             {
                 WriteLine("======================================================================|\n" +
                           "|                                                                     |\n" +
-                          $"|  Hair Color ID: {hairColor.HairColorId} | Hair Color Name: {hairColor.HairColorName}\n"+
-                          "                                                                      "); 
+                          $"|  Hair Color ID: {hairColor.HairColorId} | Hair Color Name: {hairColor.HairColorName}\n" +
+                          "                                                                      ");
             }
 
             PressAnyKeyToContinue();
@@ -909,13 +911,62 @@ public class ProgramUI
             {
                 WriteLine("======================================================================|\n" +
                           "|                                                                     |\n" +
-                          $"|  Body Type Id: {bodyType.BodyTypeId} | Body Type Name: {bodyType.BodyTypeName}\n"+
-                          "                                                                      "); 
+                          $"|  Body Type Id: {bodyType.BodyTypeId} | Body Type Name: {bodyType.BodyTypeName}\n" +
+                          "                                                                      ");
             }
 
             PressAnyKeyToContinue();
         }
     }
+
+    private void ViewAllAbilities()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Abilities").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<AbilityDetailUI> Abilities = response.Content.ReadAsAsync<List<AbilityDetailUI>>().Result;
+
+            foreach (var Ability in Abilities)
+            {
+                WriteLine("======================================================================|\n" +
+                          "|                                                                     |\n" +
+                          $"|  Ability Id: {Ability.AbilityId} | Body Type Name: {Ability.AbilityName}\n" +
+                          "                                                                      ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void ViewAllArmours()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Armours").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<ArmourDetailUI> Armours = response.Content.ReadAsAsync<List<ArmourDetailUI>>().Result;
+
+            foreach (var Armour in Armours)
+            {
+                WriteLine("======================================================================|\n" +
+                          "|                                                                     |\n" +
+                          $"|  Armour Id: {Armour.ArmourId} | Body Type Name: {Armour.ArmourName}\n" +
+                          "                                                                      ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
 
     private bool ExitApplication()
     {
