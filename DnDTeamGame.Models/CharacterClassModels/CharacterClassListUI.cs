@@ -11,19 +11,19 @@ namespace DnDTeamGame.Models.CharacterClassModels
     public class CharacterClassListUI
     {
         [JsonProperty("characterClassId")]
-        [JsonPropertyName("CharacterClassId")]
+        [JsonPropertyName("characterClassId")]
         public int CharacterClassId { get; set; }
 
         [JsonProperty("characterClassName")]
-        [JsonPropertyName("CharacterClassName")]
+        [JsonPropertyName("characterClassName")]
         public string CharacterClassName { get; set; } = string.Empty;
 
         [JsonProperty("characterClassDescription")]
-        [JsonPropertyName("CharacterClassDescription")]
+        [JsonPropertyName("characterClassDescription")]
         public string CharacterClassDescription { get; set; }
 
         [JsonProperty("characterClassSpecialAbility")]
-        [JsonPropertyName("CharacterClassSpecialAbility")]
+        [JsonPropertyName("characterClassSpecialAbility")]
         public string CharacterClassSpecialAbility { get; set; } = string.Empty;
 
         [JsonProperty("specialAbilityDescription")]
