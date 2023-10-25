@@ -17,6 +17,9 @@ using DnDTeamGame.Models.HairColorModels;
 using DnDTeamGame.Models.BodyTypeModels;
 using DnDTeamGame.Models.CharacterClassModels;
 using DnDTeamGame.Models.AbilityModels;
+using DnDTeamGame.Models.ArmourModels;
+using DnDTeamGame.Models.ConsumableModels;
+using DnDTeamGame.Models.VehicleModels;
 using System.Text;
 using DnDTeamGame.Models.WeaponModels;
 using DnDTeamGame.Models.VehicleModels;
@@ -804,7 +807,8 @@ public class ProgramUI
                     "|  two abilities to help you with the journey.|\n" +
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
-        // ViewAllAbilities();
+
+        ViewAllAbilities();
         System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
         string userInput = Console.ReadLine();
 
@@ -812,6 +816,131 @@ public class ProgramUI
             .Split(',')
             .Select(id => int.Parse(id.Trim()))
             .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  an armour to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllArmours();
+        System.Console.WriteLine("Please enter the Armour Id separated by commas (e.g., 1,2) to assign your Armours to your Character:");
+        string userArmourInput = Console.ReadLine();
+
+        List<int> newArmourIds = userArmourInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  a weapon to help you with the journey.     |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllWeapons();
+        System.Console.WriteLine("Please enter the Weapon ID separated by commas (e.g., 1,2) to assign Weapons to your Character:");
+        string userWeaponInput = Console.ReadLine();
+
+        List<int> newWeaponIds = userWeaponInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  a consumable to help you with the journey. |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllConsumables();
+        System.Console.WriteLine("Please enter the Consumable ID(s) separated by commas (e.g., 1,2) to assign Consumable(s) to your Character:");
+        string userConsumableInput = Console.ReadLine();
+
+        List<int> newConsumableIds = userConsumableInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Finally {newCharacterName}, you need       |\n" +
+                    "|  a vehicle to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllVehicles();
+        System.Console.WriteLine("Please enter the Vehicle ID(s) separated by commas (e.g., 1,2) to assign Vehicle(s) to your Character:");
+        string userVehicleInput = Console.ReadLine();
+
+        List<int> newVehicleIds = userVehicleInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Please Enter your User ID to save your     |\n" +
+                    "|     Character.                              |\n" +
+                    "|                                             |\n" +
+                    "|=============================================|\n");
+        int userId = int.Parse(Console.ReadLine()!); 
+
+
+        CharacterCreate createCharacter = new CharacterCreate
+        {
+            CharacterName = newCharacterName,
+            CharacterHealth = baseHealth,
+            CharacterBaseAttackDamage = baseAttack,
+            CharacterBaseDefense = baseDefense,
+            CharacterDescription = newCharacterDescription,
+            HairColorId = newHairColorId,
+            HairStyleId = newHairStyleId,
+            BodyTypeId = newBodyTypeId,
+            CharacterClassId = newCharacterClassId,
+            UserId = userId,
+            AbilityList = newAbilityIds,
+            WeaponList = newWeaponIds,
+            ArmourList = newArmourIds,
+            ConsumableList = newConsumableIds,
+            VehicleList = newVehicleIds,
+        };
+
+        var characterContent = new StringContent(JsonConvert.SerializeObject(createCharacter), Encoding.UTF8, "application/json");
+        
+        HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Character", characterContent).Result;
+        ReadKey();
+        if (response.IsSuccessStatusCode)
+        {
+            CharacterListUI characterCreated = response.Content.ReadAsAsync<CharacterListUI>().Result;
+            Console.Clear();
+            ForegroundColor = ConsoleColor.Cyan;
+            WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| You have successfully create a new         |\n" +
+                    "|     Character. Here is the information on   |\n" +
+                    "|       the character you created             |\n" +
+                    "|=============================================|\n");
+
+            System.Console.WriteLine($"{characterCreated.CharacterName}\n" +
+                                     $"{characterCreated.CharacterDescription}\n" +
+                                     $"{characterCreated.CharacterClassDescription}");
+            PressAnyKeyToContinue();
+            StartAGame();
+        }
+        else
+        {
+            Console.WriteLine("Internal server Error");
+            PressAnyKeyToContinue();
+        }
     }
 
     private void ManageWeapons()
@@ -1181,6 +1310,35 @@ public class ProgramUI
         }
     }
 
+    private void ViewAllConsumables()
+    {
+
+        ForegroundColor = ConsoleColor.DarkRed;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Consumable").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<ConsumableDetailUI> consumables = response.Content.ReadAsAsync<List<ConsumableDetailUI>>().Result;
+
+            foreach (var consumable in consumables)
+            {
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Consumable ID: {consumable.ConsumableId} | Consumable Name: {consumable.ConsumableName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Consumable Description:                                                                                        |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {consumable.ConsumableDescription}                         \n" +
+                          "                                                                                                                 ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
     private void ViewAllHairColors()
     {
 
@@ -1256,6 +1414,62 @@ public class ProgramUI
     //         PressAnyKeyToContinue();
     //     }
     // }
+    private void ManageGameItemDetails()
+    {
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Ability").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<AbilityDetailUI> abilities = response.Content.ReadAsAsync<List<AbilityDetailUI>>().Result;
+
+            foreach (var ability in abilities)
+            {
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Ability ID: {ability.AbilityId} | Ability Name: {ability.AbilityName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Ability Description:                                                                                           |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {ability.AbilityDescription}                         \n" +
+                          "                                                                                                                 ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
+    private void ViewAllArmours()
+    {
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Armour").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<ArmourDetailUI> armours = response.Content.ReadAsAsync<List<ArmourDetailUI>>().Result;
+
+            foreach (var armour in armours)
+            {
+                WriteLine("=================================================================================================================|\n" +
+                          "|                                                                                                                |\n" +
+                          $"| Armour ID: {armour.ArmourId} | Armour Name: {armour.ArmourName}|\n" +
+                          "|================================================================================================================|\n" +
+                          "| Armour Description:                                                                                            |\n" +
+                          "|________________________________________________________________________________________________________________|\n" +
+                          "|                                                                                                                |\n" +
+                          $" {armour.ArmourDescription}                         \n" +
+                          "                                                                                                                 ");
+            }
+
+            PressAnyKeyToContinue();
+        }
+    }
+
     private void ManageGameItemDetails()
     {
         Clear();
@@ -1600,7 +1814,29 @@ public class ProgramUI
             }
             PressAnyKeyToContinue();
         }    
+
+    private bool ExitApplication()
+    {
+        return false;
     }
+
+    private void DisplayDataValidationError(int userInputValue)
+    {
+        ForegroundColor = ConsoleColor.Blue;
+        WriteLine($"Invalid Id Entry: {userInputValue}!");
+        ResetColor();
+        return;
+    }
+
+    private void PressAnyKeyToContinue()
+    {
+        WriteLine("Press any key to continue...");
+        ReadKey();
+    }
+}
+
+
+
 
     private void DeleteExistingVehicle()
     {
