@@ -64,7 +64,7 @@ public class VehicleController : Controller
     }
 
     [HttpDelete("{vehicleId:int}")]
-    public async Task<IActionResult> DeleteVehicle([FromBody] int vehicleId)
+    public async Task<IActionResult> DeleteVehicle([FromRoute] int vehicleId)
     {
         return await _vehicleService.DeleteVehicleAsync(vehicleId)
             ? Ok($"Vehicle: {vehicleId} was successfully deleted!")
