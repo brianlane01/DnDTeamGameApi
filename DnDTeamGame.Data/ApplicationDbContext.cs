@@ -36,7 +36,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 AbilityId = 1,
                 AbilityName = "Invisibility",
-                AbilityDescription = "Invisibility, considered to be the supreme form of camouflage, as it does not reveal to the viewer any kind of vital signs, visual effects, or any frequencies of the electromagnetic spectrum detectable to the human eye, instead making use of radio, infrared or ultraviolet wavelengths.",
+                AbilityDescription = "Invisibility, considered to be the supreme form of camouflage, as it does not reveal to the viewer any kind of vital \n" +
+                                     "signs, visual effects, or any frequencies of the electromagnetic spectrum detectable to the human eye, instead making \n" +
+                                     "use of radio, infrared or ultraviolet wavelengths.",
                 AbilityEffectType = "Physical Status Effect",
                 AbilityEffectAttack = false,
                 AbilityEffectHealthEnhancement = false,
@@ -89,7 +91,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 AbilityId = 4,
                 AbilityName = "Haganeri",
-                AbilityDescription = "A defence skill that increases the player's Defence for a single second to such an extent that their entire body becomes harder than a set of full plate armour. Activation requires the player to be unarmed and only wearing non-metallic armour.",
+                AbilityDescription = "A defence skill that increases the player's Defence for a single second to such an extent that their entire \n" +
+                                     "body becomes harder than a set of full plate armour. Activation requires the player to be unarmed and only \n" +
+                                     "wearing non-metallic armour.",
                 AbilityEffectType = "Defensive Ability",
                 AbilityEffectAttack = false,
                 AbilityEffectHealthEnhancement = false,
@@ -147,7 +151,10 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 CharacterClassId = 1,
                 CharacterClassName = "Warrior",
-                CharacterClassDescription = "Warriors equip themselves carefully for combat and engage their enemies head-on, letting attacks glance off their heavy armor. They use diverse combat tactics and a wide variety of weapon types to protect their more vulnerable allies. Warriors must carefully master their rage – the power behind their strongest attacks – in order to maximize their effectiveness in combat.",
+                CharacterClassDescription = "Warriors equip themselves carefully for combat and engage their enemies head-on, letting attacks glance \n"+
+                                            "off their heavy armor. They use diverse combat tactics and a wide variety of weapon types to protect \n" + 
+                                            "their more vulnerable allies. Warriors must carefully master their rage, the power behind their strongest \n" +
+                                            "attacks in order to maximize their effectiveness in combat.",
                 CharacterClassSpecialAbility = "Rage",
                 SpecialAbilityIsAnAttack = true,
                 SpecialAbilityHeals = false,
@@ -169,7 +176,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 CharacterClassId = 2,
                 CharacterClassName = "Hunter",
-                CharacterClassDescription = "Hunters battle their foes at a distance or up close, commanding their pets to attack while they nock their arrows, fire their guns, or ready their polearms. Though their weapons are effective at short and long ranges, hunters are also highly mobile. They can evade or restrain their foes to control the arena of battle",
+                CharacterClassDescription = "Hunters battle their foes at a distance or up close, commanding their pets to attack while they nock their arrows, \n" +
+                                            "fire their guns, or ready their polearms. Though their weapons are effective at short and long ranges, hunters are \n" +
+                                            "also highly mobile. They can evade or restrain their foes to control the arena of battle",
                 CharacterClassSpecialAbility = "Tamer of the Wilds",
                 SpecialAbilityIsAnAttack = true,
                 SpecialAbilityHeals = false,
@@ -180,7 +189,8 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "45 seconds",
                 SpecialAbilityDescription = "Hunters tame the beasts of the wild, and those beasts serve in return by assaulting their enemies and shielding them from harm.",
-                ClassBackstoryForCharacter = " You have become a skilled hunter, hailing from the Elven Woodlands. The connection you have with the natural world and mastery of archery have made you\n" +
+                ClassBackstoryForCharacter = " You have become a skilled hunter, hailing from the Elven Woodlands. The connection you have with the natural world \n" +
+                                            "and mastery of archery have made you\n" +
                                             "a renowned protector of the forest. You joins the other heroes, using your keen senses to detect the malevolent forces\n" +
                                             "threatening the realm. This is not only a quest to safeguard the homeland but also to restore the balance of nature."
             },
@@ -189,7 +199,10 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 CharacterClassId = 3,
                 CharacterClassName = "Rogue",
-                CharacterClassDescription = "Rogues often initiate combat with a surprise attack from the shadows, leading with vicious melee strikes. When in protracted battles, they utilize a successive combination of carefully chosen attacks to soften the enemy up for a killing blow. Rogues must take special care when selecting targets so that their combo attacks are not wasted, and they must be conscious of when to hide or flee if a battle turns against them.",
+                CharacterClassDescription = "Rogues often initiate combat with a surprise attack from the shadows, leading with vicious melee strikes.\n" +
+                                            "When in protracted battles, they utilize a successive combination of carefully chosen attacks to soften the \n" +
+                                            "enemy up for a killing blow. Rogues must take special care when selecting targets so that their combo attacks \n"+
+                                            "are not wasted, and they must be conscious of when to hide or flee if a battle turns against them.",
                 CharacterClassSpecialAbility = "Stealth Attack",
                 SpecialAbilityIsAnAttack = true,
                 SpecialAbilityHeals = false,
@@ -210,7 +223,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 CharacterClassId = 4,
                 CharacterClassName = "Mage",
-                CharacterClassDescription = "Mages demolish their foes with arcane incantations. Although they wield powerful offensive spells, mages are fragile and lightly armored, making them particularly vulnerable to close-range attacks. Wise mages make careful use of their spells to keep their foes at a distance or hold them in place.",
+                CharacterClassDescription = "Mages demolish their foes with arcane incantations. Although they wield powerful offensive spells, mages are \n" +
+                                            "fragile and lightly armored, making them particularly vulnerable to close-range attacks. Wise mages make \n" +
+                                            "careful use of their spells to keep their foes at a distance or hold them in place.",
                 CharacterClassSpecialAbility = "Elemental Nova Blast",
                 SpecialAbilityIsAnAttack = true,
                 SpecialAbilityHeals = false,
@@ -220,7 +235,8 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 0,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "",
-                SpecialAbilityDescription = "By calling upon sheets of ice, columns of flame, and waves of arcane power, mages can effectively attack multiple foes at the same time.",
+                SpecialAbilityDescription = "By calling upon sheets of ice, columns of flame, and waves of arcane power, mages can effectively \n" +
+                                            "attack multiple foes at the same time.",
                 ClassBackstoryForCharacter = " You have becoma a gifted mage, spending your youth studying the arcane arts in the Tower of Mysteries. \n" +
                                             "You now possess a unique ability to see glimpses of the future through magic. The visions reveal an imminent \n" +
                                             "cataclysm that threatens to plunge the world into darkness. To avert this fate, you must harness your powers \n" +
@@ -231,7 +247,10 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 CharacterClassId = 5,
                 CharacterClassName = "Death Knight",
-                CharacterClassDescription = "Death Knights engage their foes up-close, supplementing swings of their weapons with dark magic that renders enemies vulnerable or damages them with unholy power. They drag foes into one-on-one conflicts, compelling them to focus their attacks away from weaker companions. To prevent their enemies from fleeing their grasp, death knights must remain mindful of the power they call forth from runes, and pace their attacks appropriately.",
+                CharacterClassDescription = "Death Knights engage their foes up-close, supplementing swings of their weapons with dark magic that renders \n" +
+                                            "enemies vulnerable or damages them with unholy power. They drag foes into one-on-one conflicts, compelling \n" +
+                                            "them to focus their attacks away from weaker companions. To prevent their enemies from fleeing their grasp, \n" +
+                                            "death knights must remain mindful of the power they call forth from runes, and pace their attacks appropriately.",
                 CharacterClassSpecialAbility = "RuneForged Starburst Stream",
                 SpecialAbilityIsAnAttack = true,
                 SpecialAbilityHeals = false,
@@ -251,7 +270,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 CharacterClassId = 6,
                 CharacterClassName = "Paladin",
-                CharacterClassDescription = "Paladins stand directly in front of their enemies, relying on heavy armor and healing in order to survive incoming attacks. Whether with massive shields or crushing two-handed weapons, Paladins are able to keep claws and swords from their weaker fellows or they use healing magic to ensure that they remain on their feet.",
+                CharacterClassDescription = "Paladins stand directly in front of their enemies, relying on heavy armor and healing in order to survive incoming \n" +
+                                            "attacks. Whether with massive shields or crushing two-handed weapons, Paladins are able to keep claws and swords from \n" +
+                                            "their weaker fellows or they use healing magic to ensure that they remain on their feet.",
                 CharacterClassSpecialAbility = "Healing Nova Blessing",
                 SpecialAbilityIsAnAttack = false,
                 SpecialAbilityHeals = true,
@@ -271,7 +292,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 CharacterClassId = 7,
                 CharacterClassName = "Engineer",
-                CharacterClassDescription = "Masters of mechanical mayhem, engineers love to tinker with explosives, elixirs, and all manner of hazardous gadgets. They support their allies with alchemic weaponry, deploy ingenious inventions, or lay waste to foes with a wide array of mines, bombs, and grenades.",
+                CharacterClassDescription = "Masters of mechanical mayhem, engineers love to tinker with explosives, elixirs, and all manner of hazardous gadgets. \n" +
+                                            "They support their allies with alchemic weaponry, deploy ingenious inventions, or lay waste to foes with a wide array \n" +
+                                            "of mines, bombs, and grenades.",
                 CharacterClassSpecialAbility = "Rapid Turret Deployment",
                 SpecialAbilityIsAnAttack = true,
                 SpecialAbilityHeals = false,
@@ -281,17 +304,20 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 0,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "20 seconds",
-                SpecialAbilityDescription = "An engineer constructs turrets to help defend and control an area. These devices can pound the ground to damage enemies, disperse healing mist to aid allies, fire off rockets, and more.",
+                SpecialAbilityDescription = "An engineer constructs turrets to help defend and control an area. These devices can pound the ground to damage enemies, \n" +
+                                            "disperse healing mist to aid allies, fire off rockets, and more.",
                 ClassBackstoryForCharacter = " You have become a brilliant engineer, dedicating your life to inventing ingenious contraptions. The mysterious artifacts \n" +
                                             "discovered in the ruins of the acients reveal their dark secrets to you. As an inventor, your knowledge \n" +
-                                            "of machinery and gadgets makes you a vital ally in deciphering the ancient devices that hold the power to avert the impending catastrophe."
+                                            "of machinery and gadgets makes you a vital ally in deciphering the ancient devices that hold the power to \n" +
+                                            "avert the impending catastrophe."
             },
 
             new CharacterClassEntity
             {
                 CharacterClassId = 8,
                 CharacterClassName = "Necromancer",
-                CharacterClassDescription = "Practitioners of the dark arts, necromancers summon minions, wield the power of ritual, and heal themselves with blood magic. Necromancers feed on life force, which they can leverage offensively or use to delay their own demise.",
+                CharacterClassDescription = "Practitioners of the dark arts, necromancers summon minions, wield the power of ritual, and heal themselves with \n" +
+                                            "blood magic. Necromancers feed on life force, which they can leverage offensively or use to delay their own demise.",
                 CharacterClassSpecialAbility = "Life Force Drain",
                 SpecialAbilityIsAnAttack = true,
                 SpecialAbilityHeals = true,
@@ -301,11 +327,14 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 SpecialAbilityHealingAmount = 30,
                 SpeacialAbilityDefenseAmount = 0,
                 SpecialAbilityDuration = "20 seconds",
-                SpecialAbilityDescription = "Life force is a special type of energy that necromancers draw from their enemies. Once theyve collected enough life force, necromancers can activate their Death Shroud, entering a spirit form. Life force can be gathered from certain weapon attacks and especially from deaths that happen near the necromancer.",
+                SpecialAbilityDescription = "Life force is a special type of energy that necromancers draw from their enemies. Once theyve collected enough \n" +
+                                            "life force, necromancers can activate their Death Shroud, entering a spirit form. Life force can be gathered \n" +
+                                            "from certain weapon attacks and especially from deaths that happen near the necromancer.",
                 ClassBackstoryForCharacter = "You have been an outcast, shunned for the mastery over the dark arts of necromancy. Your affinity for \n" +
                                             "communicating with the spirits of the deceased led you to uncover an ancient curse that has bound restless souls\n" +
                                             "to the world. Your quest is to break the curse, not only to gain acceptance among the living but also to liberate the \n" +
-                                            " tormented spirits. In the course of the journey, you cross paths with other heroes, forming an unlikely alliance to combat the common threat."
+                                            " tormented spirits. In the course of the journey, you cross paths with other heroes, forming an unlikely alliance \n" +
+                                            "to combat the common threat."
             }
         );
 
@@ -346,7 +375,8 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             {
                 ArmourId = 3,
                 ArmourName = "Plate Armor of the Phoenix",
-                ArmourDescription = "An ornate and majestic suit of armor that grants the wearer resistance to fire damage and the ability to rise from the ashes once per day.",
+                ArmourDescription = "An ornate and majestic suit of armor that grants the wearer resistance to fire damage and the ability \n" +
+                                    "to rise from the ashes once per day.",
                 ArmourProvidesDefense = true,
                 ArmourIncreasesHealth = true,
                 ArmourIncreasesSwordAttacks = false,
@@ -570,7 +600,8 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 ConsumableId = 6,
                 ConsumableName = "Scroll of Teleportation",
                 // Quantity = 1.0,
-                ConsumableDescription = "An ancient scroll with the power to instantly teleport the user to a previously visited location.",
+                ConsumableDescription = "An ancient scroll with the power to instantly teleport \n"+
+                                        "the user to a previously visited location.",
                 ConsumableEffect = "Teleports you to a known location on the map.",
                 ConsumableIncreaseHealth = false,
                 ConsumableIncreaseDefense = false,
@@ -643,7 +674,8 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
                 VehicleSpeed = 35.0,
                 VehicleAbility = "Crunch",
                 VehicleType = "Mount",
-                VehicleDescription = "A massive, fearsome wolf that serves as a mount for those brave enough to tame it. Known for its speed and strength, it's a formidable ally in battle.",
+                VehicleDescription = "A massive, fearsome wolf that serves as a mount for those brave enough to tame it. Known for its \n" +
+                                    "speed and strength, it's a formidable ally in battle.",
                 VehicleAttackDamage = 75,
                 VehicleHealth = 250
             },
@@ -985,24 +1017,23 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<i
             }
         );
 
-        // modelBuilder.Entity<GameEntity>().HasData(
-        //     new GameEntity
-        //     {
-        //         GameId = 1,
-        //         GameName = "Into the Heart of Darkness",
-        //         GameDescription = "In a realm where magic and might coexist, the land teeters on the precipice of darkness.\n" +
-        //                             "Unlikely heros must rise up, each from vastly different backgrounds, to embark on a journey\n" +
-        //                             "that will determine the fate of their world. These four heroes are on separate paths, yet the \n" +
-        //                             "echoes of their destinies are inextricably linked. As they come together, they will unlock the secrets \n" +
-        //                             "of ancient artifacts, face unspeakable evils, and unite against a malevolent force that threatens to plunge \n" +
-        //                             "the world into darkness. Welcome to a world of magic, valor, cunning, and the unknown. The fate of the realm rests \n" +
-        //                             "in your hands. Will you rise to the occasion and uncover the truth behind the Rise of the Ancients",
+        modelBuilder.Entity<GameEntity>().HasData(
+            new GameEntity
+            {
+                GameId = 1,
+                GameName = "Into the Heart of Darkness",
+                GameDescription = "In a realm where magic and might coexist, the land teeters on the precipice of darkness.\n" +
+                                    "Unlikely heros must rise up, each from vastly different backgrounds, to embark on a journey\n" +
+                                    "that will determine the fate of their world. These four heroes are on separate paths, yet the \n" +
+                                    "echoes of their destinies are inextricably linked. As they come together, they will unlock the secrets \n" +
+                                    "of ancient artifacts, face unspeakable evils, and unite against a malevolent force that threatens to plunge \n" +
+                                    "the world into darkness. Welcome to a world of magic, valor, cunning, and the unknown. The fate of the realm rests \n" +
+                                    "in your hands. Will you rise to the occasion and uncover the truth behind the Rise of the Ancients",
 
-        //         DateCreated = DateTimeOffset.Now,
-        //         UserId = 1 
-        //     }
+                DateCreated = DateTimeOffset.Now
+            }
 
-        // );
+        );
     }
 }
 

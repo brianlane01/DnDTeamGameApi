@@ -18,10 +18,6 @@ namespace DnDTeamGame.Models.Games
         public string? GameDescription {get; set;}
 
         [Required]
-        public int UserId {get; set;}
-
-
-        [Required]
         public DateTimeOffset DateCreated {get; set;}
     }
 }

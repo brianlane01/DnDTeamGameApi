@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Headers;
+﻿using Internal;
+using System;
+using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -51,18 +53,57 @@ public class ProgramUI
                      "|       Made By: PutSomeRespectOnIt         |\n" +
                      "|                                           |\n" +
                      "|===========================================|\n" +
-                     "|                                           |\n" +
-                     "|  What Would You Like To Do?               |\n" +
-                     "|  1. Manage Users                          |\n" +
-                     "|  2. Manage A Game                         |\n" +
-                     "|  3. Start Game                            |\n" +
-                     "|  4. Manage Game Item Details              |\n" +
-                     "|  0. Close Application                     |\n" +
-                     "|                                           |\n" +
-                     "|===========================================|");
+                     "|  What Would You Like To Do?               |");
+            ConsoleKeyInfo key;
+            int option = 1;
+            bool isSelected = false;
+            (int left, int top) = Console.GetCursorPosition();
+            string color = "💩";
+
+            while(!isSelected)
+            {   Console.SetCursorPosition(left, top);
+                WriteLine($"|{(option == 1 ? color : "  ")}1. Manage Users                          |");
+                WriteLine($"|{(option == 2 ? color : "  ")}2. Manage A Game                         |");
+                WriteLine($"|{(option == 3 ? color : "  ")}3. Start Game                            |");
+                WriteLine($"|{(option == 4 ? color : "  ")}4. Manage Game Item Details              |");
+                WriteLine($"|{(option == 5 ? color : "  ")}5. Close Application                     |");
+                WriteLine("|                                           |");
+                WriteLine("|===========================================|");
             try
             {
-                var userInput = int.Parse(Console.ReadLine()!);
+                key = Console.ReadKey(true); 
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        option = (option == 5 ? 1 : option + 1);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        option = (option == 1 ? 5 : option -1);
+                        break;
+
+                    case ConsoleKey.Enter:
+                        isSelected = true;
+                        break;
+
+                    default:
+                        WriteLine("Invalid Selection Please Try Again");
+                        PressAnyKeyToContinue();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Bad selection.. Press any key to continue");
+                Console.ReadKey();
+            }
+                
+            }
+
+            try
+            {
+                var userInput = option;
                 switch (userInput)
                 {
                     case 1:
@@ -81,7 +122,7 @@ public class ProgramUI
                         ManageGameItemDetails();
                         break;
 
-                    case 0:
+                    case 5:
                         IsRunning = ExitApplication();
                         break;
 
@@ -103,7 +144,7 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.Red;
-        WriteLine("|=========================================|\n" +
+        WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
                     "|  DnDTeamGame User Management          |\n" +
                     "|  What would you like to do with the   |\n" +
@@ -175,9 +216,12 @@ public class ProgramUI
             UserDetailUI users = response.Content.ReadAsAsync<UserDetailUI>().Result;
             // var users = JsonSerializer.Deserialize<UserDetailUI>(content);
             // var users = _userService.GetUserByIdAsync(userId).Result;
-            System.Console.WriteLine($"Welcome to the Game {users.FirstName} {users.LastName}! Your UserName is - {users.UserName}");
+            // System.Console.WriteLine($"Welcome to the Game {users.FirstName} {users.LastName}! Your UserName is - {users.UserName}");
 
-            System.Console.WriteLine($"FirstName: {users.FirstName} \n LastName: {users.LastName} \n UserName: {users.UserName}");
+            System.Console.WriteLine("|====================================================================|\n" +
+                                    $"|FirstName: {users.FirstName} || LastName: {users.LastName} || UserName: {users.UserName} |\n" +
+                                    $"|                                                                    |\n" +
+                                    $"|====================================================================|\n");
             PressAnyKeyToContinue();
             ManageUsers();
         }
@@ -197,7 +241,7 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.Magenta;
-        WriteLine("|=========================================|\n" +
+        WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
                     "| Thanks for Choosing to Play!          |\n" +
                     "|  To begin what is your First Name?    |\n" +
@@ -207,7 +251,7 @@ public class ProgramUI
         PressAnyKeyToContinue();
         Clear();
         ForegroundColor = ConsoleColor.Magenta;
-        WriteLine("|=========================================|\n" +
+        WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
                     "|  What is your Last Name?              |\n" +
                     "|                                       |\n" +
@@ -216,7 +260,7 @@ public class ProgramUI
         PressAnyKeyToContinue();
         Clear();
         ForegroundColor = ConsoleColor.Magenta;
-        WriteLine("|=========================================|\n" +
+        WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
                     "|       Please enter a UserName:        |\n" +
                     "|                                       |\n" +
@@ -225,7 +269,7 @@ public class ProgramUI
         PressAnyKeyToContinue();
         Clear();
         ForegroundColor = ConsoleColor.Magenta;
-        WriteLine("|=========================================|\n" +
+        WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
                     "|    Please enter an Email Address:     |\n" +
                     "|                                       |\n" +
@@ -234,7 +278,7 @@ public class ProgramUI
         PressAnyKeyToContinue();
         Clear();
         ForegroundColor = ConsoleColor.Magenta;
-        WriteLine("|=========================================|\n" +
+        WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
                     "|    Please enter a Password:           |\n" +
                     "|                                       |\n" +
@@ -243,7 +287,7 @@ public class ProgramUI
         PressAnyKeyToContinue();
         Clear();
         ForegroundColor = ConsoleColor.Magenta;
-        WriteLine("|=========================================|\n" +
+        WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
                     "|    Please enter Confirm Password:     |\n" +
                     "|                                       |\n" +
@@ -407,15 +451,11 @@ public class ProgramUI
 
         Write("Game Description: ");
         string gameDescription = ReadLine()!;
-
-        WriteLine("UserId: ");
-        if (int.TryParse(ReadLine(), out int userId))
         {
             var newGame = new GameDetailUI
             {
                 GameName = gameName,
-                GameDescription = gameDescription,
-                UserId = userId,
+                GameDescription = gameDescription
             };
             HttpClient httpClient = new HttpClient();
 
@@ -448,15 +488,12 @@ public class ProgramUI
         Write("Game Description: ");
         string gameDescription = ReadLine()!;
 
-        Write("User ID: ");
-        if (int.TryParse(ReadLine(), out int userId))
         {
             var updatedGame = new GameDetailUI
             {
                 GameId = gameId,
                 GameName = gameName,
-                GameDescription = gameDescription,
-                UserId = userId,
+                GameDescription = gameDescription
             };
 
             HttpClient httpClient = new HttpClient();
@@ -538,15 +575,14 @@ public class ProgramUI
 
             foreach (var game in games)
             {
-                WriteLine($"GameName: {game.GameName} \n" +
-                          "   \n" +
-                          "GameDescription: \n" +
-                          "  \n" +
-                          "==============================================================================================================\n" +
-                          "  \n" +
-                          $"{game.GameDescription}\n" +
-                          "     \n" +
-                          "==============================================================================================================");
+                WriteLine($"|GameName: {game.GameName}                                                                                   |\n" +
+                          "|                                                                                                             |\n" +
+                          "|GameDescription:                                                                                             |\n" +
+                          "|=============================================================================================================|\n" +
+                          "|  \n" +
+                          $"|{game.GameDescription}|\n" +
+                          "|    \n" +
+                          "|=============================================================================================================|");
             }
 
             PressAnyKeyToContinue();
@@ -707,6 +743,7 @@ public class ProgramUI
         int baseDefense = int.Parse(Console.ReadLine()!);
 
         Clear();
+        int baseHealth = 100;
         ForegroundColor = ConsoleColor.DarkRed;
         System.Console.WriteLine("|===================================================|\n" +
                                  "|                                                   |\n" +
@@ -721,7 +758,7 @@ public class ProgramUI
                                     $"| {newCharacterName}'s Health has beed restored to  |\n" +
                                      "|      150 HealthPoints                             |\n" +
                                      "|===================================================|\n");
-            int baseHealth = 150;
+            baseHealth = 150;
             PressAnyKeyToContinue();
         }
         else
@@ -732,7 +769,7 @@ public class ProgramUI
                                     $"| {newCharacterName}'s Health has beed restored to  \n" +
                                      "|      120 HealthPoints                             |\n" +
                                      "|===================================================|\n");
-            int baseHealth = 120;
+            baseHealth = 120;
             PressAnyKeyToContinue();
         }
 
@@ -893,13 +930,13 @@ public class ProgramUI
                     "|     Character.                              |\n" +
                     "|                                             |\n" +
                     "|=============================================|\n");
-        int userId = int.Parse(Console.ReadLine()!); 
+        int userId = int.Parse(Console.ReadLine()!);
 
 
         CharacterCreate createCharacter = new CharacterCreate
         {
             CharacterName = newCharacterName,
-            CharacterHealth = 140,
+            CharacterHealth = baseHealth,
             CharacterBaseAttackDamage = baseAttack,
             CharacterBaseDefense = baseDefense,
             CharacterDescription = newCharacterDescription,
@@ -916,7 +953,7 @@ public class ProgramUI
         };
 
         var characterContent = new StringContent(JsonConvert.SerializeObject(createCharacter), Encoding.UTF8, "application/json");
-        
+
         HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Character", characterContent).Result;
         ReadKey();
         if (response.IsSuccessStatusCode)
@@ -924,16 +961,31 @@ public class ProgramUI
             CharacterListUI characterCreated = response.Content.ReadAsAsync<CharacterListUI>().Result;
             Console.Clear();
             ForegroundColor = ConsoleColor.Cyan;
-            WriteLine("|===============================================|\n" +
-                    "|                                             |\n" +
-                    $"| You have successfully create a new         |\n" +
-                    "|     Character. Here is the information on   |\n" +
-                    "|       the character you created             |\n" +
-                    "|=============================================|\n");
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      "| You have successfully create a new          |\n" +
+                      "|     Character. Here is the information on   |\n" +
+                      "|       the character you created             |\n" +
+                      "|=============================================|\n");
 
             System.Console.WriteLine($"{characterCreated.CharacterName}\n" +
                                      $"{characterCreated.CharacterDescription}\n" +
-                                     $"{characterCreated.CharacterClassDescription}");
+                                     $"{characterCreated.CharacterHealth}\n" +
+                                     $"{characterCreated.CharacterBaseAttackDamage}\n" +
+                                     $"{characterCreated.CharacterBaseDefense}\n" +
+                                     $"{characterCreated.HairColorName}\n" +
+                                     $"{characterCreated.HairStyleName}\n" +
+                                     $"{characterCreated.CharacterClassName}\n" +
+                                     $"{characterCreated.AbilityName}\n" +
+                                     $"{characterCreated.AbilityDescription}\n" +
+                                     $"{characterCreated.VehicleName}\n" +
+                                     $"{characterCreated.VehicleDescription}\n" +
+                                     $"{characterCreated.WeaponName}\n" +
+                                     $"{characterCreated.WeaponDescription}\n" +
+                                     $"{characterCreated.ArmourName}\n" +
+                                     $"{characterCreated.ArmourDescription}\n" +
+                                     $"{characterCreated.ConsumableName}\n" +
+                                     $"{characterCreated.ConsumableDescription}");
             PressAnyKeyToContinue();
             StartAGame();
         }
@@ -1278,7 +1330,7 @@ public class ProgramUI
 
     private void ViewAllCharacterClasses()
     {
-
+        BackgroundColor = ConsoleColor.Gray;
         ForegroundColor = ConsoleColor.DarkRed;
 
         HttpClient httpClient = new HttpClient();
@@ -1290,15 +1342,23 @@ public class ProgramUI
 
             foreach (var characterClass in characterClasses)
             {
-                WriteLine("=================================================================================================================|\n" +
-                          "|                                                                                                                |\n" +
-                          $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}|\n" +
-                          "|================================================================================================================|\n" +
-                          "| Character Class Description:                                                                                   |\n" +
-                          "|________________________________________________________________________________________________________________|\n" +
-                          "|                                                                                                                |\n" +
-                          $" {characterClass.CharacterClassDescription}                         \n" +
-                          "                                                                                                                 ");
+                WriteLine("|======================================================================================================================|\n" +
+                          "|                                                                                                                      |\n" +
+                         $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}\n" +
+                          "|======================================================================================================================|\n" +
+                          "| Character Class Description:                                                                                         |\n" +
+                          "|______________________________________________________________________________________________________________________|\n" +
+                          "                                                                                                            \n" +
+                         $"{characterClass.CharacterClassDescription} \n");
+                // int characterLimitPerLine = 100;
+                // string description = characterClass.CharacterClassDescription;
+
+                // // Split the description into lines
+                // for (int i = 0; i < description.Length; i += characterLimitPerLine)
+                // {
+                //     int length = Math.Min(characterLimitPerLine, description.Length - i);
+                //     WriteLine("| " + description.Substring(i, length).PadRight(characterLimitPerLine) + " |");
+                // }
             }
 
             PressAnyKeyToContinue();
@@ -1473,6 +1533,10 @@ public class ProgramUI
 
                 case 2:
                     ManageVehicles();
+                    break;
+
+                case 3:
+                    ViewAllCharacterClasses();
                     break;
 
                 case 4:
@@ -2646,9 +2710,9 @@ public class ProgramUI
             else
             {
                 WriteLine("Failed to update armour. Status Code: " + response.StatusCode);
+                }
+                PressAnyKeyToContinue();
             }
-            PressAnyKeyToContinue();
-        }
     }
 
     private void DeleteExistingArmour()
@@ -2802,7 +2866,7 @@ public class ProgramUI
             Console.ReadKey();
         }
     }
-   
+
     private void ManageVehicles()
     {
         Clear();
@@ -3198,7 +3262,7 @@ public class ProgramUI
                 WriteLine("Failed to add new Game");
             }
             PressAnyKeyToContinue();
-        }    
+        }
     }
 
     private void ViewAllVehicles()
@@ -3243,16 +3307,16 @@ public class ProgramUI
         if (response.IsSuccessStatusCode)
         {
             VehicleDetailUI vehicle = response.Content.ReadAsAsync<VehicleDetailUI>().Result;
-                    WriteLine(
-                          $"VehicleId {vehicle.VehicleId} \n" +
-                          $"VehicleName: {vehicle.VehicleName} \n" +
-                          $"VehicleSpeed: {vehicle.VehicleSpeed} \n" +
-                          $"VehicleAbility: {vehicle.VehicleAbility} \n" +
-                          $"VehicleType: {vehicle.VehicleType} \n" +
-                          $"VehicleDescription: {vehicle.VehicleDescription} \n" +
-                          $"VehicleAttackDamage: {vehicle.VehicleAttackDamage} \n" +
-                          $"VehicleHealth: {vehicle.VehicleHealth} \n"
-                          );
+            WriteLine(
+                  $"VehicleId {vehicle.VehicleId} \n" +
+                  $"VehicleName: {vehicle.VehicleName} \n" +
+                  $"VehicleSpeed: {vehicle.VehicleSpeed} \n" +
+                  $"VehicleAbility: {vehicle.VehicleAbility} \n" +
+                  $"VehicleType: {vehicle.VehicleType} \n" +
+                  $"VehicleDescription: {vehicle.VehicleDescription} \n" +
+                  $"VehicleAttackDamage: {vehicle.VehicleAttackDamage} \n" +
+                  $"VehicleHealth: {vehicle.VehicleHealth} \n"
+                  );
             PressAnyKeyToContinue();
         }
     }
@@ -3335,20 +3399,12 @@ public class ProgramUI
                 WriteLine("Failed to Upate a Vehicle!" + response.StatusCode);
             }
             PressAnyKeyToContinue();
-        }    
+        }
     }
 
     private bool ExitApplication()
     {
         return false;
-    }
-
-    private void DisplayDataValidationError(int userInputValue)
-    {
-        ForegroundColor = ConsoleColor.Blue;
-        WriteLine($"Invalid Id Entry: {userInputValue}!");
-        ResetColor();
-        return;
     }
 
     private void PressAnyKeyToContinue()
