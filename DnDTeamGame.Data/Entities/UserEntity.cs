@@ -14,8 +14,6 @@ namespace DnDTeamGame.Data.Entities
         [Required]
         public DateTime DateCreated { get; set; }
 
-        public List<GameEntity> Games {get; set;} = new List<GameEntity>();
-
         public List<CharacterEntity> Characters { get; set; } = new List<CharacterEntity>();
     }
 }

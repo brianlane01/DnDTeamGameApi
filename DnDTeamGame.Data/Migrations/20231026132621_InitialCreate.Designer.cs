@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnDTeamGame.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231023151030_InitialCreate")]
+    [Migration("20231026132621_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -164,7 +164,7 @@ namespace DnDTeamGame.Data.Migrations
                             AbilityDamageMultipleEnemy = false,
                             AbilityDamageSingleEnemy = false,
                             AbilityDefenseIncrease = 0,
-                            AbilityDescription = "Invisibility, considered to be the supreme form of camouflage, as it does not reveal to the viewer any kind of vital signs, visual effects, or any frequencies of the electromagnetic spectrum detectable to the human eye, instead making use of radio, infrared or ultraviolet wavelengths.",
+                            AbilityDescription = "Invisibility, considered to be the supreme form of camouflage, as it does not reveal to the viewer any kind of vital \nsigns, visual effects, or any frequencies of the electromagnetic spectrum detectable to the human eye, instead making \nuse of radio, infrared or ultraviolet wavelengths.",
                             AbilityEffectAttack = false,
                             AbilityEffectDefenseEnhancement = false,
                             AbilityEffectHealthEnhancement = false,
@@ -215,7 +215,7 @@ namespace DnDTeamGame.Data.Migrations
                             AbilityDamageMultipleEnemy = false,
                             AbilityDamageSingleEnemy = false,
                             AbilityDefenseIncrease = 100,
-                            AbilityDescription = "A defence skill that increases the player's Defence for a single second to such an extent that their entire body becomes harder than a set of full plate armour. Activation requires the player to be unarmed and only wearing non-metallic armour.",
+                            AbilityDescription = "A defence skill that increases the player's Defence for a single second to such an extent that their entire \nbody becomes harder than a set of full plate armour. Activation requires the player to be unarmed and only \nwearing non-metallic armour.",
                             AbilityEffectAttack = false,
                             AbilityEffectDefenseEnhancement = true,
                             AbilityEffectHealthEnhancement = false,
@@ -304,7 +304,7 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             ArmourId = 3,
-                            ArmourDescription = "An ornate and majestic suit of armor that grants the wearer resistance to fire damage and the ability to rise from the ashes once per day.",
+                            ArmourDescription = "An ornate and majestic suit of armor that grants the wearer resistance to fire damage and the ability \nto rise from the ashes once per day.",
                             ArmourIncreasesHealth = true,
                             ArmourIncreasesRangedAttacks = false,
                             ArmourIncreasesSwordAttacks = false,
@@ -541,7 +541,7 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             CharacterClassId = 1,
-                            CharacterClassDescription = "Warriors equip themselves carefully for combat and engage their enemies head-on, letting attacks glance off their heavy armor. They use diverse combat tactics and a wide variety of weapon types to protect their more vulnerable allies. Warriors must carefully master their rage – the power behind their strongest attacks – in order to maximize their effectiveness in combat.",
+                            CharacterClassDescription = "Warriors equip themselves carefully for combat and engage their enemies head-on, letting attacks glance \noff their heavy armor. They use diverse combat tactics and a wide variety of weapon types to protect \ntheir more vulnerable allies. Warriors must carefully master their rage, the power behind their strongest \nattacks in order to maximize their effectiveness in combat.",
                             CharacterClassName = "Warrior",
                             CharacterClassSpecialAbility = "Rage",
                             ClassBackstoryForCharacter = "You hail from a long line of noble knights sworn to protect the kingdom. Trained in the art of combat \nfrom a young age, you became a renowned warrior and commander of the royal army. Beneath your stoic \nexterior lies a burning desire to uncover the truth about a dark prophecy that foretells the return of \nan ancient evil. As the kingdom teeters on the brink of chaos, you decide to take up the sword, determined \nto fulfill the family's oath and vanquish the looming threat.",
@@ -558,10 +558,10 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             CharacterClassId = 2,
-                            CharacterClassDescription = "Hunters battle their foes at a distance or up close, commanding their pets to attack while they nock their arrows, fire their guns, or ready their polearms. Though their weapons are effective at short and long ranges, hunters are also highly mobile. They can evade or restrain their foes to control the arena of battle",
+                            CharacterClassDescription = "Hunters battle their foes at a distance or up close, commanding their pets to attack while they nock their arrows, \nfire their guns, or ready their polearms. Though their weapons are effective at short and long ranges, hunters are \nalso highly mobile. They can evade or restrain their foes to control the arena of battle",
                             CharacterClassName = "Hunter",
                             CharacterClassSpecialAbility = "Tamer of the Wilds",
-                            ClassBackstoryForCharacter = " You have become a skilled hunter, hailing from the Elven Woodlands. The connection you have with the natural world and mastery of archery have made you\na renowned protector of the forest. You joins the other heroes, using your keen senses to detect the malevolent forces\nthreatening the realm. This is not only a quest to safeguard the homeland but also to restore the balance of nature.",
+                            ClassBackstoryForCharacter = " You have become a skilled hunter, hailing from the Elven Woodlands. The connection you have with the natural world \nand mastery of archery have made you\na renowned protector of the forest. You joins the other heroes, using your keen senses to detect the malevolent forces\nthreatening the realm. This is not only a quest to safeguard the homeland but also to restore the balance of nature.",
                             SpeacialAbilityDefenseAmount = 0,
                             SpecialAbilityDamage = 25,
                             SpecialAbilityDescription = "Hunters tame the beasts of the wild, and those beasts serve in return by assaulting their enemies and shielding them from harm.",
@@ -575,7 +575,7 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             CharacterClassId = 3,
-                            CharacterClassDescription = "Rogues often initiate combat with a surprise attack from the shadows, leading with vicious melee strikes. When in protracted battles, they utilize a successive combination of carefully chosen attacks to soften the enemy up for a killing blow. Rogues must take special care when selecting targets so that their combo attacks are not wasted, and they must be conscious of when to hide or flee if a battle turns against them.",
+                            CharacterClassDescription = "Rogues often initiate combat with a surprise attack from the shadows, leading with vicious melee strikes.\nWhen in protracted battles, they utilize a successive combination of carefully chosen attacks to soften the \nenemy up for a killing blow. Rogues must take special care when selecting targets so that their combo attacks \nare not wasted, and they must be conscious of when to hide or flee if a battle turns against them.",
                             CharacterClassName = "Rogue",
                             CharacterClassSpecialAbility = "Stealth Attack",
                             ClassBackstoryForCharacter = " You grew up an orphan on the unforgiving streets of the shadowy city of Rogarth. Your life of \npetty theft and cunning escapes changed when you discovered a cryptic map, hinting at the existence of an\nartifact that could shift the balance of power in the kingdom. Your past as a rogue makes you an invaluable  \nasset in infiltrating dangerous territories, and you are driven to find the artifact and secure the future.",
@@ -592,13 +592,13 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             CharacterClassId = 4,
-                            CharacterClassDescription = "Mages demolish their foes with arcane incantations. Although they wield powerful offensive spells, mages are fragile and lightly armored, making them particularly vulnerable to close-range attacks. Wise mages make careful use of their spells to keep their foes at a distance or hold them in place.",
+                            CharacterClassDescription = "Mages demolish their foes with arcane incantations. Although they wield powerful offensive spells, mages are \nfragile and lightly armored, making them particularly vulnerable to close-range attacks. Wise mages make \ncareful use of their spells to keep their foes at a distance or hold them in place.",
                             CharacterClassName = "Mage",
                             CharacterClassSpecialAbility = "Elemental Nova Blast",
                             ClassBackstoryForCharacter = " You have becoma a gifted mage, spending your youth studying the arcane arts in the Tower of Mysteries. \nYou now possess a unique ability to see glimpses of the future through magic. The visions reveal an imminent \ncataclysm that threatens to plunge the world into darkness. To avert this fate, you must harness your powers \nand unite with other heroes to unlock the secrets hidden within ancient artifacts, preventing the oncoming disaster.",
                             SpeacialAbilityDefenseAmount = 0,
                             SpecialAbilityDamage = 40,
-                            SpecialAbilityDescription = "By calling upon sheets of ice, columns of flame, and waves of arcane power, mages can effectively attack multiple foes at the same time.",
+                            SpecialAbilityDescription = "By calling upon sheets of ice, columns of flame, and waves of arcane power, mages can effectively \nattack multiple foes at the same time.",
                             SpecialAbilityDuration = "",
                             SpecialAbilityHealingAmount = 0,
                             SpecialAbilityHeals = false,
@@ -609,7 +609,7 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             CharacterClassId = 5,
-                            CharacterClassDescription = "Death Knights engage their foes up-close, supplementing swings of their weapons with dark magic that renders enemies vulnerable or damages them with unholy power. They drag foes into one-on-one conflicts, compelling them to focus their attacks away from weaker companions. To prevent their enemies from fleeing their grasp, death knights must remain mindful of the power they call forth from runes, and pace their attacks appropriately.",
+                            CharacterClassDescription = "Death Knights engage their foes up-close, supplementing swings of their weapons with dark magic that renders \nenemies vulnerable or damages them with unholy power. They drag foes into one-on-one conflicts, compelling \nthem to focus their attacks away from weaker companions. To prevent their enemies from fleeing their grasp, \ndeath knights must remain mindful of the power they call forth from runes, and pace their attacks appropriately.",
                             CharacterClassName = "Death Knight",
                             CharacterClassSpecialAbility = "RuneForged Starburst Stream",
                             ClassBackstoryForCharacter = "You were once a valiant knight, but corruption took hold when you were raised from the dead as a death knight by a malevolent necromancer.\ntormented by your past deeds, you now seek redemption. Using your unholy powers are harnessing them for a noble cause:\nto vanquish the darkness you once served. Your presence serves as a constant reminder of the thin line between light and shadow.",
@@ -626,7 +626,7 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             CharacterClassId = 6,
-                            CharacterClassDescription = "Paladins stand directly in front of their enemies, relying on heavy armor and healing in order to survive incoming attacks. Whether with massive shields or crushing two-handed weapons, Paladins are able to keep claws and swords from their weaker fellows or they use healing magic to ensure that they remain on their feet.",
+                            CharacterClassDescription = "Paladins stand directly in front of their enemies, relying on heavy armor and healing in order to survive incoming \nattacks. Whether with massive shields or crushing two-handed weapons, Paladins are able to keep claws and swords from \ntheir weaker fellows or they use healing magic to ensure that they remain on their feet.",
                             CharacterClassName = "Paladin",
                             CharacterClassSpecialAbility = "Healing Nova Blessing",
                             ClassBackstoryForCharacter = "A Dawnbringer, a devoted paladin of a divine order, you set out on a quest with a sacred purpose.\nYour unwavering faith is guided by visions of an ancient prophecy, which you believes holds the key to thwarting the ancient evil.\nArmed with holy magic and a deep sense of duty, You represent the light's beacon in the darkest of times.",
@@ -643,13 +643,13 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             CharacterClassId = 7,
-                            CharacterClassDescription = "Masters of mechanical mayhem, engineers love to tinker with explosives, elixirs, and all manner of hazardous gadgets. They support their allies with alchemic weaponry, deploy ingenious inventions, or lay waste to foes with a wide array of mines, bombs, and grenades.",
+                            CharacterClassDescription = "Masters of mechanical mayhem, engineers love to tinker with explosives, elixirs, and all manner of hazardous gadgets. \nThey support their allies with alchemic weaponry, deploy ingenious inventions, or lay waste to foes with a wide array \nof mines, bombs, and grenades.",
                             CharacterClassName = "Engineer",
                             CharacterClassSpecialAbility = "Rapid Turret Deployment",
-                            ClassBackstoryForCharacter = " You have become a brilliant engineer, dedicating your life to inventing ingenious contraptions. The mysterious artifacts \ndiscovered in the ruins of the acients reveal their dark secrets to you. As an inventor, your knowledge \nof machinery and gadgets makes you a vital ally in deciphering the ancient devices that hold the power to avert the impending catastrophe.",
+                            ClassBackstoryForCharacter = " You have become a brilliant engineer, dedicating your life to inventing ingenious contraptions. The mysterious artifacts \ndiscovered in the ruins of the acients reveal their dark secrets to you. As an inventor, your knowledge \nof machinery and gadgets makes you a vital ally in deciphering the ancient devices that hold the power to \navert the impending catastrophe.",
                             SpeacialAbilityDefenseAmount = 0,
                             SpecialAbilityDamage = 30,
-                            SpecialAbilityDescription = "An engineer constructs turrets to help defend and control an area. These devices can pound the ground to damage enemies, disperse healing mist to aid allies, fire off rockets, and more.",
+                            SpecialAbilityDescription = "An engineer constructs turrets to help defend and control an area. These devices can pound the ground to damage enemies, \ndisperse healing mist to aid allies, fire off rockets, and more.",
                             SpecialAbilityDuration = "20 seconds",
                             SpecialAbilityHealingAmount = 0,
                             SpecialAbilityHeals = false,
@@ -660,13 +660,13 @@ namespace DnDTeamGame.Data.Migrations
                         new
                         {
                             CharacterClassId = 8,
-                            CharacterClassDescription = "Practitioners of the dark arts, necromancers summon minions, wield the power of ritual, and heal themselves with blood magic. Necromancers feed on life force, which they can leverage offensively or use to delay their own demise.",
+                            CharacterClassDescription = "Practitioners of the dark arts, necromancers summon minions, wield the power of ritual, and heal themselves with \nblood magic. Necromancers feed on life force, which they can leverage offensively or use to delay their own demise.",
                             CharacterClassName = "Necromancer",
                             CharacterClassSpecialAbility = "Life Force Drain",
-                            ClassBackstoryForCharacter = "You have been an outcast, shunned for the mastery over the dark arts of necromancy. Your affinity for \ncommunicating with the spirits of the deceased led you to uncover an ancient curse that has bound restless souls\nto the world. Your quest is to break the curse, not only to gain acceptance among the living but also to liberate the \n tormented spirits. In the course of the journey, you cross paths with other heroes, forming an unlikely alliance to combat the common threat.",
+                            ClassBackstoryForCharacter = "You have been an outcast, shunned for the mastery over the dark arts of necromancy. Your affinity for \ncommunicating with the spirits of the deceased led you to uncover an ancient curse that has bound restless souls\nto the world. Your quest is to break the curse, not only to gain acceptance among the living but also to liberate the \n tormented spirits. In the course of the journey, you cross paths with other heroes, forming an unlikely alliance \nto combat the common threat.",
                             SpeacialAbilityDefenseAmount = 0,
                             SpecialAbilityDamage = 15,
-                            SpecialAbilityDescription = "Life force is a special type of energy that necromancers draw from their enemies. Once theyve collected enough life force, necromancers can activate their Death Shroud, entering a spirit form. Life force can be gathered from certain weapon attacks and especially from deaths that happen near the necromancer.",
+                            SpecialAbilityDescription = "Life force is a special type of energy that necromancers draw from their enemies. Once theyve collected enough \nlife force, necromancers can activate their Death Shroud, entering a spirit form. Life force can be gathered \nfrom certain weapon attacks and especially from deaths that happen near the necromancer.",
                             SpecialAbilityDuration = "20 seconds",
                             SpecialAbilityHealingAmount = 30,
                             SpecialAbilityHeals = true,
@@ -871,7 +871,7 @@ namespace DnDTeamGame.Data.Migrations
                             ConsumableAttackIncreaseAmount = 0,
                             ConsumableDamageToEnemy = "",
                             ConsumableDefenseIncreaseAmount = 0,
-                            ConsumableDescription = "An ancient scroll with the power to instantly teleport the user to a previously visited location.",
+                            ConsumableDescription = "An ancient scroll with the power to instantly teleport \nthe user to a previously visited location.",
                             ConsumableDoesDamageToEnemy = false,
                             ConsumableEffect = "Teleports you to a known location on the map.",
                             ConsumableHealthIncreaseAmount = 0,
@@ -920,14 +920,18 @@ namespace DnDTeamGame.Data.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("GameId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Games");
+
+                    b.HasData(
+                        new
+                        {
+                            GameId = 1,
+                            DateCreated = new DateTimeOffset(new DateTime(2023, 10, 26, 9, 26, 21, 627, DateTimeKind.Unspecified).AddTicks(7230), new TimeSpan(0, -4, 0, 0, 0)),
+                            GameDescription = "In a realm where magic and might coexist, the land teeters on the precipice of darkness.\nUnlikely heros must rise up, each from vastly different backgrounds, to embark on a journey\nthat will determine the fate of their world. These four heroes are on separate paths, yet the \nechoes of their destinies are inextricably linked. As they come together, they will unlock the secrets \nof ancient artifacts, face unspeakable evils, and unite against a malevolent force that threatens to plunge \nthe world into darkness. Welcome to a world of magic, valor, cunning, and the unknown. The fate of the realm rests \nin your hands. Will you rise to the occasion and uncover the truth behind the Rise of the Ancients",
+                            GameName = "Into the Heart of Darkness"
+                        });
                 });
 
             modelBuilder.Entity("DnDTeamGame.Data.Entities.HairColorEntity", b =>
@@ -1316,7 +1320,7 @@ namespace DnDTeamGame.Data.Migrations
                             VehicleId = 4,
                             VehicleAbility = "Crunch",
                             VehicleAttackDamage = 75,
-                            VehicleDescription = "A massive, fearsome wolf that serves as a mount for those brave enough to tame it. Known for its speed and strength, it's a formidable ally in battle.",
+                            VehicleDescription = "A massive, fearsome wolf that serves as a mount for those brave enough to tame it. Known for its \nspeed and strength, it's a formidable ally in battle.",
                             VehicleHealth = 250.0,
                             VehicleName = "DireWolf Mount",
                             VehicleSpeed = 35.0,
@@ -1764,17 +1768,6 @@ namespace DnDTeamGame.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DnDTeamGame.Data.Entities.GameEntity", b =>
-                {
-                    b.HasOne("DnDTeamGame.Data.Entities.UserEntity", "Games")
-                        .WithMany("Games")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Games");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -1829,8 +1822,6 @@ namespace DnDTeamGame.Data.Migrations
             modelBuilder.Entity("DnDTeamGame.Data.Entities.UserEntity", b =>
                 {
                     b.Navigation("Characters");
-
-                    b.Navigation("Games");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,8 +7,6 @@ namespace DnDTeamGame.Models.Games
 
         public string? GameDescription {get; set;}
 
-        public int UserId {get; set;}
-
         public DateTimeOffset DateCreated {get; set;}
         public DateTimeOffset? DateModified { get; set; }
 

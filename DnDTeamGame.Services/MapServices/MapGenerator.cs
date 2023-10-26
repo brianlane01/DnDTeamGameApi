@@ -55,26 +55,27 @@ namespace DnDTeamGame.Services.MapServices
         public async Task<bool> DeleteMapAsync(int GameId)
         {
             var mapEntity = await _dbContext.Maps.FindAsync(GameId);
-            if (mapEntity?.MapId != _userId)
+            if (mapEntity == null)
                 return false;
+                
             _dbContext.Maps.Remove(mapEntity);
             return await _dbContext.SaveChangesAsync() == 1;
         }
 
-        public async Task<IEnumerable<MapListItem>> GetAllMapsAsync(MapCreate request)
-        {
-            List<MapListItem> maps = await _dbContext.Maps
-            .Where(entity => entity.MapId == _userId)
-            .Select(entity => new MapListItem
-            {
-                MapId = entity.MapId,
-                GameId = entity.GameId,
-                MapName = entity.MapName,
-                MapDescription = entity.MapDescription,
-            })
-            .ToListAsync();
-            return maps;
-        }
+        // public async Task<IEnumerable<MapListItem>> GetAllMapsAsync(MapCreate request)
+        // {
+        //     List<MapListItem> maps = await _dbContext.Maps
+        //     .Where(entity => entity.MapId == _userId)
+        //     .Select(entity => new MapListItem
+        //     {
+        //         MapId = entity.MapId,
+        //         GameId = entity.GameId,
+        //         MapName = entity.MapName,
+        //         MapDescription = entity.MapDescription,
+        //     })
+        //     .ToListAsync();
+        //     return maps;
+        // }
 
         public async Task<MapDetail?> GetMapByGameIdAsync(int GameId)
         {
@@ -89,17 +90,29 @@ namespace DnDTeamGame.Services.MapServices
 
             };
         }
-        public Task<IEnumerable<MapListItem>> GetAllMapsAsync()
+        public async Task<IEnumerable<MapListItem>> GetAllMapsAsync()
         {
-            throw new NotImplementedException();
+            List<MapListItem> maps = await _dbContext.Maps
+                .Select(entity => new MapListItem
+                {
+                    MapId = entity.MapId,
+                    GameId = entity.GameId,
+                    MapName = entity.MapName,
+                    MapType = entity.MapType,
+                    MapDescription = entity.MapDescription,
+                    PrecipitationType = entity.PrecipitationType
+                })
+                .ToListAsync();
+            return maps;        
         }
 
 
         public async Task<bool> UpdateMapAsync(MapUpdate request)
         {
-            MapEntity? entity = await _dbContext.Maps.FindAsync(request.GameId);
-            if (entity?.MapId != _userId)
+            MapEntity? entity = await _dbContext.Maps.FindAsync(request.MapId);
+            if (entity == null)
                 return false;
+
             entity.MapId = request.MapId;
             entity.GameId = request.GameId;
             entity.MapType = request.MapType;
