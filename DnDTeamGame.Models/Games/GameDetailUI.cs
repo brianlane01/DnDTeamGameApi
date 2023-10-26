@@ -17,10 +17,5 @@ namespace DnDTeamGame.Models.Games
         [JsonPropertyName("gameDescription")]
         public string? GameDescription { get; set; } 
 
-        
-        [JsonProperty("userId")]
-        [JsonPropertyName("userId")] 
-        public int UserId {get; set;}
-
     }
 }

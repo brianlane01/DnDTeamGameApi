@@ -8,7 +8,6 @@ namespace DnDTeamGame.Services.Games
     public class GameService : IGameService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly int _userId;
 
         public GameService(ApplicationDbContext dbContext)
         {
@@ -21,7 +20,6 @@ namespace DnDTeamGame.Services.Games
             {
                 GameName = model.GameName,
                 GameDescription = model.GameDescription,
-                UserId = model.UserId,
                 DateCreated = DateTimeOffset.Now
 
             };
@@ -36,7 +34,6 @@ namespace DnDTeamGame.Services.Games
                 GameId = entity.GameId,
                 GameName = entity.GameName,
                 GameDescription = entity.GameDescription,
-                UserId = entity.UserId,
                 DateCreated = DateTime.Now
             };
 
@@ -51,7 +48,6 @@ namespace DnDTeamGame.Services.Games
                     GameId = entity.GameId,
                     GameName = entity.GameName,
                     GameDescription = entity.GameDescription,
-                    UserId = entity.UserId,
                     DateCreated = entity.DateCreated
                 })
                 .ToListAsync();
@@ -67,7 +63,6 @@ namespace DnDTeamGame.Services.Games
                 GameId = entity.GameId,
                 GameName = entity.GameName,
                 GameDescription = entity.GameDescription,
-                UserId = entity.UserId,
                 DateCreated = entity.DateCreated,
                 DateModified = entity.DateModified
             };
@@ -83,7 +78,6 @@ namespace DnDTeamGame.Services.Games
             entity.GameId = request.GameId;
             entity.GameName = request.GameName;
             entity.GameDescription = request.GameDescription;
-            entity.UserId = request.UserId;
             entity.DateModified = DateTimeOffset.Now;
 
             int numberOfChanges = await _dbContext.SaveChangesAsync();

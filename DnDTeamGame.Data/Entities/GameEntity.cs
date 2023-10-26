@@ -19,9 +19,5 @@ namespace DnDTeamGame.Data.Entities
 
         public DateTimeOffset? DateModified {get; set;}
 
-        [ForeignKey(nameof(Games))]
-        public int UserId {get; set;}
-        public UserEntity Games {get; set;} = null!;
-
     }
 }
