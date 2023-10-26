@@ -10,6 +10,11 @@ namespace DnDTeamGame.Models.MapModels
         public int MapId { get; set; }
         public int GameId { get; set; }
         public string MapName { get; set; }
+        public string MapType { get; set; }
         public string MapDescription { get; set; }
+
+        public bool IsDayTime { get; set; }
+        public string PrecipitationType { get; set; }
+
     }
 }

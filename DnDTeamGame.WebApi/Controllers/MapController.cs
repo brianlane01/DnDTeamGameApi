@@ -57,12 +57,13 @@ namespace DnDTeamGame.WebApi.Controllers
             ? Ok("Note updated successfully.")
             : BadRequest("Note could not be updated.");
         }
-        [HttpDelete("{gameId:int}")]
-        public async Task<IActionResult> DeleteMap([FromRoute] int gameId)
+
+        [HttpDelete("{mapId:int}")]
+        public async Task<IActionResult> DeleteMap([FromRoute] int mapId)
         {
-            return await _mapGenerator.DeleteMapAsync(gameId)
-            ? Ok($"Map {gameId} was deleted successfully.")
-            : BadRequest($"Map {gameId} could not be deleted.");
+            return await _mapGenerator.DeleteMapAsync(mapId)
+            ? Ok($"Map {mapId} was deleted successfully.")
+            : BadRequest($"Map {mapId} could not be deleted.");
         }
 
     }

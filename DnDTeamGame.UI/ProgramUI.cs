@@ -22,6 +22,7 @@ using DnDTeamGame.Models.ConsumableModels;
 using DnDTeamGame.Models.VehicleModels;
 using System.Text;
 using DnDTeamGame.Models.WeaponModels;
+using DnDTeamGame.Models.MapModels;
 
 
 public class ProgramUI
@@ -1488,6 +1489,15 @@ public class ProgramUI
                 case 7:
                     ManageBodyTypes();
                     break;
+                case 8:
+                    ManageHairStyles();
+                    break;
+                case 9:
+                    ManageHairColors();
+                    break;
+                case 10:
+                    ManageMaps();
+                    break;
 
                 case 0:
                     Run();
@@ -1508,9 +1518,562 @@ public class ProgramUI
 
     }
 
+// ========================================= Map UI ================================== //
+    private void ManageMaps()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Map?                             |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All Map                 |\n" +
+                    "|  2. View Map By Id                |\n" +
+                    "|  3. Update Existing Map            |\n" +
+                    "|  4. Add a New Map                  |\n" +
+                    "|  5. Delete a Map                   |\n" +
+                    "|  0. Return to Manage Game Items       |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllMaps();
+                    break;
+
+                case 2:
+                    ViewMapById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingMap();
+                    break;
+
+                case 4:
+                    AddANewMap();
+                    break;
+
+                case 5:
+                    DeleteExistingMap();
+                    break;
+
+                case 0:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }    
+    }
+
+    private void AddANewMap()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the details for the Map:");
+
+        Write("Map Name: ");
+        string mapName= ReadLine()!;
+
+        Write("MapType: ");
+        string mapType = ReadLine()!;
+
+        Write("MapDescription: ");
+        string mapDescription = ReadLine()!;
+
+        Write("IsDayTime: ");
+        bool isDayTime = bool.Parse(ReadLine()!);
+
+        Write("PrecipitationType: ");
+        string precipitationType = ReadLine()!;
+
+            var newMap= new MapDetailsUI
+            {
+                MapName = mapName,
+                MapType = mapType,
+                MapDescription = mapDescription,
+                IsDaytime = isDayTime,
+                PrecipitationType = precipitationType
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var mapContent = new StringContent(JsonConvert.SerializeObject(newMap), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Map", mapContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("new Map is added successfully");
+            }
+            else
+            {
+                WriteLine("Failed to add new Map");
+            }
+            PressAnyKeyToContinue();     }
+
+    private void ViewAllMaps()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Map").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<MapDetailsUI> maps = response.Content.ReadAsAsync<List<MapDetailsUI>>().Result;
+
+            foreach (var map in maps)
+            {
+                WriteLine(
+                          $"MapId {map.MapId} \n" +
+                          $"MapName: {map.MapName} \n" +
+                          $"MapType: {map.MapType} \n" +
+                          $"MapDescription: {map.MapDescription} \n" +
+                          $"IsDayTime: {map.IsDaytime} \n" +
+                          $"PrecipitationType: {map.PrecipitationType} \n");
+            }
+            PressAnyKeyToContinue();
+        }    
+    }
+
+    private void ViewMapById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Black;
+        WriteLine("Please enter a MapId to look up a Map.");
+        var mapId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Map/{mapId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            MapDetailsUI map = response.Content.ReadAsAsync<MapDetailsUI>().Result;
+                WriteLine(
+                          $"MapName: {map.MapName} \n" +
+                          $"MapType: {map.MapType} \n" +
+                          $"MapDescription: {map.MapDescription} \n" +
+                          $"IsDayTime: {map.IsDaytime} \n" +
+                          $"PrecipitationType: {map.PrecipitationType} \n");
+            PressAnyKeyToContinue();
+        }          
+    }
+
+    private void UpdateAnExistingMap()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the ID of the Map you want to update:");
+        int mapId = int.Parse(ReadLine()!);
+
+        Write("Map Name: ");
+        string mapName= ReadLine()!;
+
+        Write("MapType");
+        string mapType = ReadLine()!;
+
+        Write("MapDescription");
+        string mapDescription = ReadLine()!;
+
+        Write("IsDayTime");
+        bool isDayTime = bool.Parse(ReadLine()!);
+
+        Write("PrecipitationType");
+        string precipitationType = ReadLine()!;
+
+        var newMap= new MapDetailsUI
+            {
+                MapId = mapId,
+                MapName = mapName,
+                MapType = mapType,
+                MapDescription = mapDescription,
+                IsDaytime = isDayTime,
+                PrecipitationType = precipitationType
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var mapContent = new StringContent(JsonConvert.SerializeObject(newMap), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Map", mapContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("Map is updated successfully");
+            }
+            else
+            {
+                WriteLine("Failed to update Map");
+            }
+            PressAnyKeyToContinue();     
+    }
+
+    private void DeleteExistingMap()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Cyan;
+        WriteLine("Please enter the MapId of the Map you want to delete:");
+        int mapId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Map/{mapId}").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("Map was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete a Map. Status Code: " + response.StatusCode);
+        }
+
+        PressAnyKeyToContinue(); 
+    }
+
+    // ===================================== HairColor UI ============================================ //
+    private void ManageHairColors()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Hair Color?                             |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All HairColor                 |\n" +
+                    "|  2. View HairColor By Id                |\n" +
+                    "|  3. Update Existing HairColor            |\n" +
+                    "|  4. Add a New HairColor                  |\n" +
+                    "|  5. Delete a HairColor                   |\n" +
+                    "|  0. Return to Manage Game Items       |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllHairColors();
+                    break;
+
+                case 2:
+                    ViewHairColorById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingHairColor();
+                    break;
+
+                case 4:
+                    AddANewHairColor();
+                    break;
+
+                case 5:
+                    DeleteExistingHairColor();
+                    break;
+
+                case 0:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }    
+    }
+
+    private void AddANewHairColor()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the details for the new HairColor:");
+
+        Write("HairColor Name: ");
+        string hairColorName= ReadLine()!;
+
+            var newHairStyle = new HairColorDetailUI
+            {
+                HairColorName = hairColorName
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var hairColorContent = new StringContent(JsonConvert.SerializeObject(newHairStyle), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/HairColor", hairColorContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("new hairColor is added successfully");
+            }
+            else
+            {
+                WriteLine("Failed to add new hairColor");
+            }
+            PressAnyKeyToContinue();    
+        }
+
+    private void ViewHairColorById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Black;
+        WriteLine("Please enter a HairColorId to look up a HairColor.");
+        var hairColorId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/HairColor/{hairColorId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            HairColorDetailUI hairColor = response.Content.ReadAsAsync<HairColorDetailUI>().Result;
+            WriteLine(
+                      $"HairColorId {hairColor.HairColorId} \n" +
+                      $"HairColorName: {hairColor.HairColorName} \n");
+            PressAnyKeyToContinue();
+        }       
+    }
+
+    private void UpdateAnExistingHairColor()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the ID of the HairColor you want to update:");
+        int hairColorId = int.Parse(ReadLine()!);
+
+        Write("HairColor Name: ");
+        string hairColorName= ReadLine()!;
+
+            var newHairColor = new HairColorDetailUI
+            {
+                HairColorId = hairColorId,
+                HairColorName = hairColorName
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var hairColorContent = new StringContent(JsonConvert.SerializeObject(newHairColor), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/HairColor", hairColorContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("HairColor is updated successfully");
+            }
+            else
+            {
+                WriteLine("Failed to update HairColor");
+            }
+            PressAnyKeyToContinue();     
+    }
+
+    private void DeleteExistingHairColor()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Cyan;
+        WriteLine("Please enter the HairColorId of the HairColor you want to delete:");
+        int hairColorId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/HairColor/{hairColorId}").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("HairColor was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete a HairColor. Status Code: " + response.StatusCode);
+        }
+
+        PressAnyKeyToContinue(); 
+    }
+
+
+    //================================ HairStyle UI ======================================= //
+    private void ManageHairStyles()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|  Hair Style?                             |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  1. View All HairStyles                  |\n" +
+                    "|  2. View HairStyle By Id                |\n" +
+                    "|  3. Update Existing HairStyle            |\n" +
+                    "|  4. Add a New HairStyle                  |\n" +
+                    "|  5. Delete a HairStyle                   |\n" +
+                    "|  0. Return to Manage Game Items       |\n" +
+                    "|=======================================|");
+        try
+        {
+            var userInput = int.Parse(Console.ReadLine()!);
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllHairStyles();
+                    break;
+
+                case 2:
+                    ViewHairStylesById();
+                    break;
+
+                case 3:
+                    UpdateAnExistingHairStyles();
+                    break;
+
+                case 4:
+                    AddANewHairStyles();
+                    break;
+
+                case 5:
+                    DeleteExistingHairStyles();
+                    break;
+
+                case 0:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }    
+    }
+
+    private void AddANewHairStyles()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the details for the new HairStyle:");
+
+        Write("HairStyle Name: ");
+        string hairStyleName= ReadLine()!;
+
+            var newHairStyle = new HairStyleDetailUI
+            {
+                HairStyleName = hairStyleName
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var hairStyleContent = new StringContent(JsonConvert.SerializeObject(newHairStyle), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/HairStyle", hairStyleContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("new HairStyle is added successfully");
+            }
+            else
+            {
+                WriteLine("Failed to add new HairStyle");
+            }
+            PressAnyKeyToContinue();
+    }
+
+    private void ViewHairStylesById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Black;
+        WriteLine("Please enter a HairStyleId to look up a HairStyle.");
+        var hairStyleId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/HairStyle/{hairStyleId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            HairStyleDetailUI hairStyle = response.Content.ReadAsAsync<HairStyleDetailUI>().Result;
+            WriteLine(
+                      $"HairStyleId {hairStyle.HairStyleId} \n" +
+                      $"HairStyleName: {hairStyle.HairStyleName} \n");
+            PressAnyKeyToContinue();
+        }       
+    }
+
+    private void UpdateAnExistingHairStyles()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Enter the ID of the HairStyle you want to update:");
+        int hairStyleId = int.Parse(ReadLine()!);
+
+        Write("HairStyle Name: ");
+        string hairStyleName= ReadLine()!;
+
+            var newHairStyle = new HairStyleDetailUI
+            {
+                HairStyleId = hairStyleId,
+                HairStyleName = hairStyleName
+            };
+            HttpClient httpClient = new HttpClient();
+
+            var hairStyleContent = new StringContent(JsonConvert.SerializeObject(newHairStyle), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/HairStyle", hairStyleContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("HairStyle is updated successfully");
+            }
+            else
+            {
+                WriteLine("Failed to update HairStyle");
+            }
+            PressAnyKeyToContinue();       
+    }
+
+    private void DeleteExistingHairStyles()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Cyan;
+        WriteLine("Please enter the HairStyleId of the HairStyle you want to delete:");
+        int hairStyleId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/HairStyle/{hairStyleId}").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("HairStyle was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete a HairStyle. Status Code: " + response.StatusCode);
+        }
+
+        PressAnyKeyToContinue();      
+    }
+
     private void ManageBodyTypes()
     {
- Clear();
+        Clear();
         ForegroundColor = ConsoleColor.White;
         WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
@@ -1572,7 +2135,7 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.DarkYellow;
-        WriteLine("Enter the details for the new Weapon:");
+        WriteLine("Enter the details for the new BodyType:");
 
         Write("BodyType Name: ");
         string bodyTypeName= ReadLine()!;
@@ -1611,8 +2174,8 @@ public class ProgramUI
         {
             BodyTypeDetailUI bodyType = response.Content.ReadAsAsync<BodyTypeDetailUI>().Result;
             WriteLine(
-                      $"ConsumableId {bodyType.BodyTypeId} \n" +
-                      $"ConsumableDamageToEnemy: {bodyType.BodyTypeName} \n");
+                      $"BodyTypeId {bodyType.BodyTypeId} \n" +
+                      $"BodyTypeName: {bodyType.BodyTypeName} \n");
             PressAnyKeyToContinue();
         }    
     }
@@ -1645,7 +2208,8 @@ public class ProgramUI
             {
                 WriteLine("Failed to update BodyType");
             }
-            PressAnyKeyToContinue();    }
+            PressAnyKeyToContinue();    
+        }
 
     private void DeleteExistingBodyTypes()
     {
@@ -1667,7 +2231,8 @@ public class ProgramUI
             WriteLine("Failed to delete a BodyType. Status Code: " + response.StatusCode);
         }
 
-        PressAnyKeyToContinue();    }
+        PressAnyKeyToContinue();    
+    }
 
     private void ManageConsumables()
     {
@@ -1895,11 +2460,11 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Consumable", consumableContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("Consumable is added successfully");
+                WriteLine("Consumable is updated successfully");
             }
             else
             {
-                WriteLine("Failed to add new consumable");
+                WriteLine("Failed to updated consumable");
             }
             PressAnyKeyToContinue();
         }    
