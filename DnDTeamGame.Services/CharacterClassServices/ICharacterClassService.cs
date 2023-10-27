@@ -9,7 +9,7 @@ namespace DnDTeamGame.Services.CharacterClassServices
     public interface ICharacterClassService
     {
         Task<CharacterClassDetail?> CreateNewCharacterClassAsync(CharacterClassCreate request);
-        Task<IEnumerable<CharacterClassList>> GetAllCharacterClassesAsync();
+        Task<IEnumerable<CharacterClassDetail>> GetAllCharacterClassesAsync();
         Task<CharacterClassDetail?> GetCharacterClassByIdAsync(int characterClassId);
         Task<bool> UpdateCharacterClassAsync(CharacterClassUpdate request);
         Task<bool> DeleteCharacterClassAsync(int characterClassId);
