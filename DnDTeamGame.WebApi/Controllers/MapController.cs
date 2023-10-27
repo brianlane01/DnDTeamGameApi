@@ -26,7 +26,7 @@ namespace DnDTeamGame.WebApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var response = await _mapGenerator.CreatMapAsync(request);
+            var response = await _mapGenerator.CreateMapAsync(request);
             if (response is not null)
                 return Ok(response);
             return BadRequest(new TextResponse("Could not create map"));

@@ -22,12 +22,7 @@ namespace DnDTeamGame.Services.MapServices
             _dbContext = dbContext;
         }
 
-        public Task CreateMapAsync(MapCreate request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<MapListItem> CreatMapAsync(MapCreate request)
+        public async Task<MapListItem> CreateMapAsync(MapCreate request)
         {
             MapEntity entity = new()
             {

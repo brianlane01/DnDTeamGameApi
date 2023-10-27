@@ -11,7 +11,6 @@ public interface IMapGenerator
     Task<MapListItem?> CreateMapAsync(MapCreate request);
     Task<IEnumerable<MapListItem>> GetAllMapsAsync();
     Task<MapDetail> GetMapByGameIdAsync(int GameId);
-    Task<MapListItem> CreatMapAsync(MapCreate request);
     Task<bool> UpdateMapAsync(MapUpdate request);
     Task<bool> DeleteMapAsync(int MapId);
 
