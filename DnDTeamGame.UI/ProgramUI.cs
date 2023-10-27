@@ -595,7 +595,35 @@ public class ProgramUI
     }
 
     private void StartAGame()
-    {
+    {   
+         Clear();
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| In order to play a game please enter        |\n" +
+                "|     your username to ensure proper access.  |\n" +
+                "|                                             |\n" +
+                "|=============================================|\n");
+        string userName = Console.ReadLine();
+
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Please Enter your password to sign in to    |\n" +
+                "| acces the Game you would like to play       |\n" +
+                "|                                             |\n" +
+                "|=============================================|\n");
+        string userPassword = Console.ReadLine();
+
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Finally confirm your User Id to gain access |\n" +
+                "| to the System.                              |\n" +
+                "|                                             |\n" +
+                "|=============================================|\n");
+        int userId = int.Parse(Console.ReadLine()!);
+
         Clear();
         ForegroundColor = ConsoleColor.Cyan;
         WriteLine("|=======================================|\n" +
@@ -661,15 +689,56 @@ public class ProgramUI
                                  "|  Please choose one of the following:  |\n" +
                                  "|                                       |\n" +
                                  "|=======================================|\n" +
-                                 "|                                       |\n" +
-                                 "|  1. Create a New Character            |\n" +
-                                 "|  2. View Existing Game Character      |\n" +
-                                 "|  0. Return to Main Menu               |\n" +
-                                 "|=======================================|");
+                                 "|                                       |");
+        ConsoleKeyInfo key;
+        int option = 1;
+        bool isSelected = false;
+        (int left, int top) = Console.GetCursorPosition();
+        string color = "🐉\u001b[35m";
+
+        while(!isSelected)
+        {   
+            Console.SetCursorPosition(left, top);
+                WriteLine($"|{(option == 1 ? color : "  ")}1. Createn A New Character\u001b[32m               |");
+                WriteLine($"|{(option == 2 ? color : "  ")}2. View Existing Game Character\u001b[32m          |");
+                WriteLine($"|{(option == 3 ? color : "  ")}3. Return to Main Menu\u001b[32m                   |");
+                WriteLine("|                                           |\u001b[32m");
+                WriteLine("|===========================================|\u001b[32m");
+            try
+            {
+                key = Console.ReadKey(true); 
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        option = (option == 3 ? 1 : option + 1);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        option = (option == 1 ? 3 : option -1);
+                        break;
+
+                    case ConsoleKey.Enter:
+                        isSelected = true;
+                        break;
+
+                    default:
+                        WriteLine("Invalid Selection Please Try Again");
+                        PressAnyKeyToContinue();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Bad selection.. Press any key to continue");
+                Console.ReadKey();
+            }
+                
+        }
 
         try
         {
-            var userInput = int.Parse(Console.ReadLine()!);
+            var userInput = option;
             switch (userInput)
             {
                 case 1:
@@ -680,7 +749,7 @@ public class ProgramUI
                     ViewCharacterById();
                     break;
 
-                case 0:
+                case 3:
                     Run();
                     break;
 
@@ -1133,6 +1202,7 @@ public class ProgramUI
         {
             Console.WriteLine("Internal server Error");
             PressAnyKeyToContinue();
+            StartAGame();
         }
     }
 
@@ -1342,9 +1412,292 @@ public class ProgramUI
         }
     }
 
-    private void ManageWeapons()
+    private void UpdateExistingCharacter()
     {
         Clear();
+        ForegroundColor = ConsoleColor.DarkCyan;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| In order to update a character please enter |\n" +
+                "|     your username to ensure proper access.  |\n" +
+                "|                                             |\n" +
+                "|=============================================|\n");
+        string userName = Console.ReadLine();
+
+        ForegroundColor = ConsoleColor.DarkCyan;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Please Enter your password to sign in to    |\n" +
+                "| acces the Character you would like to make  |\n" +
+                "|       changes to.                           |\n" +
+                "|=============================================|\n");
+        string userPassword = Console.ReadLine();
+
+        ForegroundColor = ConsoleColor.DarkCyan;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Finally confirm your User Id to gain access |\n" +
+                "| to the Character you would like to make     |\n" +
+                "|       changes to.                           |\n" +
+                "|=============================================|\n");
+        int userId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkRed;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Please Enter the Character Id for the       |\n" +
+                "|     Character you would like to make        |\n" +
+                "|       changes to.                           |\n" +
+                "|=============================================|\n");
+        int characterId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|==================================================|\n" +
+                    "|                                                 |\n" +
+                    "| If you want to update your character name please|\n" +
+                    "| input a new name. If you do not please enter    |\n" +
+                    "| your character's current name.                  |\n" +
+                    "|                                                 |\n" +
+                    "|=================================================|\n");
+        string newCharacterName = Console.ReadLine();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now you can update your catchphrase.  |\n" +
+                    "|  Please enter a brief desciption      |\n" +
+                    "|    or Catchphrase for your character. |\n" +
+                    "|=======================================|\n");
+        string newCharacterDescription = Console.ReadLine();
+        PressAnyKeyToContinue();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Hair Style you want |\n" +
+                    "|  to have for the character now.       |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+
+        ViewAllHairStyles();
+        System.Console.WriteLine("\n" +
+            "Please enter a Hair Style ID to assign a Hair Style to your Character");
+        int newHairStyleId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Hair Color you want |\n" +
+                    "|  to have for your Character now.      |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+        ViewAllHairColors();
+        System.Console.WriteLine("\n" +
+            "Please enter a Hair Color ID to assign a Hair Color to your Character");
+        int newHairColorId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Body Type you want  |\n" +
+                    "|  to have for your Character now.      |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+        ViewAllBodyTypes();
+        System.Console.WriteLine("\n" +
+            "Please enter a Body Type ID to assign a Body Type to your Character");
+        int newBodyTypeId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    "| You can now choose to update the abilities  |\n" +
+                    "|  your character has to help on the journey. |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllAbilities();
+        System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
+        string userInput = Console.ReadLine();
+
+        List<int> newAbilityIds = userInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose  \n" +
+                    "|  an armour to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllArmours();
+        System.Console.WriteLine("Please enter the Armour Id separated by commas (e.g., 1,2) to assign your Armours to your Character:");
+        string userArmourInput = Console.ReadLine();
+
+        List<int> newArmourIds = userArmourInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    "| Now you need to choose at least one weapon  |\n" +
+                    "| to help you with the journey.               |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllWeaponsForCharacterCreate();
+        System.Console.WriteLine("Please enter the Weapon ID separated by commas (e.g., 1,2) to assign Weapons to your Character:");
+        string userWeaponInput = Console.ReadLine();
+
+        List<int> newWeaponIds = userWeaponInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    "| Now you need to choose some consumable(s)   |\n" +
+                    "| to help you with the journey ahead.         |\n" +
+                    "|      Please choose from the following:      |\n" +
+                    "|=============================================|\n");
+        ViewAllConsumables();
+        System.Console.WriteLine("Please enter the Consumable ID(s) separated by commas (e.g., 1,2) to assign Consumable(s) to your Character:");
+        string userConsumableInput = Console.ReadLine();
+
+        List<int> newConsumableIds = userConsumableInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Finally {newCharacterName}, you need       |\n" +
+                    "|  a vehicle to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllVehicles();
+        System.Console.WriteLine("Please enter the Vehicle ID(s) separated by commas (e.g., 1,2) to assign Vehicle(s) to your Character:");
+        string userVehicleInput = Console.ReadLine();
+
+        List<int> newVehicleIds = userVehicleInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        CharacterUpdate updatedCharacter = new CharacterUpdate
+        {
+            CharacterId = characterId,
+            CharacterName = newCharacterName,
+            DateModified = DateTime.Now,
+            CharacterDescription = newCharacterDescription,
+            HairColorId = newHairColorId,
+            HairStyleId = newHairStyleId,
+            BodyTypeId = newBodyTypeId,
+            UserId = userId,
+            AbilityList = newAbilityIds,
+            WeaponList = newWeaponIds,
+            ArmourList = newArmourIds,
+            ConsumableList = newConsumableIds,
+            VehicleList = newVehicleIds
+        };
+
+        HttpClient httpClient = new HttpClient();
+
+        var characterUpdate = new StringContent(JsonConvert.SerializeObject(updatedCharacter), Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Character", characterUpdate).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            Clear();
+            ForegroundColor = ConsoleColor.DarkYellow;
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      "|                                             |\n" +
+                      "|   Character has been updated successfully.  |\n" +
+                      "|                                             |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+            PressAnyKeyToContinue();
+            ManageCharacters();
+        }
+        else
+        {
+            WriteLine("Failed to updated the give Character. Status Code: " + response.StatusCode);
+        }
+        PressAnyKeyToContinue();
+        ManageCharacters();
+    }
+
+    private void DeleteExistingCharacter()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkRed;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    "| Please Enter your Character ID to delete    |\n" +
+                    "|    your Character.                          |\n" +
+                    "|                                             |\n" +
+                    "|=============================================|\n");
+        int characterId = int.Parse(Console.ReadLine()!);
+        
+        Write($"Are your sure you want to delete the character with the ID: {characterId}? \n" +
+                "Please input y to delete or n to cancel deletion: ");
+            string userInputYesorNo = ReadLine()!;
+            if (userInputYesorNo.ToLower() == "Y".ToLower())
+            {
+                HttpClient httpClient = new HttpClient();
+
+                HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Character/{characterId}").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    WriteLine("Character was deleted successfully.");
+                    PressAnyKeyToContinue();
+                }
+                else
+                {
+                    WriteLine("Failed to delete the Character. Status Code: " + response.StatusCode);
+                    PressAnyKeyToContinue();
+                    
+                }
+            }
+            else
+            {
+                WriteLine("|=============================================|\n" +
+                        "|                                             |\n" +
+                        $"| Deletion of the Character with ID: {characterId} |\n" +
+                        "|    has been Canceled                        |\n" +
+                        "|                                             |\n" +
+                        "|=============================================|\n");
+            }
+
+        PressAnyKeyToContinue();
+        ManageCharacters();
+    }
+
+    private void ManageCharacters()
+    {
+
+    }
+    
+    private void ManageWeapons()
+    {
+        Console.Clear();
         ForegroundColor = ConsoleColor.White;
         WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
@@ -1562,7 +1915,7 @@ public class ProgramUI
             {
                 WriteLine("|=========================================================================================================================================================================|\n" +
                           "|                                                                                                                                                                         |\n" +
-                          $"| WeaponId: {weapon.WeaponId} ||  WeaponName: {weapon.WeaponName}                                    \n" +
+                          $"| WeaponId: {weapon.WeaponId} ||  Weapon Name: {weapon.WeaponName}                                    \n" +
                           "|                                                                                                                                                                         |\n" +
                           "|=========================================================================================================================================================================|\n" +
                           "|                                                                                                                                                                         |\n" +
@@ -1615,7 +1968,7 @@ public class ProgramUI
             {
                 WriteLine("|=========================================================================================================================================================================|\n" +
                           "|                                                                                                                                                                         |\n" +
-                          $"| WeaponId: {weapon.WeaponId} ||  WeaponName: {weapon.WeaponName}                                    \n" +
+                          $"| WeaponId: {weapon.WeaponId} ||  Weapon Name: {weapon.WeaponName}                                    \n" +
                           "|                                                                                                                                                                         |\n" +
                           "|=========================================================================================================================================================================|\n" +
                           "|                                                                                                                                                                         |\n" +
