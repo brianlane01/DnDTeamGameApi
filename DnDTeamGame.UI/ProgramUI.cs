@@ -4414,7 +4414,7 @@ public class ProgramUI
                     "|===================================================|\n");
         int armourId = int.Parse(Console.ReadLine()!);
         HttpClient httpClient = new HttpClient();
-        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Armours/{armourId}").Result;
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Armour/{armourId}").Result;
         if (response.IsSuccessStatusCode)
         {
             // var content = response.Content.ReadAsStringAsync().Result;

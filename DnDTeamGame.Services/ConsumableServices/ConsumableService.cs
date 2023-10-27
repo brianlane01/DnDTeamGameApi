@@ -39,10 +39,10 @@ namespace DnDTeamGame.Services.ConsumableServices
             return null;
         }
 
-        public async Task<IEnumerable<ConsumableList>> GetAllConsumablesAsync()
+        public async Task<IEnumerable<ConsumableDetail>> GetAllConsumablesAsync()
         {
             var consumables = await _dbContext.Consumables
-                .Select(entity => _mapper.Map<ConsumableEntity, ConsumableList>(entity))
+                .Select(entity => _mapper.Map<ConsumableEntity, ConsumableDetail>(entity))
                 .ToListAsync();
 
             return consumables;

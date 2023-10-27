@@ -9,7 +9,7 @@ namespace DnDTeamGame.Services.ConsumableServices
     public interface IConsumableService
     {
         Task<ConsumableDetail?> CreateNewConsumableAsync(ConsumableCreate request);
-        Task<IEnumerable<ConsumableList>> GetAllConsumablesAsync();
+        Task<IEnumerable<ConsumableDetail>> GetAllConsumablesAsync();
         Task<ConsumableDetail?> GetConsumableByIdAsync(int consumableId);
         Task<bool> UpdateConsumableAsync(ConsumableUpdate request);
         Task<bool> DeleteConsumableAsync(int consumableId);

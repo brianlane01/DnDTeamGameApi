@@ -9,7 +9,7 @@ namespace DnDTeamGame.Services.ArmourServices
     public interface IArmourService
     {
         Task<ArmourDetail?> CreateNewArmourAsync(ArmourCreate request);
-        Task<IEnumerable<ArmourList>> GetAllArmoursAsync();
+        Task<IEnumerable<ArmourDetail>> GetAllArmoursAsync();
         Task<ArmourDetail?> GetArmourByIdAsync(int armourId);
         Task<bool> UpdateArmourAsync(ArmourUpdate request);
         Task<bool> DeleteArmourAsync(int armourId);

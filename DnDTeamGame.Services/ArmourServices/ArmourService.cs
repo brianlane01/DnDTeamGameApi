@@ -39,10 +39,10 @@ namespace DnDTeamGame.Services.ArmourServices
             return null;
         }
 
-        public async Task<IEnumerable<ArmourList>> GetAllArmoursAsync()
+        public async Task<IEnumerable<ArmourDetail>> GetAllArmoursAsync()
         {
             var armours = await _dbContext.Armours
-                .Select(entity => _mapper.Map<ArmourEntity, ArmourList>(entity))
+                .Select(entity => _mapper.Map<ArmourEntity, ArmourDetail>(entity))
                 .ToListAsync();
 
             return armours;
