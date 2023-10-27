@@ -154,17 +154,59 @@ public class ProgramUI
                     "|  What would you like to do with the   |\n" +
                     "|  Users?                               |\n" +
                     "|=======================================|\n" +
-                    "|                                       |\n" +
-                    "|  1. View All Users                    |\n" +
-                    "|  2. View User By Id                   |\n" +
-                    "|  3. Update Existing User              |\n" +
-                    "|  4. Add a New User                    |\n" +
-                    "|  5. Delete a User                     |\n" +
-                    "|  0. Return to Main Menu               |\n" +
-                    "|=======================================|");
+                    "|                                       |");
+
+        ConsoleKeyInfo key;
+        int option = 1;
+        bool isSelected = false;
+        (int left, int top) = Console.GetCursorPosition();
+        string color = "💀\u001b[33m";
+
+            while(!isSelected)
+            {   Console.SetCursorPosition(left, top);
+                WriteLine($"|{(option == 1 ? color : "  ")}1. View All Users \u001b[31m                   |");
+                WriteLine($"|{(option == 2 ? color : "  ")}2. View User By Id\u001b[31m                   |");
+                WriteLine($"|{(option == 3 ? color : "  ")}3. Update Existing User\u001b[31m              |");
+                WriteLine($"|{(option == 4 ? color : "  ")}4. Add a New User\u001b[31m                    |");
+                WriteLine($"|{(option == 5 ? color : "  ")}5. Delete a User\u001b[31m                     |");
+                WriteLine($"|{(option == 6 ? color : "  ")}6. Return to Main Menu\u001b[31m               |");
+                WriteLine("|                                       |\u001b[31m");
+                WriteLine("|=======================================|\u001b[31m");
+            try
+            {
+                key = Console.ReadKey(true); 
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        option = (option == 6 ? 1 : option + 1);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        option = (option == 1 ? 6 : option -1);
+                        break;
+
+                    case ConsoleKey.Enter:
+                        isSelected = true;
+                        break;
+
+                    default:
+                        WriteLine("Invalid Selection Please Try Again");
+                        PressAnyKeyToContinue();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Bad selection.. Press any key to continue");
+                Console.ReadKey();
+            }
+                
+            }            
+        
         try
         {
-            var userInput = int.Parse(Console.ReadLine()!);
+            var userInput = option;
             switch (userInput)
             {
                 case 1:
@@ -187,7 +229,7 @@ public class ProgramUI
                     DeleteExistingUser();
                     break;
 
-                case 0:
+                case 6:
                     Run();
                     break;
 
@@ -201,8 +243,8 @@ public class ProgramUI
         {
             System.Console.WriteLine("Bad selection.. Press any key to continue");
             Console.ReadKey();
-        }
-        // httpClient.BaseAddress = new Uri("http://localhost:5211/api");
+        }            
+        
     }
 
     private void ViewUserById()
@@ -700,11 +742,11 @@ public class ProgramUI
         while(!isSelected)
         {   
             Console.SetCursorPosition(left, top);
-                WriteLine($"|{(option == 1 ? color : "  ")}1. Createn A New Character\u001b[32m               |");
-                WriteLine($"|{(option == 2 ? color : "  ")}2. View Existing Game Character\u001b[32m          |");
-                WriteLine($"|{(option == 3 ? color : "  ")}3. Return to Main Menu\u001b[32m                   |");
-                WriteLine("|                                           |\u001b[32m");
-                WriteLine("|===========================================|\u001b[32m");
+                WriteLine($"|{(option == 1 ? color : "  ")}1. Create A New Character\u001b[36m           |");
+                WriteLine($"|{(option == 2 ? color : "  ")}2. View Existing Game Character\u001b[36m      |");
+                WriteLine($"|{(option == 3 ? color : "  ")}3. Return to Main Menu\u001b[36m               |");
+                WriteLine("|                                       |\u001b[36m");
+                WriteLine("|=======================================|\u001b[36m");
             try
             {
                 key = Console.ReadKey(true); 
@@ -920,7 +962,7 @@ public class ProgramUI
                     "|  two abilities to help you with the journey.|\n" +
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
-        ViewAllAbilities();
+        ViewAllAbilitiesForCharacterCreate();
         System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
         string userInput = Console.ReadLine();
 
@@ -1197,13 +1239,13 @@ public class ProgramUI
             PressAnyKeyToContinue();
             WriteLine("Tune in next week to see how the story unfolds.......");
             ReadKey();
-            StartAGame();
+            Run();
         }
         else
         {
             Console.WriteLine("Internal server Error");
             PressAnyKeyToContinue();
-            StartAGame();
+            Run();
         }
     }
 
@@ -1359,7 +1401,7 @@ public class ProgramUI
                     "|  two abilities to help you with the journey.|\n" +
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
-        ViewAllAbilities();
+        ViewAllAbilitiesForCharacterCreate();
         System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
         string userInput = Console.ReadLine();
 
@@ -1803,7 +1845,7 @@ public class ProgramUI
             // WriteLine(string.Join(System.Environment.NewLine, character.ConsumableName));
             // WriteLine(string.Join(System.Environment.NewLine, character.ConsumableDescription));
             PressAnyKeyToContinue();
-            StartAGame();
+            ManageCharacters();
         }
     }
 
@@ -1954,7 +1996,7 @@ public class ProgramUI
                     "|  your character has to help on the journey. |\n" +
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
-        ViewAllAbilities();
+        ViewAllAbilitiesForCharacterCreate();
         System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
         string userInput = Console.ReadLine();
 
@@ -3105,7 +3147,6 @@ public class ProgramUI
             }
             }
 
-            PressAnyKeyToContinue();
     }
 
     private void ViewAllArmours()
@@ -3214,29 +3255,71 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.Red;
-        WriteLine("|=========================================|\n" +
+        WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
                     "|  DnDTeamGame Game Item Management     |\n" +
                     "|  What would you like to do?           |\n" +
                     "|                                       |\n" +
                     "|=======================================|\n" +
-                    "|                                       |\n" +
-                    "|  1. Manage Weapons                    |\n" +
-                    "|  2. Manage Vehicles                   |\n" +
-                    "|  3. Manage Character Classes          |\n" +
-                    "|  4. Manage Abilities                  |\n" +
-                    "|  5. Manage Armours                    |\n" +
-                    "|  6. Manage Consumables                |\n" +
-                    "|  7. Manage Body Types                 |\n" +
-                    "|  8. Manage Hair Styles                |\n" +
-                    "|  9. Manage Hair Colors                |\n" +
-                    "| 10. Manage Maps                       |\n" +
-                    "| 11. Manage Characters                 |\n" +
-                    "|  0. Return to Main Menu               |\n" +
-                    "|=======================================|");
+                    "|                                       |");
+        ConsoleKeyInfo key;
+        int option = 1;
+        bool isSelected = false;
+        (int left, int top) = Console.GetCursorPosition();
+        string color = "👻\u001b[37m";
+
+        while(!isSelected)
+        {   
+            Console.SetCursorPosition(left, top);
+            WriteLine($"|{(option == 1 ? color : "  ")}1. Manage Weapons\u001b[31m                    |");
+            WriteLine($"|{(option == 2 ? color : "  ")}2. Manage Vehicles\u001b[31m                   |");
+            WriteLine($"|{(option == 3 ? color : "  ")}3. Manage Character Classes\u001b[31m          |");
+            WriteLine($"|{(option == 4 ? color : "  ")}4. Manage Abilities\u001b[31m                  |");
+            WriteLine($"|{(option == 5 ? color : "  ")}5. Manage Armours\u001b[31m                    |");
+            WriteLine($"|{(option == 6 ? color : "  ")}6. Manage Consumables\u001b[31m                |");
+            WriteLine($"|{(option == 7 ? color : "  ")}7. Manage Body Types\u001b[31m                 |");
+            WriteLine($"|{(option == 8 ? color : "  ")}8. Manage Hair Styles\u001b[31m                |");
+            WriteLine($"|{(option == 9 ? color : "  ")}9. Manage Hair Colors\u001b[31m                |");
+            WriteLine($"|{(option == 10 ? color : "  ")}10. Manage Maps\u001b[31m                      |");
+            WriteLine($"|{(option == 11 ? color : "  ")}11. Manage Characters\u001b[31m                |");
+            WriteLine($"|{(option == 12 ? color : "  ")}12. Return to Main Menu\u001b[31m              |");
+            WriteLine("|                                       |\u001b[31m");
+            WriteLine("|=======================================|\u001b[31m");
+            try
+            {
+                key = Console.ReadKey(true); 
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        option = (option == 12 ? 1 : option + 1);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        option = (option == 1 ? 12 : option -1);
+                        break;
+
+                    case ConsoleKey.Enter:
+                        isSelected = true;
+                        break;
+
+                    default:
+                        WriteLine("Invalid Selection Please Try Again");
+                        PressAnyKeyToContinue();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Bad selection.. Press any key to continue");
+                Console.ReadKey();
+            }
+                
+        }                        
+
         try
         {
-            var userInput = int.Parse(Console.ReadLine()!);
+            var userInput = option;
             switch (userInput)
             {
                 case 1:
@@ -3277,7 +3360,7 @@ public class ProgramUI
                 case 11:
                     ManageCharacters();
                     break;
-                case 0:
+                case 12:
                     Run();
                     break;
 
