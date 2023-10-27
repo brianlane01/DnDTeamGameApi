@@ -6,7 +6,7 @@ This project was created to fulfill the requirements of ElevenFifty Academy's Bl
 In this project, the focus is video game creation with a focus on character creation. The user is able to create a character, adding skills, classes, weapons, and more! All group members enjoy the idea of video gaming creation and this was a fun topic for all of us. We gathered inspiration from the well-know game, Dungeons and Dragons.
 
 ### Technologies Applied
-Desktop Docker, Visual Stupio, Postman
+Desktop Docker, Visual Studio, Postman
 
 ### To Get Started
 Clone Project <br>
