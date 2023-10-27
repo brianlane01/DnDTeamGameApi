@@ -16,6 +16,7 @@ namespace DnDTeamGame.Models.CharacterModels
         public string? HairStyleName { get; set; }
         public string? CharacterClassName { get; set; }
         public string? CharacterClassDescription { get; set; }
+        public string? ClassBackstoryForCharacter { get; set; }
 
         public  List<string> AbilityName { get; set; }
         public  List<string> AbilityDescription { get; set; }

@@ -55,6 +55,10 @@ namespace DnDTeamGame.Models.CharacterModels
         [JsonPropertyName("characterClassDescription")]
         public string CharacterClassDescription { get; set; }
 
+        [JsonProperty("classBackStoryForCharacter")]
+        [JsonPropertyName("classBackStoryForCharacter")]
+        public string? ClassBackstoryForCharacter { get; set; }
+
         [JsonProperty("abilityName")]
         [JsonPropertyName("abilityName")]
         public List<string> AbilityName { get; set; }

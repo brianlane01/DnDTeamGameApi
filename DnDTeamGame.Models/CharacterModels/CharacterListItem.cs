@@ -8,7 +8,7 @@ namespace DnDTeamGame.Models.CharacterModels
         public int CharacterId { get; set; }
         public string CharacterName { get; set; } = string.Empty;
         public string CharacterDescription { get; set; } = string.Empty;
-        
+        public string? ClassBackstoryForCharacter { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         
     }
