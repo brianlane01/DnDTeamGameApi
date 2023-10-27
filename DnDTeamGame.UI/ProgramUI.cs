@@ -1,4 +1,5 @@
-﻿using System.Reflection.Emit;
+﻿using System.Runtime.InteropServices;
+using System.Reflection.Emit;
 using System.Data;
 using Internal;
 using System;
@@ -595,7 +596,35 @@ public class ProgramUI
     }
 
     private void StartAGame()
-    {
+    {   
+         Clear();
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| In order to play a game please enter        |\n" +
+                "|     your username to ensure proper access.  |\n" +
+                "|                                             |\n" +
+                "|=============================================|\n");
+        string userName = Console.ReadLine();
+
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Please Enter your password to sign in to    |\n" +
+                "| acces the Game you would like to play       |\n" +
+                "|                                             |\n" +
+                "|=============================================|\n");
+        string userPassword = Console.ReadLine();
+
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Finally confirm your User Id to gain access |\n" +
+                "| to the System.                              |\n" +
+                "|                                             |\n" +
+                "|=============================================|\n");
+        int userId = int.Parse(Console.ReadLine()!);
+
         Clear();
         ForegroundColor = ConsoleColor.Cyan;
         WriteLine("|=======================================|\n" +
@@ -661,15 +690,56 @@ public class ProgramUI
                                  "|  Please choose one of the following:  |\n" +
                                  "|                                       |\n" +
                                  "|=======================================|\n" +
-                                 "|                                       |\n" +
-                                 "|  1. Create a New Character            |\n" +
-                                 "|  2. View Existing Game Character      |\n" +
-                                 "|  0. Return to Main Menu               |\n" +
-                                 "|=======================================|");
+                                 "|                                       |");
+        ConsoleKeyInfo key;
+        int option = 1;
+        bool isSelected = false;
+        (int left, int top) = Console.GetCursorPosition();
+        string color = "🐉\u001b[35m";
+
+        while(!isSelected)
+        {   
+            Console.SetCursorPosition(left, top);
+                WriteLine($"|{(option == 1 ? color : "  ")}1. Createn A New Character\u001b[32m               |");
+                WriteLine($"|{(option == 2 ? color : "  ")}2. View Existing Game Character\u001b[32m          |");
+                WriteLine($"|{(option == 3 ? color : "  ")}3. Return to Main Menu\u001b[32m                   |");
+                WriteLine("|                                           |\u001b[32m");
+                WriteLine("|===========================================|\u001b[32m");
+            try
+            {
+                key = Console.ReadKey(true); 
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        option = (option == 3 ? 1 : option + 1);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        option = (option == 1 ? 3 : option -1);
+                        break;
+
+                    case ConsoleKey.Enter:
+                        isSelected = true;
+                        break;
+
+                    default:
+                        WriteLine("Invalid Selection Please Try Again");
+                        PressAnyKeyToContinue();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Bad selection.. Press any key to continue");
+                Console.ReadKey();
+            }
+                
+        }
 
         try
         {
-            var userInput = int.Parse(Console.ReadLine()!);
+            var userInput = option;
             switch (userInput)
             {
                 case 1:
@@ -680,7 +750,7 @@ public class ProgramUI
                     ViewCharacterById();
                     break;
 
-                case 0:
+                case 3:
                     Run();
                     break;
 
@@ -798,7 +868,7 @@ public class ProgramUI
                     "|   Please choose from the following:   |\n" +
                     "|=======================================|\n");
 
-        ViewAllHairStyles();
+        ViewAllHairStylesForCharacterCreate();
         System.Console.WriteLine("\n" +
             "Please enter a Hair Style ID to assign a Hair Style to your Character");
         int newHairStyleId = int.Parse(Console.ReadLine()!);
@@ -837,7 +907,7 @@ public class ProgramUI
                     "|  have you chosen to become proficient in?   |\n" +
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
-        ViewAllCharacterClasses();
+        ViewAllCharacterClassesForCharacterCreate();
         System.Console.WriteLine("\n" +
             "Please enter a Character Class ID to assign a Character Class to your Character");
         int newCharacterClassId = int.Parse(Console.ReadLine()!);
@@ -867,7 +937,7 @@ public class ProgramUI
                     "|  an armour to help you with the journey.    |\n" +
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
-        ViewAllArmours();
+        ViewAllArmoursForCharacterCreate();
         System.Console.WriteLine("Please enter the Armour Id separated by commas (e.g., 1,2) to assign your Armours to your Character:");
         string userArmourInput = Console.ReadLine();
 
@@ -901,7 +971,7 @@ public class ProgramUI
                     "|  a consumable to help you with the journey. |\n" +
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
-        ViewAllConsumables();
+        ViewAllConsumablesForCharacterCreate();
         System.Console.WriteLine("Please enter the Consumable ID(s) separated by commas (e.g., 1,2) to assign Consumable(s) to your Character:");
         string userConsumableInput = Console.ReadLine();
 
@@ -918,7 +988,7 @@ public class ProgramUI
                     "|  a vehicle to help you with the journey.    |\n" +
                     "|   Please choose from the following:         |\n" +
                     "|=============================================|\n");
-        ViewAllVehicles();
+        ViewAllVehiclesForCharacterCreate();
         System.Console.WriteLine("Please enter the Vehicle ID(s) separated by commas (e.g., 1,2) to assign Vehicle(s) to your Character:");
         string userVehicleInput = Console.ReadLine();
 
@@ -1133,6 +1203,437 @@ public class ProgramUI
         {
             Console.WriteLine("Internal server Error");
             PressAnyKeyToContinue();
+            StartAGame();
+        }
+    }
+
+    private void AddANewCharacter()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "| Your Courage will not be Forgotten    |\n" +
+                    "|  What is your name Brave one?         |\n" +
+                    "|                                       |\n" +
+                    "|=======================================|\n");
+        string newCharacterName = Console.ReadLine();
+        System.Console.WriteLine($"{newCharacterName} do not fear the coming darkness it is no match for you!!");
+        System.Console.WriteLine($"Let us get you ready to face your destiny {newCharacterName}!!");
+        PressAnyKeyToContinue();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkCyan;
+        System.Console.WriteLine("|===================================================|\n" +
+                                 "|                                                   |\n" +
+                                 "|  You have 8 points to spend on Defense and Attack |\n" +
+                                 "|      Choose wisely!!                              |\n" +
+                                 "|===================================================|\n");
+        int skillPoints = 8;
+        ForegroundColor = ConsoleColor.DarkCyan;
+        System.Console.WriteLine("|===================================================|\n" +
+                                 "|                                                   |\n" +
+                                 "|  Please input a value between 1 and 8 for your    |\n" +
+                                 "|      Base Attack.                                 |\n" +
+                                 "|===================================================|\n");
+
+        int baseAttack = int.Parse(Console.ReadLine()!);
+        skillPoints -= baseAttack;
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkCyan;
+        System.Console.WriteLine("|===================================================|\n" +
+                                 "|                                                   |\n" +
+                                 $"|  You now have {skillPoints} points to spend      |\n" +
+                                 "|        on Defense                                 |\n" +
+                                 "|===================================================|\n");
+
+        ForegroundColor = ConsoleColor.DarkCyan;
+        System.Console.WriteLine("|===================================================|\n" +
+                                 "|                                                   |\n" +
+                                 $"|  Please input a value between 1 and {skillPoints}|\n" +
+                                 "|      for your Base Defense.                       |\n" +
+                                 "|===================================================|\n");
+        int baseDefense = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        int baseHealth = 100;
+        ForegroundColor = ConsoleColor.DarkRed;
+        System.Console.WriteLine("|===================================================|\n" +
+                                 "|                                                   |\n" +
+                                 $"|  Now {newCharacterName}, we  need to ensure that \n" +
+                                 "|      your health is restored.                     |\n" +
+                                 "|===================================================|\n");
+        if (baseDefense > 3)
+        {
+            ForegroundColor = ConsoleColor.DarkRed;
+            System.Console.WriteLine("|===================================================|\n" +
+                                     "|                                                   |\n" +
+                                    $"| {newCharacterName}'s Health has beed restored to  |\n" +
+                                     "|      150 HealthPoints                             |\n" +
+                                     "|===================================================|\n");
+            baseHealth = 150;
+            PressAnyKeyToContinue();
+        }
+        else
+        {
+            ForegroundColor = ConsoleColor.DarkRed;
+            System.Console.WriteLine("|===================================================|\n" +
+                                     "|                                                   |\n" +
+                                    $"| {newCharacterName}'s Health has beed restored to  \n" +
+                                     "|      120 HealthPoints                             |\n" +
+                                     "|===================================================|\n");
+            baseHealth = 120;
+            PressAnyKeyToContinue();
+        }
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now we need to learn more about you.  |\n" +
+                    "|  Please enter a brief desciption      |\n" +
+                    "|    or Catchphrase for your character. |\n" +
+                    "|=======================================|\n");
+        string newCharacterDescription = Console.ReadLine();
+        PressAnyKeyToContinue();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Hair Style you want |\n" +
+                    "|  have on this adventure.              |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+
+        ViewAllHairStylesForCharacterCreate();
+        System.Console.WriteLine("\n" +
+            "Please enter a Hair Style ID to assign a Hair Style to your Character");
+        int newHairStyleId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Hair Color you want |\n" +
+                    "|  to have on this adventure.           |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+        ViewAllHairColors();
+        System.Console.WriteLine("\n" +
+            "Please enter a Hair Color ID to assign a Hair Color to your Character");
+        int newHairColorId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Body Type you want  |\n" +
+                    "|  to have on this adventure.           |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+        ViewAllBodyTypes();
+        System.Console.WriteLine("\n" +
+            "Please enter a Body Type ID to assign a Body Type to your Character");
+        int newBodyTypeId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, tell me what class |\n" +
+                    "|  have you chosen to become proficient in?   |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllCharacterClassesForCharacterCreate();
+        System.Console.WriteLine("\n" +
+            "Please enter a Character Class ID to assign a Character Class to your Character");
+        int newCharacterClassId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  two abilities to help you with the journey.|\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllAbilities();
+        System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
+        string userInput = Console.ReadLine();
+
+        List<int> newAbilityIds = userInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose  \n" +
+                    "|  an armour to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllArmoursForCharacterCreate();
+        System.Console.WriteLine("Please enter the Armour Id separated by commas (e.g., 1,2) to assign your Armours to your Character:");
+        string userArmourInput = Console.ReadLine();
+
+        List<int> newArmourIds = userArmourInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose |\n" +
+                    "|  a weapon to help you with the journey.     |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllWeaponsForCharacterCreate();
+        System.Console.WriteLine("Please enter the Weapon ID separated by commas (e.g., 1,2) to assign Weapons to your Character:");
+        string userWeaponInput = Console.ReadLine();
+
+        List<int> newWeaponIds = userWeaponInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose       |\n" +
+                    "|  a consumable to help you with the journey. |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllConsumablesForCharacterCreate();
+        System.Console.WriteLine("Please enter the Consumable ID(s) separated by commas (e.g., 1,2) to assign Consumable(s) to your Character:");
+        string userConsumableInput = Console.ReadLine();
+
+        List<int> newConsumableIds = userConsumableInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Finally {newCharacterName}, you need       |\n" +
+                    "|  a vehicle to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllVehiclesForCharacterCreate();
+        System.Console.WriteLine("Please enter the Vehicle ID(s) separated by commas (e.g., 1,2) to assign Vehicle(s) to your Character:");
+        string userVehicleInput = Console.ReadLine();
+
+        List<int> newVehicleIds = userVehicleInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Please Enter your User ID to save your      |\n" +
+                    "|     Character.                              |\n" +
+                    "|                                             |\n" +
+                    "|=============================================|\n");
+        int userId = int.Parse(Console.ReadLine()!);
+        PressAnyKeyToContinue();
+
+        CharacterCreate createCharacter = new CharacterCreate
+        {
+            CharacterName = newCharacterName,
+            CharacterHealth = baseHealth,
+            CharacterBaseAttackDamage = baseAttack,
+            CharacterBaseDefense = baseDefense,
+            CharacterDescription = newCharacterDescription,
+            HairColorId = newHairColorId,
+            HairStyleId = newHairStyleId,
+            BodyTypeId = newBodyTypeId,
+            CharacterClassId = newCharacterClassId,
+            UserId = userId,
+            AbilityList = newAbilityIds,
+            WeaponList = newWeaponIds,
+            ArmourList = newArmourIds,
+            ConsumableList = newConsumableIds,
+            VehicleList = newVehicleIds,
+        };
+
+        var characterContent = new StringContent(JsonConvert.SerializeObject(createCharacter), Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Character", characterContent).Result;
+        
+        if (response.IsSuccessStatusCode)
+        {
+            CharacterListUI characterCreated = response.Content.ReadAsAsync<CharacterListUI>().Result;
+            Console.Clear();
+            ForegroundColor = ConsoleColor.Cyan;
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      "| You have successfully create a new          |\n" +
+                      "|     Character. Here is the information on   |\n" +
+                      "|       the character you created             |\n" +
+                      "|=============================================|\n");
+            
+            PressAnyKeyToContinue();
+
+            WriteLine("==============================================================================================================================================");
+            WriteLine(characterCreated.CharacterName);
+            Write("You have choosen to be a: ");
+            WriteLine(characterCreated.CharacterClassName);
+            WriteLine(" \n" +
+                     $" Here is an overview of the {characterCreated.CharacterClassName} Class:\n" +
+                      "==============================================================================================================================================");
+            WriteLine(characterCreated.CharacterClassDescription);
+            WriteLine("  \n" +
+                      "==============================================================================================================================================");
+            WriteLine($"Your Character's current health is at {characterCreated.CharacterHealth} HP \n" +
+                      "     \n" +
+                      "==============================================================================================================================================");
+            WriteLine($"Your Character's current Attack Stat is at {characterCreated.CharacterBaseAttackDamage}\n" +
+                      "     \n" +
+                      "==============================================================================================================================================");
+            WriteLine($"Your Character's current Defense Stat is at {characterCreated.CharacterBaseDefense}\n" +
+                      "     \n" +
+                      "==============================================================================================================================================");
+            WriteLine($"Your Current Hair Color is {characterCreated.HairColorName}\n" +
+                      "     \n" +
+                      "==============================================================================================================================================");
+            WriteLine($"Your Current Hair Style is {characterCreated.HairStyleName}\n" +
+                      "     \n" +
+                      "==============================================================================================================================================");
+            WriteLine("You have the following Ability(s):");
+
+            int abilityNumber = 1;
+            foreach(var abilityName in characterCreated.AbilityName)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Ability {abilityNumber}: {abilityName} \n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                abilityNumber++;
+            }
+
+            int abilityDescriptionNumber = 1;
+            foreach(var abilityDescription in characterCreated.AbilityDescription)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Ability {abilityDescriptionNumber} Description: {abilityDescription}\n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                abilityDescriptionNumber++;
+            }
+
+            WriteLine("  ");
+            WriteLine("You have the following Armour(s):");
+
+            int armourNumber = 1;
+            foreach(var armourName in characterCreated.ArmourName)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Armour {armourNumber}: {armourName} \n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                armourNumber++;
+            }
+
+            int armourDescriptionNumber = 1;
+            foreach(var armourDescription in characterCreated.ArmourDescription)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Armour {armourDescriptionNumber} Description: {armourDescription}\n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                armourDescriptionNumber++;
+            }
+
+            WriteLine("  ");
+            WriteLine("You have the following Weapon(s):");
+
+            int weaponNumber = 1;
+            foreach(var weaponName in characterCreated.WeaponName)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Weapon {weaponNumber}: {weaponName} \n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                weaponNumber++;
+            }
+
+            int weaponDescriptionNumber = 1;
+            foreach(var weaponDescription in characterCreated.WeaponDescription)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Weapon {weaponDescriptionNumber} Description: {weaponDescription}\n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                weaponDescriptionNumber++;
+            }
+
+            WriteLine("  ");
+            WriteLine("You have the following Vehicle(s):");
+
+            int vehicleNumber = 1;
+            foreach(var vehicleName in characterCreated.VehicleName)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Vehicle {vehicleNumber}: {vehicleName} \n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                vehicleNumber++;
+            }
+
+            int vehicleDescriptionNumber = 1;
+            foreach(var vehicleDescription in characterCreated.VehicleDescription)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Vehicle {vehicleDescriptionNumber} Description: {vehicleDescription}\n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                vehicleDescriptionNumber++;
+            }
+
+            WriteLine("  ");
+            WriteLine("You have the following Consumable(s):");
+
+            int ConsumableNumber = 1;
+            foreach(var ConsumableName in characterCreated.ConsumableName)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Consumable {ConsumableNumber}: {ConsumableName} \n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                ConsumableNumber++;
+            }
+
+            int ConsumableDescriptionNumber = 1;
+            foreach(var ConsumableDescription in characterCreated.ConsumableDescription)
+            {
+                System.Console.WriteLine(" \n" +
+                                        $"Consumable {ConsumableDescriptionNumber} Description: {ConsumableDescription}\n" +
+                                        " \n" +
+                                        "-----------------------------------------------------------------------------------------------------------------------------------------------");
+                ConsumableDescriptionNumber++;
+            }
+
+            PressAnyKeyToContinue();
+
+            Console.Clear();
+            System.Console.WriteLine("Now your journey can truly begin");
+            PressAnyKeyToContinue();
+        }
+        else
+        {
+            Console.WriteLine("Internal server Error");
+            PressAnyKeyToContinue();
+            StartAGame();
         }
     }
 
@@ -1339,12 +1840,392 @@ public class ProgramUI
             }
 
             PressAnyKeyToContinue();
+            ManageCharacters();
         }
     }
 
-    private void ManageWeapons()
+    private void UpdateExistingCharacter()
     {
         Clear();
+        ForegroundColor = ConsoleColor.DarkCyan;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| In order to update a character please enter |\n" +
+                "|     your username to ensure proper access.  |\n" +
+                "|                                             |\n" +
+                "|=============================================|\n");
+        string userName = Console.ReadLine();
+
+        ForegroundColor = ConsoleColor.DarkCyan;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Please Enter your password to sign in to    |\n" +
+                "| acces the Character you would like to make  |\n" +
+                "|       changes to.                           |\n" +
+                "|=============================================|\n");
+        string userPassword = Console.ReadLine();
+
+        ForegroundColor = ConsoleColor.DarkCyan;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Finally confirm your User Id to gain access |\n" +
+                "| to the Character you would like to make     |\n" +
+                "|       changes to.                           |\n" +
+                "|=============================================|\n");
+        int userId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkRed;
+        WriteLine("|=============================================|\n" +
+                "|                                             |\n" +
+                "| Please Enter the Character Id for the       |\n" +
+                "|     Character you would like to make        |\n" +
+                "|       changes to.                           |\n" +
+                "|=============================================|\n");
+        int characterId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGray;
+        WriteLine("|==================================================|\n" +
+                    "|                                                 |\n" +
+                    "| If you want to update your character name please|\n" +
+                    "| input a new name. If you do not please enter    |\n" +
+                    "| your character's current name.                  |\n" +
+                    "|                                                 |\n" +
+                    "|=================================================|\n");
+        string newCharacterName = Console.ReadLine();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now you can update your catchphrase.  |\n" +
+                    "|  Please enter a brief desciption      |\n" +
+                    "|    or Catchphrase for your character. |\n" +
+                    "|=======================================|\n");
+        string newCharacterDescription = Console.ReadLine();
+        PressAnyKeyToContinue();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Hair Style you want |\n" +
+                    "|  to have for the character now.       |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+
+        ViewAllHairStylesForCharacterCreate();
+        System.Console.WriteLine("\n" +
+            "Please enter a Hair Style ID to assign a Hair Style to your Character");
+        int newHairStyleId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Hair Color you want |\n" +
+                    "|  to have for your Character now.      |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+        ViewAllHairColors();
+        System.Console.WriteLine("\n" +
+            "Please enter a Hair Color ID to assign a Hair Color to your Character");
+        int newHairColorId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkGreen;
+        WriteLine("|=========================================|\n" +
+                    "|                                       |\n" +
+                    "| Now Lets see what Body Type you want  |\n" +
+                    "|  to have for your Character now.      |\n" +
+                    "|   Please choose from the following:   |\n" +
+                    "|=======================================|\n");
+        ViewAllBodyTypes();
+        System.Console.WriteLine("\n" +
+            "Please enter a Body Type ID to assign a Body Type to your Character");
+        int newBodyTypeId = int.Parse(Console.ReadLine()!);
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    "| You can now choose to update the abilities  |\n" +
+                    "|  your character has to help on the journey. |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllAbilities();
+        System.Console.WriteLine("Please enter the Ability IDs separated by commas (e.g., 1,2) to assign your Abilities to your Character:");
+        string userInput = Console.ReadLine();
+
+        List<int> newAbilityIds = userInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Now {newCharacterName}, you need to choose  \n" +
+                    "|  an armour to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllArmoursForCharacterCreate();
+        System.Console.WriteLine("Please enter the Armour Id separated by commas (e.g., 1,2) to assign your Armours to your Character:");
+        string userArmourInput = Console.ReadLine();
+
+        List<int> newArmourIds = userArmourInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    "| Now you need to choose at least one weapon  |\n" +
+                    "| to help you with the journey.               |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllWeaponsForCharacterCreate();
+        System.Console.WriteLine("Please enter the Weapon ID separated by commas (e.g., 1,2) to assign Weapons to your Character:");
+        string userWeaponInput = Console.ReadLine();
+
+        List<int> newWeaponIds = userWeaponInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    "| Now you need to choose some consumable(s)   |\n" +
+                    "| to help you with the journey ahead.         |\n" +
+                    "|      Please choose from the following:      |\n" +
+                    "|=============================================|\n");
+        ViewAllConsumablesForCharacterCreate();
+        System.Console.WriteLine("Please enter the Consumable ID(s) separated by commas (e.g., 1,2) to assign Consumable(s) to your Character:");
+        string userConsumableInput = Console.ReadLine();
+
+        List<int> newConsumableIds = userConsumableInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("|===============================================|\n" +
+                    "|                                             |\n" +
+                    $"| Finally {newCharacterName}, you need       |\n" +
+                    "|  a vehicle to help you with the journey.    |\n" +
+                    "|   Please choose from the following:         |\n" +
+                    "|=============================================|\n");
+        ViewAllVehiclesForCharacterCreate();
+        System.Console.WriteLine("Please enter the Vehicle ID(s) separated by commas (e.g., 1,2) to assign Vehicle(s) to your Character:");
+        string userVehicleInput = Console.ReadLine();
+
+        List<int> newVehicleIds = userVehicleInput
+            .Split(',')
+            .Select(id => int.Parse(id.Trim()))
+            .ToList();
+
+        CharacterUpdate updatedCharacter = new CharacterUpdate
+        {
+            CharacterId = characterId,
+            CharacterName = newCharacterName,
+            DateModified = DateTime.Now,
+            CharacterDescription = newCharacterDescription,
+            HairColorId = newHairColorId,
+            HairStyleId = newHairStyleId,
+            BodyTypeId = newBodyTypeId,
+            UserId = userId,
+            AbilityList = newAbilityIds,
+            WeaponList = newWeaponIds,
+            ArmourList = newArmourIds,
+            ConsumableList = newConsumableIds,
+            VehicleList = newVehicleIds
+        };
+
+        HttpClient httpClient = new HttpClient();
+
+        var characterUpdate = new StringContent(JsonConvert.SerializeObject(updatedCharacter), Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Character", characterUpdate).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            Clear();
+            ForegroundColor = ConsoleColor.DarkYellow;
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      "|                                             |\n" +
+                      "|   Character has been updated successfully.  |\n" +
+                      "|                                             |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+            PressAnyKeyToContinue();
+            ManageCharacters();
+        }
+        else
+        {
+            WriteLine("Failed to updated the give Character. Status Code: " + response.StatusCode);
+        }
+        PressAnyKeyToContinue();
+        ManageCharacters();
+    }
+
+    private void DeleteExistingCharacter()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkRed;
+        WriteLine("|=============================================|\n" +
+                    "|                                             |\n" +
+                    "| Please Enter your Character ID to delete    |\n" +
+                    "|    your Character.                          |\n" +
+                    "|                                             |\n" +
+                    "|=============================================|\n");
+        int characterId = int.Parse(Console.ReadLine()!);
+        
+        Write($"Are your sure you want to delete the character with the ID: {characterId}? \n" +
+                "Please input y to delete or n to cancel deletion: ");
+            string userInputYesorNo = ReadLine()!;
+            if (userInputYesorNo.ToLower() == "Y".ToLower())
+            {
+                HttpClient httpClient = new HttpClient();
+
+                HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Character/{characterId}").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    WriteLine("Character was deleted successfully.");
+                    PressAnyKeyToContinue();
+                }
+                else
+                {
+                    WriteLine("Failed to delete the Character. Status Code: " + response.StatusCode);
+                    PressAnyKeyToContinue();
+                    
+                }
+            }
+            else
+            {
+                WriteLine("|=============================================|\n" +
+                        "|                                             |\n" +
+                        $"| Deletion of the Character with ID: {characterId} |\n" +
+                        "|    has been Canceled                        |\n" +
+                        "|                                             |\n" +
+                        "|=============================================|\n");
+            }
+
+        PressAnyKeyToContinue();
+        ManageCharacters();
+    }
+
+    private void ManageCharacters()
+    {
+        Console.Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|        Characters?                    |\n" +
+                    "|                                       |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |");
+        ConsoleKeyInfo key;
+        int option = 1;
+        bool isSelected = false;
+        (int left, int top) = Console.GetCursorPosition();
+        string color = "👻\u001b[35m";
+
+            while(!isSelected)
+            {   Console.SetCursorPosition(left, top);
+                WriteLine($"|{(option == 1 ? color : "  ")}1. View All Characters\u001b[37m               |");
+                WriteLine($"|{(option == 2 ? color : "  ")}2. View Characters By Character Id\u001b[37m   |");
+                WriteLine($"|{(option == 3 ? color : "  ")}3. Update Existing Character\u001b[37m         |");
+                WriteLine($"|{(option == 4 ? color : "  ")}4. Add a New Character\u001b[37m               |");
+                WriteLine($"|{(option == 5 ? color : "  ")}5. Delete a Character\u001b[37m                |");
+                WriteLine($"|{(option == 6 ? color : "  ")}6. Return to Main Menu\u001b[37m               |");
+                WriteLine("|                                       |\u001b[37m");
+                WriteLine("|=======================================|\u001b[37m");
+            try
+            {
+                key = Console.ReadKey(true); 
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        option = (option == 6 ? 1 : option + 1);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        option = (option == 1 ? 6 : option -1);
+                        break;
+
+                    case ConsoleKey.Enter:
+                        isSelected = true;
+                        break;
+
+                    default:
+                        WriteLine("Invalid Selection Please Try Again");
+                        PressAnyKeyToContinue();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Bad selection.. Press any key to continue");
+                Console.ReadKey();
+            }
+                
+            }            
+        
+        try
+        {
+            var userInput = option;
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllCharacters();
+                    break;
+
+                case 2:
+                    ViewCharacterById();
+                    break;
+
+                case 3:
+                    UpdateExistingCharacter();
+                    break;
+
+                case 4:
+                    AddANewCharacter();
+                    break;
+
+                case 5:
+                    DeleteExistingCharacter();
+                    break;
+
+                case 6:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+    }
+    
+    private void ManageWeapons()
+    {
+        Console.Clear();
         ForegroundColor = ConsoleColor.White;
         WriteLine("|=======================================|\n" +
                     "|                                       |\n" +
@@ -1354,11 +2235,11 @@ public class ProgramUI
                     "|=======================================|\n" +
                     "|                                       |");
 
-         ConsoleKeyInfo key;
-            int option = 1;
-            bool isSelected = false;
-            (int left, int top) = Console.GetCursorPosition();
-            string color = "🐉\u001b[35m";
+        ConsoleKeyInfo key;
+        int option = 1;
+        bool isSelected = false;
+        (int left, int top) = Console.GetCursorPosition();
+        string color = "🐉\u001b[35m";
 
             while(!isSelected)
             {   Console.SetCursorPosition(left, top);
@@ -1367,7 +2248,7 @@ public class ProgramUI
                 WriteLine($"|{(option == 3 ? color : "  ")}3. Update Existing Weapon\u001b[37m            |");
                 WriteLine($"|{(option == 4 ? color : "  ")}4. Add a New Weapon\u001b[37m                  |");
                 WriteLine($"|{(option == 5 ? color : "  ")}5. Delete a Weapon\u001b[37m                   |");
-                WriteLine($"|{(option == 6 ? color : "  ")}6. Return to Main Menu\u001b[37m               |");
+                WriteLine($"|{(option == 6 ? color : "  ")}6. Return to Previous Menu\u001b[37m           |");
                 WriteLine("|                                       |\u001b[37m");
                 WriteLine("|=======================================|\u001b[37m");
             try
@@ -1428,7 +2309,7 @@ public class ProgramUI
                     break;
 
                 case 6:
-                    Run();
+                    ManageGameItemDetails();
                     break;
 
                 default:
@@ -1562,7 +2443,7 @@ public class ProgramUI
             {
                 WriteLine("|=========================================================================================================================================================================|\n" +
                           "|                                                                                                                                                                         |\n" +
-                          $"| WeaponId: {weapon.WeaponId} ||  WeaponName: {weapon.WeaponName}                                    \n" +
+                          $"| Weapon Id: {weapon.WeaponId} ||  Weapon Name: {weapon.WeaponName}                                    \n" +
                           "|                                                                                                                                                                         |\n" +
                           "|=========================================================================================================================================================================|\n" +
                           "|                                                                                                                                                                         |\n" +
@@ -1615,7 +2496,7 @@ public class ProgramUI
             {
                 WriteLine("|=========================================================================================================================================================================|\n" +
                           "|                                                                                                                                                                         |\n" +
-                          $"| WeaponId: {weapon.WeaponId} ||  WeaponName: {weapon.WeaponName}                                    \n" +
+                          $"| Weapon Id: {weapon.WeaponId} ||  Weapon Name: {weapon.WeaponName}                                    \n" +
                           "|                                                                                                                                                                         |\n" +
                           "|=========================================================================================================================================================================|\n" +
                           "|                                                                                                                                                                         |\n" +
@@ -1648,7 +2529,7 @@ public class ProgramUI
     private void ViewWeaponById()
     {
         Clear();
-        ForegroundColor = ConsoleColor.Black;
+        ForegroundColor = ConsoleColor.DarkMagenta;
         WriteLine("Please enter a WeaponId to look up a Weapons.");
         var weaponId = int.Parse(Console.ReadLine()!);
 
@@ -1783,6 +2664,39 @@ public class ProgramUI
 
     private void ViewAllHairStyles()
     {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/HairStyle").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<HairStyleDetailUI> hairStyles = response.Content.ReadAsAsync<List<HairStyleDetailUI>>().Result;
+            
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here is the information on the Hair Styles |\n" +
+                      "|   that are available.                       |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+            WriteLine("   ");  
+
+            foreach (var hairStyle in hairStyles)
+            {        
+                WriteLine("======================================================================|\n" +
+                          "|                                                                     |\n" +
+                          $"|  Hair Style ID: {hairStyle.HairStyleId} | Hair Style Name: {hairStyle.HairStyleName}\n" +
+                          "                                                                      ");
+            }
+
+            PressAnyKeyToContinue();
+            ManageHairStyles();
+        }
+    }
+
+    private void ViewAllHairStylesForCharacterCreate()
+    {
         ForegroundColor = ConsoleColor.DarkMagenta;
 
         HttpClient httpClient = new HttpClient();
@@ -1799,14 +2713,79 @@ public class ProgramUI
                           $"|  Hair Style ID: {hairStyle.HairStyleId} | Hair Style Name: {hairStyle.HairStyleName}\n" +
                           "                                                                      ");
             }
-
-            PressAnyKeyToContinue();
         }
     }
 
     private void ViewAllCharacterClasses()
     {
-        ForegroundColor = ConsoleColor.DarkRed;
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/CharacterClass").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<CharacterClassListUI> characterClasses = response.Content.ReadAsAsync<List<CharacterClassListUI>>().Result;
+
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here is the information on the Character   |\n" +
+                      "|  Classes that are available.                |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+            WriteLine("   ");  
+
+            foreach (var characterClass in characterClasses)
+            {
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Character Class Id: {characterClass.CharacterClassId} ||  Character Class Name: {characterClass.CharacterClassName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|Character Class Description:                                                                                                                                             |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|{characterClass.CharacterClassDescription} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Character Class Special Ability: {characterClass.CharacterClassSpecialAbility}  \n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"{characterClass.SpecialAbilityDescription} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Is an Attack: {characterClass.SpecialAbilityIsAnAttack}  ||  Special Ability Heals: {characterClass.SpecialAbilityHeals} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Provides Defense: {characterClass.SpecialAbilityProvidesDefense}  ||  Special Ability Provides Status Effect: {characterClass.SpecialAbilityProvidesStatusEffect} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Damage Amount: {characterClass.SpecialAbilityDamage}  ||  Special Ability Healing Amount: {characterClass.SpecialAbilityHealingAmount} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Defense Amount: {characterClass.SpeacialAbilityDefenseAmount}  ||  Special Ability Duration: {characterClass.SpecialAbilityDuration} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+                WriteLine("  ");
+            }
+
+            PressAnyKeyToContinue();
+            ManageCharacterClasses();
+        }
+    }
+
+    private void ViewAllCharacterClassesForCharacterCreate()
+    {
+        ForegroundColor = ConsoleColor.DarkMagenta;
 
         HttpClient httpClient = new HttpClient();
 
@@ -1817,21 +2796,111 @@ public class ProgramUI
 
             foreach (var characterClass in characterClasses)
             {
-                WriteLine("|======================================================================================================================|\n" +
-                          "|                                                                                                                      |\n" +
-                         $"| Character Class ID: {characterClass.CharacterClassId} | Character Class Name: {characterClass.CharacterClassName}\n" +
-                          "|======================================================================================================================|\n" +
-                          "| Character Class Description:                                                                                         |\n" +
-                          "|______________________________________________________________________________________________________________________|\n" +
-                          "                                                                                                            \n" +
-                         $"{characterClass.CharacterClassDescription} \n");
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Character Class Id: {characterClass.CharacterClassId} ||  Character Class Name: {characterClass.CharacterClassName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|Character Class Description:                                                                                                                                             |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|{characterClass.CharacterClassDescription} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Character Class Special Ability: {characterClass.CharacterClassSpecialAbility}  \n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"{characterClass.SpecialAbilityDescription} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Is an Attack: {characterClass.SpecialAbilityIsAnAttack}  ||  Special Ability Heals: {characterClass.SpecialAbilityHeals} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Provides Defense: {characterClass.SpecialAbilityProvidesDefense}  ||  Special Ability Provides Status Effect: {characterClass.SpecialAbilityProvidesStatusEffect} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Damage Amount: {characterClass.SpecialAbilityDamage}  ||  Special Ability Healing Amount: {characterClass.SpecialAbilityHealingAmount} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Defense Amount: {characterClass.SpeacialAbilityDefenseAmount}  ||  Special Ability Duration: {characterClass.SpecialAbilityDuration} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+                WriteLine("  ");
             }
 
-            PressAnyKeyToContinue();
         }
     }
 
     private void ViewAllConsumables()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkRed;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Consumable").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<ConsumableDetailUI> consumables = response.Content.ReadAsAsync<List<ConsumableDetailUI>>().Result;
+
+             WriteLine("|=============================================|\n" +
+                          "|                                             |\n" +
+                          $"| Here is the information on the Consumables |\n" +
+                          "|   that are available.                       |\n" +
+                          "|                                             |\n" +
+                          "|=============================================|\n");
+                    
+                WriteLine("  ");
+
+            foreach (var consumable in consumables)
+            {
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Consumable Id: {consumable.ConsumableId} ||  Consumable Name: {consumable.ConsumableName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Consumable Description: {consumable.ConsumableDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Effect: {consumable.ConsumableEffect}  || Consumable Increases Health: {consumable.ConsumableIncreaseHealth}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Increases Defense: {consumable.ConsumableIncreaseDefense}  ||  Consumable Increases Attack: {consumable.ConsumableIncreaseAttack}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Does Damage To An Enemy: {consumable.ConsumableDoesDamageToEnemy}  ||  Consumable Health Increase Amount: {consumable.ConsumableHealthIncreaseAmount}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Defense Increase Amount: {consumable.ConsumableDefenseIncreaseAmount}  ||  Consumable Attack Increase Amount: {consumable.ConsumableAttackIncreaseAmount}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Console Damage Amount to Enemy: {consumable.ConsumableDamageToEnemy}     \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+            }
+
+            PressAnyKeyToContinue();
+            ManageConsumables();
+        }
+    }
+
+    private void ViewAllConsumablesForCharacterCreate()
     {
         ForegroundColor = ConsoleColor.DarkRed;
 
@@ -1844,18 +2913,39 @@ public class ProgramUI
 
             foreach (var consumable in consumables)
             {
-                WriteLine("=================================================================================================================|\n" +
-                          "|                                                                                                                |\n" +
-                          $"| Consumable ID: {consumable.ConsumableId} | Consumable Name: {consumable.ConsumableName}|\n" +
-                          "|================================================================================================================|\n" +
-                          "| Consumable Description:                                                                                        |\n" +
-                          "|________________________________________________________________________________________________________________|\n" +
-                          "|                                                                                                                |\n" +
-                          $" {consumable.ConsumableDescription}                         \n" +
-                          "                                                                                                                 ");
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Consumable Id: {consumable.ConsumableId} ||  Consumable Name: {consumable.ConsumableName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Consumable Description: {consumable.ConsumableDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Effect: {consumable.ConsumableEffect}  || Consumable Increases Health: {consumable.ConsumableIncreaseHealth}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Increases Defense: {consumable.ConsumableIncreaseDefense}  ||  Consumable Increases Attack: {consumable.ConsumableIncreaseAttack}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Does Damage To An Enemy: {consumable.ConsumableDoesDamageToEnemy}  ||  Consumable Health Increase Amount: {consumable.ConsumableHealthIncreaseAmount}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Defense Increase Amount: {consumable.ConsumableDefenseIncreaseAmount}  ||  Consumable Attack Increase Amount: {consumable.ConsumableAttackIncreaseAmount}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Console Damage Amount to Enemy: {consumable.ConsumableDamageToEnemy}     \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
             }
 
-            PressAnyKeyToContinue();
         }
     }
 
@@ -1909,6 +2999,67 @@ public class ProgramUI
 
     private void ViewAllAbilities()
     {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Ability").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<AbilityDetailUI> abilities = response.Content.ReadAsAsync<List<AbilityDetailUI>>().Result;
+
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here is the information on the Abilities   |\n" +
+                      "|   that are available.                       |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+                    
+            WriteLine("  ");
+
+            foreach (var ability in abilities)
+            {
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Ability Id: {ability.AbilityId} ||  Ability Name: {ability.AbilityName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Ability Description: {ability.AbilityDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Effect Type: {ability.AbilityEffectType}  ||  Ability is an Attack: {ability.AbilityEffectAttack}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Enhances Health: {ability.AbilityEffectHealthEnhancement}  ||  Ability Enhances Defence: {ability.AbilityEffectDefenseEnhancement}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Has A Status Effect: {ability.AbilityHasStatusEffect}  ||  Ability Does Damage to Single Enemy: {ability.AbilityDamageSingleEnemy}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Does Damage to Multipl Enemies: {ability.AbilityDamageMultipleEnemy}  ||  Ability Attack Damage Amount: {ability.AbilityAttackDamage}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Healing Amount: {ability.AbilityHealingAmount} || Ability Defense Increase Amount: {ability.AbilityDefenseIncrease} || Ability Effect Time Limit: {ability.AbilityEffectTimeLimit}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+            }
+            }
+
+            PressAnyKeyToContinue();
+            ManageAbilities();
+    }
+
+    private void ViewAllAbilitiesForCharacterCreate()
+    {
         ForegroundColor = ConsoleColor.DarkCyan;
 
         HttpClient httpClient = new HttpClient();
@@ -1920,22 +3071,101 @@ public class ProgramUI
 
             foreach (var ability in abilities)
             {
-                WriteLine("=================================================================================================================|\n" +
-                          "|                                                                                                                |\n" +
-                          $"| Ability ID: {ability.AbilityId} | Ability Name: {ability.AbilityName}|\n" +
-                          "|================================================================================================================|\n" +
-                          "| Ability Description:                                                                                           |\n" +
-                          "|________________________________________________________________________________________________________________|\n" +
-                          "|                                                                                                                |\n" +
-                          $" {ability.AbilityDescription}                         \n" +
-                          "                                                                                                                 ");
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Ability Id: {ability.AbilityId} ||  Ability Name: {ability.AbilityName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Ability Description: {ability.AbilityDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Effect Type: {ability.AbilityEffectType}  ||  Ability is an Attack: {ability.AbilityEffectAttack}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Enhances Health: {ability.AbilityEffectHealthEnhancement}  ||  Ability Enhances Defence: {ability.AbilityEffectDefenseEnhancement}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Has A Status Effect: {ability.AbilityHasStatusEffect}  ||  Ability Does Damage to Single Enemy: {ability.AbilityDamageSingleEnemy}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Does Damage to Multipl Enemies: {ability.AbilityDamageMultipleEnemy}  ||  Ability Attack Damage Amount: {ability.AbilityAttackDamage}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ability Healing Amount: {ability.AbilityHealingAmount} || Ability Defense Increase Amount: {ability.AbilityDefenseIncrease} || Ability Effect Time Limit: {ability.AbilityEffectTimeLimit}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+            }
             }
 
             PressAnyKeyToContinue();
-        }
     }
 
     private void ViewAllArmours()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkCyan;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Armour").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<ArmourDetailUI> armours = response.Content.ReadAsAsync<List<ArmourDetailUI>>().Result;
+
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here is the information on the Armours that|\n" +
+                      "|     are available.                          |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+                    
+            WriteLine("  ");
+
+            foreach (var armour in armours)
+            {
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Armour Id: {armour.ArmourId} ||  ArmourName: {armour.ArmourName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Armour Description: {armour.ArmourDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Armour Provides Defense: {armour.ArmourProvidesDefense}  ||  Armour Increases Health: {armour.ArmourIncreasesHealth}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Armour Increases Sword Attacks: {armour.ArmourIncreasesSwordAttacks}  ||  Armour Increases Ranged Attacks: {armour.ArmourIncreasesRangedAttacks}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Sword Damage Increase: {armour.IncreasedSwordDamageAmount}  ||  Health Increase Amount: {armour.IncreasedHealthAmount}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ranged Damage Increase Amount: {armour.IncreasedRangeAttackDamageAmount}  ||  Armour Protection Amount: {armour.IncreasedDefenseAmount}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+            }
+
+            PressAnyKeyToContinue();
+            ManageArmours();
+        }
+    }
+
+    private void ViewAllArmoursForCharacterCreate()
     {
         ForegroundColor = ConsoleColor.DarkCyan;
 
@@ -1948,21 +3178,37 @@ public class ProgramUI
 
             foreach (var armour in armours)
             {
-                WriteLine("=================================================================================================================|\n" +
-                          "|                                                                                                                |\n" +
-                          $"| Armour ID: {armour.ArmourId} | Armour Name: {armour.ArmourName}|\n" +
-                          "|================================================================================================================|\n" +
-                          "| Armour Description:                                                                                            |\n" +
-                          "|________________________________________________________________________________________________________________|\n" +
-                          "|                                                                                                                |\n" +
-                          $" {armour.ArmourDescription}                         \n" +
-                          "                                                                                                                 ");
-            }
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Armour Id: {armour.ArmourId} ||  ArmourName: {armour.ArmourName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Armour Description: {armour.ArmourDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Armour Provides Defense: {armour.ArmourProvidesDefense}  ||  Armour Increases Health: {armour.ArmourIncreasesHealth}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Armour Increases Sword Attacks: {armour.ArmourIncreasesSwordAttacks}  ||  Armour Increases Ranged Attacks: {armour.ArmourIncreasesRangedAttacks}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Sword Damage Increase: {armour.IncreasedSwordDamageAmount}  ||  Health Increase Amount: {armour.IncreasedHealthAmount}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ranged Damage Increase Amount: {armour.IncreasedRangeAttackDamageAmount}  ||  Armour Protection Amount: {armour.IncreasedDefenseAmount}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
 
-            PressAnyKeyToContinue();
+            }
         }
     }
-
 
     private void ManageGameItemDetails()
     {
@@ -2002,7 +3248,7 @@ public class ProgramUI
                     break;
 
                 case 3:
-                    ViewAllCharacterClasses();
+                    ManageCharacterClasses();
                     break;
 
                 case 4:
@@ -2029,7 +3275,7 @@ public class ProgramUI
                     ManageMaps();
                     break;
                 case 11:
-                    ManageMaps();
+                    ManageCharacters();
                     break;
                 case 0:
                     Run();
@@ -2059,14 +3305,14 @@ public class ProgramUI
                     "|                                       |\n" +
                     "|                                       |\n" +
                     "|  What would you like to do with the   |\n" +
-                    "|  Map?                             |\n" +
+                    "|  Map?                                 |\n" +
                     "|=======================================|\n" +
                     "|                                       |\n" +
-                    "|  1. View All Map                 |\n" +
-                    "|  2. View Map By Id                |\n" +
-                    "|  3. Update Existing Map            |\n" +
-                    "|  4. Add a New Map                  |\n" +
-                    "|  5. Delete a Map                   |\n" +
+                    "|  1. View All Map                      |\n" +
+                    "|  2. View Map By Id                    |\n" +
+                    "|  3. Update Existing Map               |\n" +
+                    "|  4. Add a New Map                     |\n" +
+                    "|  5. Delete a Map                      |\n" +
                     "|  0. Return to Manage Game Items       |\n" +
                     "|=======================================|");
         try
@@ -2147,13 +3393,15 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Map", mapContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("new Map is added successfully");
+                WriteLine("The new Map was added successfully!!!");
             }
             else
             {
                 WriteLine("Failed to add new Map");
             }
-            PressAnyKeyToContinue();     }
+            PressAnyKeyToContinue();     
+            ManageMaps();
+    }
 
     private void ViewAllMaps()
     {
@@ -2178,13 +3426,14 @@ public class ProgramUI
                           $"PrecipitationType: {map.PrecipitationType} \n");
             }
             PressAnyKeyToContinue();
+            ManageMaps();
         }    
     }
 
     private void ViewMapById()
     {
         Clear();
-        ForegroundColor = ConsoleColor.Black;
+        ForegroundColor = ConsoleColor.DarkMagenta;
         WriteLine("Please enter a MapId to look up a Map.");
         var mapId = int.Parse(Console.ReadLine()!);
 
@@ -2201,6 +3450,7 @@ public class ProgramUI
                           $"IsDayTime: {map.IsDaytime} \n" +
                           $"PrecipitationType: {map.PrecipitationType} \n");
             PressAnyKeyToContinue();
+            ManageMaps();
         }          
     }
 
@@ -2248,7 +3498,8 @@ public class ProgramUI
             {
                 WriteLine("Failed to update Map");
             }
-            PressAnyKeyToContinue();     
+            PressAnyKeyToContinue(); 
+            ManageMaps();    
     }
 
     private void DeleteExistingMap()
@@ -2272,6 +3523,7 @@ public class ProgramUI
         }
 
         PressAnyKeyToContinue(); 
+        ManageMaps();
     }
 
     // ===================================== HairColor UI ============================================ //
@@ -2283,14 +3535,14 @@ public class ProgramUI
                     "|                                       |\n" +
                     "|                                       |\n" +
                     "|  What would you like to do with the   |\n" +
-                    "|  Hair Color?                             |\n" +
+                    "|  Hair Color?                          |\n" +
                     "|=======================================|\n" +
                     "|                                       |\n" +
-                    "|  1. View All HairColor                 |\n" +
-                    "|  2. View HairColor By Id                |\n" +
-                    "|  3. Update Existing HairColor            |\n" +
-                    "|  4. Add a New HairColor                  |\n" +
-                    "|  5. Delete a HairColor                   |\n" +
+                    "|  1. View All HairColor                |\n" +
+                    "|  2. View HairColor By Id              |\n" +
+                    "|  3. Update Existing HairColor         |\n" +
+                    "|  4. Add a New HairColor               |\n" +
+                    "|  5. Delete a HairColor                |\n" +
                     "|  0. Return to Manage Game Items       |\n" +
                     "|=======================================|");
         try
@@ -2341,7 +3593,7 @@ public class ProgramUI
         ForegroundColor = ConsoleColor.DarkYellow;
         WriteLine("Enter the details for the new HairColor:");
 
-        Write("HairColor Name: ");
+        Write("Hair Color Name: ");
         string hairColorName= ReadLine()!;
 
             var newHairStyle = new HairColorDetailUI
@@ -2355,20 +3607,21 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/HairColor", hairColorContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("new hairColor is added successfully");
+                WriteLine("new Hair Color is added successfully");
             }
             else
             {
-                WriteLine("Failed to add new hairColor");
+                WriteLine("Failed to add new Hair Color");
             }
-            PressAnyKeyToContinue();    
-        }
+            PressAnyKeyToContinue(); 
+            ManageHairColors();   
+    }
 
     private void ViewHairColorById()
     {
         Clear();
-        ForegroundColor = ConsoleColor.Black;
-        WriteLine("Please enter a HairColorId to look up a HairColor.");
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("Please enter a Hair Color Id to look up a Hair Color.");
         var hairColorId = int.Parse(Console.ReadLine()!);
 
         HttpClient httpClient = new HttpClient();
@@ -2378,9 +3631,10 @@ public class ProgramUI
         {
             HairColorDetailUI hairColor = response.Content.ReadAsAsync<HairColorDetailUI>().Result;
             WriteLine(
-                      $"HairColorId {hairColor.HairColorId} \n" +
-                      $"HairColorName: {hairColor.HairColorName} \n");
+                      $"Hair Color Id {hairColor.HairColorId} \n" +
+                      $"Hair Color Name: {hairColor.HairColorName} \n");
             PressAnyKeyToContinue();
+            ManageHairColors();
         }       
     }
 
@@ -2388,10 +3642,10 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.DarkYellow;
-        WriteLine("Enter the ID of the HairColor you want to update:");
+        WriteLine("Enter the ID of the Hair Color you want to update:");
         int hairColorId = int.Parse(ReadLine()!);
 
-        Write("HairColor Name: ");
+        Write("Hair Color Name: ");
         string hairColorName= ReadLine()!;
 
             var newHairColor = new HairColorDetailUI
@@ -2406,20 +3660,21 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/HairColor", hairColorContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("HairColor is updated successfully");
+                WriteLine("Hair Color is updated successfully");
             }
             else
             {
-                WriteLine("Failed to update HairColor");
+                WriteLine("Failed to update Hair Color");
             }
-            PressAnyKeyToContinue();     
+            PressAnyKeyToContinue();
+            ManageHairColors();
     }
 
     private void DeleteExistingHairColor()
     {
         Clear();
         ForegroundColor = ConsoleColor.Cyan;
-        WriteLine("Please enter the HairColorId of the HairColor you want to delete:");
+        WriteLine("Please enter the Hair Color Id of the Hair Color you want to delete:");
         int hairColorId = int.Parse(Console.ReadLine()!);
 
         HttpClient httpClient = new HttpClient();
@@ -2432,10 +3687,11 @@ public class ProgramUI
         }
         else
         {
-            WriteLine("Failed to delete a HairColor. Status Code: " + response.StatusCode);
+            WriteLine("Failed to delete a Hair Color. Status Code: " + response.StatusCode);
         }
 
         PressAnyKeyToContinue(); 
+        ManageHairColors();
     }
 
 
@@ -2448,14 +3704,14 @@ public class ProgramUI
                     "|                                       |\n" +
                     "|                                       |\n" +
                     "|  What would you like to do with the   |\n" +
-                    "|  Hair Style?                             |\n" +
+                    "|  Hair Style?                          |\n" +
                     "|=======================================|\n" +
                     "|                                       |\n" +
-                    "|  1. View All HairStyles                  |\n" +
-                    "|  2. View HairStyle By Id                |\n" +
-                    "|  3. Update Existing HairStyle            |\n" +
-                    "|  4. Add a New HairStyle                  |\n" +
-                    "|  5. Delete a HairStyle                   |\n" +
+                    "|  1. View All HairStyles               |\n" +
+                    "|  2. View HairStyle By Id              |\n" +
+                    "|  3. Update Existing HairStyle         |\n" +
+                    "|  4. Add a New HairStyle               |\n" +
+                    "|  5. Delete a HairStyle                |\n" +
                     "|  0. Return to Manage Game Items       |\n" +
                     "|=======================================|");
         try
@@ -2504,9 +3760,9 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.DarkYellow;
-        WriteLine("Enter the details for the new HairStyle:");
+        WriteLine("Enter the details for the new Hair Style:");
 
-        Write("HairStyle Name: ");
+        Write("Hair Style Name: ");
         string hairStyleName= ReadLine()!;
 
             var newHairStyle = new HairStyleDetailUI
@@ -2520,20 +3776,21 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/HairStyle", hairStyleContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("new HairStyle is added successfully");
+                WriteLine("new Hair Style is added successfully");
             }
             else
             {
-                WriteLine("Failed to add new HairStyle");
+                WriteLine("Failed to add new Hair Style");
             }
             PressAnyKeyToContinue();
+            ManageHairStyles();
     }
 
     private void ViewHairStylesById()
     {
         Clear();
-        ForegroundColor = ConsoleColor.Black;
-        WriteLine("Please enter a HairStyleId to look up a HairStyle.");
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("Please enter a Hair Style Id to look up a Hair Style.");
         var hairStyleId = int.Parse(Console.ReadLine()!);
 
         HttpClient httpClient = new HttpClient();
@@ -2543,9 +3800,10 @@ public class ProgramUI
         {
             HairStyleDetailUI hairStyle = response.Content.ReadAsAsync<HairStyleDetailUI>().Result;
             WriteLine(
-                      $"HairStyleId {hairStyle.HairStyleId} \n" +
-                      $"HairStyleName: {hairStyle.HairStyleName} \n");
+                      $"Hair Style Id {hairStyle.HairStyleId} \n" +
+                      $"Hair Style Name: {hairStyle.HairStyleName} \n");
             PressAnyKeyToContinue();
+            ManageHairStyles();
         }       
     }
 
@@ -2553,10 +3811,10 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.DarkYellow;
-        WriteLine("Enter the ID of the HairStyle you want to update:");
+        WriteLine("Enter the ID of the Hair Style you want to update:");
         int hairStyleId = int.Parse(ReadLine()!);
 
-        Write("HairStyle Name: ");
+        Write("Hair Style Name: ");
         string hairStyleName= ReadLine()!;
 
             var newHairStyle = new HairStyleDetailUI
@@ -2571,20 +3829,21 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/HairStyle", hairStyleContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("HairStyle is updated successfully");
+                WriteLine("Hair Style is updated successfully");
             }
             else
             {
-                WriteLine("Failed to update HairStyle");
+                WriteLine("Failed to update Hair Style");
             }
-            PressAnyKeyToContinue();       
+            PressAnyKeyToContinue();
+            ManageHairStyles();       
     }
 
     private void DeleteExistingHairStyles()
     {
         Clear();
         ForegroundColor = ConsoleColor.Cyan;
-        WriteLine("Please enter the HairStyleId of the HairStyle you want to delete:");
+        WriteLine("Please enter the Hair Style Id of the Hair Style you want to delete:");
         int hairStyleId = int.Parse(Console.ReadLine()!);
 
         HttpClient httpClient = new HttpClient();
@@ -2593,14 +3852,15 @@ public class ProgramUI
 
         if (response.IsSuccessStatusCode)
         {
-            WriteLine("HairStyle was deleted successfully.");
+            WriteLine("Hair Style was deleted successfully.");
         }
         else
         {
-            WriteLine("Failed to delete a HairStyle. Status Code: " + response.StatusCode);
+            WriteLine("Failed to delete a Hair Style. Status Code: " + response.StatusCode);
         }
 
-        PressAnyKeyToContinue();      
+        PressAnyKeyToContinue(); 
+        ManageHairStyles();     
     }
 
     private void ManageBodyTypes()
@@ -2611,14 +3871,14 @@ public class ProgramUI
                     "|                                       |\n" +
                     "|                                       |\n" +
                     "|  What would you like to do with the   |\n" +
-                    "|  Body Types?                             |\n" +
+                    "|  Body Types?                          |\n" +
                     "|=======================================|\n" +
                     "|                                       |\n" +
-                    "|  1. View All BodyTypes                  |\n" +
-                    "|  2. View BodyTypes By Id                |\n" +
-                    "|  3. Update Existing BodyTypes            |\n" +
-                    "|  4. Add a New BodyTypes                  |\n" +
-                    "|  5. Delete a BodyTypes                   |\n" +
+                    "|  1. View All Body Types               |\n" +
+                    "|  2. View Body Type By Id              |\n" +
+                    "|  3. Update A Existing Body Type       |\n" +
+                    "|  4. Add a New Body Type               |\n" +
+                    "|  5. Delete a Body Type                |\n" +
                     "|  0. Return to Manage Game Items       |\n" +
                     "|=======================================|");
         try
@@ -2667,9 +3927,9 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.DarkYellow;
-        WriteLine("Enter the details for the new BodyType:");
+        WriteLine("Enter the details for the new Body Type:");
 
-        Write("BodyType Name: ");
+        Write("Body Type Name: ");
         string bodyTypeName= ReadLine()!;
 
             var newBodyType = new BodyTypeDetailUI
@@ -2683,20 +3943,21 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/BodyType", bodyTypeContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("new BodyType is added successfully");
+                WriteLine("new Body Type is added successfully");
             }
             else
             {
-                WriteLine("Failed to add new BodyType");
+                WriteLine("Failed to add new Body Type");
             }
             PressAnyKeyToContinue();
+            ManageBodyTypes();
     }
 
     private void ViewBodyTypesById()
     {
         Clear();
-        ForegroundColor = ConsoleColor.Black;
-        WriteLine("Please enter a BodyTypeId to look up a BodyType.");
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("Please enter a Body Type Id to look up a Body Type.");
         var bodyTypeId = int.Parse(Console.ReadLine()!);
 
         HttpClient httpClient = new HttpClient();
@@ -2706,9 +3967,10 @@ public class ProgramUI
         {
             BodyTypeDetailUI bodyType = response.Content.ReadAsAsync<BodyTypeDetailUI>().Result;
             WriteLine(
-                      $"BodyTypeId {bodyType.BodyTypeId} \n" +
-                      $"BodyTypeName: {bodyType.BodyTypeName} \n");
+                      $"Body Type Id {bodyType.BodyTypeId} \n" +
+                      $"Body Type Name: {bodyType.BodyTypeName} \n");
             PressAnyKeyToContinue();
+            ManageBodyTypes();
         }    
     }
 
@@ -2716,10 +3978,10 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.DarkYellow;
-        WriteLine("Enter the ID of the BodyType you want to update:");
+        WriteLine("Enter the ID of the Body Type you want to update:");
         int bodyTypeId = int.Parse(ReadLine()!);
 
-        Write("BodyType Name: ");
+        Write("Body Type Name: ");
         string bodyTypeName= ReadLine()!;
 
             var newBodyType = new BodyTypeDetailUI
@@ -2734,20 +3996,21 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/BodyType", bodyTypeContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("BodyType is updated successfully");
+                WriteLine("Body Type is updated successfully");
             }
             else
             {
-                WriteLine("Failed to update BodyType");
+                WriteLine("Failed to update Body Type");
             }
-            PressAnyKeyToContinue();    
-        }
+            PressAnyKeyToContinue();
+            ManageBodyTypes();    
+    }
 
     private void DeleteExistingBodyTypes()
     {
         Clear();
         ForegroundColor = ConsoleColor.Cyan;
-        WriteLine("Please enter the BodyTypeId of the BodyTYpe you want to delete:");
+        WriteLine("Please enter the Body Type Id of the Body Type you want to delete:");
         int bodyTypeId = int.Parse(Console.ReadLine()!);
 
         HttpClient httpClient = new HttpClient();
@@ -2756,14 +4019,15 @@ public class ProgramUI
 
         if (response.IsSuccessStatusCode)
         {
-            WriteLine("BodyTyp was deleted successfully.");
+            WriteLine("Body Type was deleted successfully.");
         }
         else
         {
-            WriteLine("Failed to delete a BodyType. Status Code: " + response.StatusCode);
+            WriteLine("Failed to delete a Body Type. Status Code: " + response.StatusCode);
         }
 
-        PressAnyKeyToContinue();    
+        PressAnyKeyToContinue();
+        ManageBodyTypes();    
     }
 
     private void ManageConsumables()
@@ -2774,14 +4038,14 @@ public class ProgramUI
                     "|                                       |\n" +
                     "|                                       |\n" +
                     "|  What would you like to do with the   |\n" +
-                    "|  Consumables?                             |\n" +
+                    "|  Consumables?                         |\n" +
                     "|=======================================|\n" +
                     "|                                       |\n" +
-                    "|  1. View All Consumables                  |\n" +
-                    "|  2. View Consumables By Id                |\n" +
-                    "|  3. Update Existing Consumables            |\n" +
-                    "|  4. Add a New Consumables                  |\n" +
-                    "|  5. Delete a Consumables                   |\n" +
+                    "|  1. View All Consumables              |\n" +
+                    "|  2. View Consumables By Id            |\n" +
+                    "|  3. Update An Existing Consumable     |\n" +
+                    "|  4. Add a New Consumable              |\n" +
+                    "|  5. Delete a Consumable               |\n" +
                     "|  0. Return to Manage Game Items       |\n" +
                     "|=======================================|");
         try
@@ -2830,14 +4094,13 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.DarkYellow;
-        WriteLine("Enter the details for the new Weapon:");
+        WriteLine("Enter the details for the new Consumable:");
 
-        Write("consumable Name: ");
+        Write("Consumable Name: ");
         string consumableName= ReadLine()!;
 
         Write("Consumable Description: ");
         string consumableDescription = ReadLine()!;
-
 
         Write("Consumable Effect: ");
         string consumableEffect = ReadLine()!;
@@ -2888,11 +4151,11 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Consumable", consumableContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("new consumable is added successfully");
+                WriteLine("The New Consumable has beem added successfully!!!!");
             }
             else
             {
-                WriteLine("Failed to add new consumable");
+                WriteLine("Failed to add the new consumable!!!!!");
             }
             PressAnyKeyToContinue();
             ManageConsumables();
@@ -2902,8 +4165,8 @@ public class ProgramUI
     private void ViewConsumableById()
     {
         Clear();
-        ForegroundColor = ConsoleColor.Black;
-        WriteLine("Please enter a ConsumableId to look up a Weapons.");
+        ForegroundColor = ConsoleColor.DarkMagenta;
+        WriteLine("Please enter a Consumable Id to look up a Consumable.");
         var consumableId = int.Parse(Console.ReadLine()!);
 
         HttpClient httpClient = new HttpClient();
@@ -2912,19 +4175,47 @@ public class ProgramUI
         if (response.IsSuccessStatusCode)
         {
             ConsumableDetailUI consumable = response.Content.ReadAsAsync<ConsumableDetailUI>().Result;
-            WriteLine(
-                      $"ConsumableId {consumable.ConsumableId} \n" +
-                      $"ConsumableName: {consumable.ConsumableName} \n" +
-                      $"ConsumableDescription: {consumable.ConsumableDescription} \n" +
-                      $"ConsumableEffect: {consumable.ConsumableEffect} \n" +
-                      $"ConsumableIncreaseHealth: {consumable.ConsumableIncreaseHealth} \n" +
-                      $"ConsumableIncreaseDefense: {consumable.ConsumableIncreaseDefense} \n" +
-                      $"ConsumableIncreaseAttack: {consumable.ConsumableIncreaseAttack} \n" +
-                      $"ConsumableDoesDamageToEnemy: {consumable.ConsumableDoesDamageToEnemy} \n" +
-                      $"ConsumableHealthIncreaseAmount: {consumable.ConsumableHealthIncreaseAmount} \n" +
-                      $"ConsumableDefenseIncreaseAmount: {consumable.ConsumableDefenseIncreaseAmount} \n" +
-                      $"ConsumableAttackIncreaseAmount: {consumable.ConsumableAttackIncreaseAmount} \n" +
-                      $"ConsumableDamageToEnemy: {consumable.ConsumableDamageToEnemy} \n");
+
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here is the information on the Consumable   |\n" +
+                      $"|  with ID: {consumableId}                    |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+
+            WriteLine("  ");
+            
+            WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Consumable Id: {consumable.ConsumableId} ||  Consumable Name: {consumable.ConsumableName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Consumable Description: {consumable.ConsumableDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Effect: {consumable.ConsumableEffect}  || Consumable Increases Health: {consumable.ConsumableIncreaseHealth}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Increases Defense: {consumable.ConsumableIncreaseDefense}  ||  Consumable Increases Attack: {consumable.ConsumableIncreaseAttack}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Does Damage To An Enemy: {consumable.ConsumableDoesDamageToEnemy}  ||  Consumable Health Increase Amount: {consumable.ConsumableHealthIncreaseAmount}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Defense Increase Amount: {consumable.ConsumableDefenseIncreaseAmount}  ||  Consumable Attack Increase Amount: {consumable.ConsumableAttackIncreaseAmount}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Consumable Damage Amount to Enemy: {consumable.ConsumableDamageToEnemy}     \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
             PressAnyKeyToContinue();
             ManageConsumables();
         }
@@ -2934,10 +4225,10 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.DarkYellow;
-        WriteLine("Enter the ID of the consumable you want to update:");
+        WriteLine("Enter the ID of the Consumable you want to update:");
         int consumableId = int.Parse(ReadLine()!);
 
-        Write("consumable Name: ");
+        Write("Consumable Name: ");
         string consumableName= ReadLine()!;
 
         Write("Consumable Description: ");
@@ -2994,11 +4285,11 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Consumable", consumableContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("Consumable is updated successfully");
+                WriteLine("Consumable has been updated successfully");
             }
             else
             {
-                WriteLine("Failed to updated consumable");
+                WriteLine("Failed to update Consumable");
             }
             PressAnyKeyToContinue();
             ManageConsumables();
@@ -3009,7 +4300,7 @@ public class ProgramUI
     {
         Clear();
         ForegroundColor = ConsoleColor.Cyan;
-        WriteLine("Please enter the ConsumableId of the consumable you want to delete:");
+        WriteLine("Please enter the Consumable Id of the consumable you want to delete:");
         int consumableId = int.Parse(Console.ReadLine()!);
 
         HttpClient httpClient = new HttpClient();
@@ -3048,13 +4339,45 @@ public class ProgramUI
 
             ArmourDetailUI armour = response.Content.ReadAsAsync<ArmourDetailUI>().Result;
             Clear();
-            WriteLine("==================================================");
-            WriteLine(armour.ArmourName);
-            Write("You have choosen: ");
-            WriteLine(armour.ArmourDescription);
-            WriteLine("==================================================");
-            ReadKey();
-            StartAGame();
+
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here is the information on the Armour       |\n" +
+                      $"|  with ID: {armourId}                        |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+            WriteLine("   ");
+
+            WriteLine("|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"| Armour Id: {armour.ArmourId} ||  ArmourName: {armour.ArmourName}                                    \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"| Armour Description: {armour.ArmourDescription}                  \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Armour Provides Defense: {armour.ArmourProvidesDefense}  ||  Armour Increases Health: {armour.ArmourIncreasesHealth}\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Armour Increases Sword Attacks: {armour.ArmourIncreasesSwordAttacks}  ||  Armour Increases Ranged Attacks: {armour.ArmourIncreasesRangedAttacks}  \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Sword Damage Increase: {armour.IncreasedSwordDamageAmount}  ||  Health Increase Amount: {armour.IncreasedHealthAmount}\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Ranged Damage Increase Amount: {armour.IncreasedRangeAttackDamageAmount}  ||  Armour Protection Amount: {armour.IncreasedDefenseAmount}  \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+
+            PressAnyKeyToContinue();
+            ManageArmours();
         }
     }
 
@@ -3107,8 +4430,6 @@ public class ProgramUI
                 ArmourIncreasesHealth = armourIncreasesHealth,
                 ArmourIncreasesSwordAttacks = armourIncreasesSwordAttacks,
                 ArmourIncreasesRangedAttacks = armourIncreasesRangedAttacks,
-
-
             };
             HttpClient httpClient = new HttpClient();
 
@@ -3117,14 +4438,14 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Armour", armourContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("Armour is updated successfully");
+                WriteLine("Armour has been updated successfully");
             }
             else
             {
                 WriteLine("Failed to update armour. Status Code: " + response.StatusCode);
                 }
                 PressAnyKeyToContinue();
-            }
+        }
     }
 
     private void DeleteExistingArmour()
@@ -3148,6 +4469,7 @@ public class ProgramUI
         }
 
         PressAnyKeyToContinue();
+        ManageArmours();
     }
 
     private void AddANewArmour()
@@ -3210,13 +4532,50 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Armour", armourContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("new armour added successfully");
+                ArmourDetailUI armourCreated = response.Content.ReadAsAsync<ArmourDetailUI>().Result;
+                WriteLine("|=============================================|\n" +
+                          "|                                             |\n" +
+                          $"| Here is the information on the armour that  |\n" +
+                          "|     was created.                            |\n" +
+                          "|                                             |\n" +
+                          "|=============================================|\n");
+                    
+                WriteLine("  ");
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Armour Id: {armourCreated.ArmourId} ||  ArmourName: {armourCreated.ArmourName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Armour Description: {armourCreated.ArmourDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Armour Provides Defense: {armourCreated.ArmourProvidesDefense}  ||  Armour Increases Health: {armourCreated.ArmourIncreasesHealth}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Armour Increases Sword Attacks: {armourCreated.ArmourIncreasesSwordAttacks}  ||  Armour Increases Ranged Attacks: {armourCreated.ArmourIncreasesRangedAttacks}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Sword Damage Increase: {armourCreated.IncreasedSwordDamageAmount}  ||  Health Increase Amount: {armourCreated.IncreasedHealthAmount}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Ranged Damage Increase Amount: {armourCreated.IncreasedRangeAttackDamageAmount}  ||  Armour Protection Amount: {armourCreated.IncreasedDefenseAmount}  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+
+                WriteLine("The New Armour was added successfully");
             }
             else
             {
-                WriteLine("Failed to add new Armour");
+                WriteLine("Failed to add the New Armour");
             }
             PressAnyKeyToContinue();
+            ManageArmours();
         }
     }
     private void ManageArmours()
@@ -3290,13 +4649,12 @@ public class ProgramUI
                     "|  Game?                                |\n" +
                     "|=======================================|\n" +
                     "|                                       |\n" +
-                    "|  1. View All Vehicles                  |\n" +
-                    "|  2. View Vehicle By Id                 |\n" +
-                    "|  3. Update Existing Vehicle            |\n" +
-                    "|  4. Add a New Vehicle                  |\n" +
-                    "|  5. Delete a Vehicle                   |\n" +
+                    "|  1. View All Vehicles                 |\n" +
+                    "|  2. View Vehicle By Id                |\n" +
+                    "|  3. Update Existing Vehicle           |\n" +
+                    "|  4. Add a New Vehicle                 |\n" +
+                    "|  5. Delete a Vehicle                  |\n" +
                     "|  0. Return to Main Menu               |\n" +
-
                     "|=======================================|");
         try
         {
@@ -3324,7 +4682,7 @@ public class ProgramUI
                     break;
 
                 case 0:
-                    Run();
+                    ManageGameItemDetails();
 
                     break;
 
@@ -3341,8 +4699,6 @@ public class ProgramUI
         }
     }
 
-
-
     private void ManageAbilities()
     {
         Clear();
@@ -3358,7 +4714,7 @@ public class ProgramUI
                     "|  2. View Abilities By Id              |\n" +
                     "|  3. Update Existing Ability           |\n" +
                     "|  4. Add a New Ability                 |\n" +
-                    "|  5. Delete an Ability                  |\n" +
+                    "|  5. Delete an Ability                 |\n" +
                     "|  0. Return to Manage Game Items       |\n" +
                     "|=======================================|");
         try
@@ -3409,7 +4765,7 @@ public class ProgramUI
         ForegroundColor = ConsoleColor.DarkGreen;
         WriteLine("|====================================================|\n" +
                     "|                                                   |\n" +
-                    "|  Please enter an Ability Id to View an Ability: |\n" +
+                    "|  Please enter an Ability Id to View an Ability:   |\n" +
                     "|                                                   |\n" +
                     "|===================================================|\n");
         int abilityId = int.Parse(Console.ReadLine()!);
@@ -3417,16 +4773,48 @@ public class ProgramUI
         HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Ability/{abilityId}").Result;
         if (response.IsSuccessStatusCode)
         {
-            // var content = response.Content.ReadAsStringAsync().Result;
-            // var characters = JsonConvert.DeserializeObject<CharacterListUI>(content);
-
             AbilityDetailUI ability = response.Content.ReadAsAsync<AbilityDetailUI>().Result;
+            
             Clear();
-            WriteLine("==================================================");
-            WriteLine(ability.AbilityName);
-            Write("You have choosen: ");
-            WriteLine(ability.AbilityDescription);
-            WriteLine("==================================================");
+
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here is the information on the Ability      |\n" +
+                      $"|  with ID: {abilityId}                    |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+
+            WriteLine("|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"| Ability Id: {ability.AbilityId} ||  Ability Name: {ability.AbilityName}                                    \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"| Ability Description: {ability.AbilityDescription}                  \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Ability Effect Type: {ability.AbilityEffectType}  ||  Ability is an Attack: {ability.AbilityEffectAttack}\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Ability Enhances Health: {ability.AbilityEffectHealthEnhancement}  ||  Ability Enhances Defence: {ability.AbilityEffectDefenseEnhancement}  \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Ability Has A Status Effect: {ability.AbilityHasStatusEffect}  ||  Ability Does Damage to Single Enemy: {ability.AbilityDamageSingleEnemy}\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Ability Does Damage to Multipl Enemies: {ability.AbilityDamageMultipleEnemy}  ||  Ability Attack Damage Amount: {ability.AbilityAttackDamage}  \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Ability Healing Amount: {ability.AbilityHealingAmount} || Ability Defense Increase Amount: {ability.AbilityDefenseIncrease} || Ability Effect Time Limit: {ability.AbilityEffectTimeLimit}\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
 
             PressAnyKeyToContinue();
             ManageAbilities();
@@ -3507,11 +4895,11 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PutAsync("http://localhost:5211/api/Ability", abilityContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("Ability is updated successfully");
+                WriteLine("Ability has been updated successfully");
             }
             else
             {
-                WriteLine("Failed to update an ability. Status Code: " + response.StatusCode);
+                WriteLine("Failed to update the ability. Status Code: " + response.StatusCode);
             }
             PressAnyKeyToContinue();
             ManageAbilities();
@@ -3590,7 +4978,7 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Ability", abilityContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("new ability added successfully");
+                WriteLine("The new ability has been added successfully!!!");
             }
             else
             {
@@ -3671,11 +5059,11 @@ public class ProgramUI
             HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/Vehicle", VehicleContent).Result;
             if (response.IsSuccessStatusCode)
             {
-                WriteLine("new game added successfully");
+                WriteLine("The new Vehicle was added successfully!!!");
             }
             else
             {
-                WriteLine("Failed to add new Game");
+                WriteLine("Failed to add the new vehicle to the game.");
             }
             PressAnyKeyToContinue();
             ManageVehicles();
@@ -3683,6 +5071,54 @@ public class ProgramUI
     }
 
     private void ViewAllVehicles()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkMagenta;
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync("http://localhost:5211/api/Vehicle").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            List<VehicleDetailUI> vehicles = response.Content.ReadAsAsync<List<VehicleDetailUI>>().Result;
+
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here are all the Vehicles currently        |\n" +
+                      "|     Available                               |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+
+            foreach (var vehicle in vehicles)
+            {
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Vehicle Id: {vehicle.VehicleId} ||  Vehicle Name: {vehicle.VehicleName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Vehicle Speed: {vehicle.VehicleSpeed} ||  Vehicle Description: {vehicle.VehicleDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Vehicle Ability: {vehicle.VehicleAbility}  ||  Vehicle Type: {vehicle.VehicleType}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Vehicle Attack Damage: {vehicle.VehicleAttackDamage}  ||  Vehicle Health: {vehicle.VehicleHealth}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+                WriteLine("  ");
+            }
+
+            PressAnyKeyToContinue();
+            ManageVehicles();
+        }
+    }
+
+    private void ViewAllVehiclesForCharacterCreate()
     {
         ForegroundColor = ConsoleColor.DarkMagenta;
 
@@ -3695,25 +5131,34 @@ public class ProgramUI
 
             foreach (var vehicle in vehicles)
             {
-                WriteLine(
-                          $"VehicleId {vehicle.VehicleId} \n" +
-                          $"VehicleName: {vehicle.VehicleName} \n" +
-                          $"VehicleSpeed: {vehicle.VehicleSpeed} \n" +
-                          $"VehicleAbility: {vehicle.VehicleAbility} \n" +
-                          $"VehicleType: {vehicle.VehicleType} \n" +
-                          $"VehicleDescription: {vehicle.VehicleDescription} \n" +
-                          $"VehicleAttackDamage: {vehicle.VehicleAttackDamage} \n" +
-                          $"VehicleHealth: {vehicle.VehicleHealth} \n");
+                WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Vehicle Id: {vehicle.VehicleId} ||  Vehicle Name: {vehicle.VehicleName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Vehicle Speed: {vehicle.VehicleSpeed} ||  Vehicle Description: {vehicle.VehicleDescription}                  \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Vehicle Ability: {vehicle.VehicleAbility}  ||  Vehicle Type: {vehicle.VehicleType}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Vehicle Attack Damage: {vehicle.VehicleAttackDamage}  ||  Vehicle Health: {vehicle.VehicleHealth}\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+                WriteLine("  ");
+                WriteLine("  ");
             }
-
-            PressAnyKeyToContinue();
         }
     }
 
     private void ViewVehicleById()
     {
         Clear();
-        ForegroundColor = ConsoleColor.Black;
+        ForegroundColor = ConsoleColor.DarkMagenta;
         WriteLine("Please enter a VehicleId to look up a Vehicle Details.");
         var vehicleId = int.Parse(Console.ReadLine()!);
 
@@ -3723,18 +5168,25 @@ public class ProgramUI
         if (response.IsSuccessStatusCode)
         {
             VehicleDetailUI vehicle = response.Content.ReadAsAsync<VehicleDetailUI>().Result;
-            WriteLine(
-                  $"VehicleId {vehicle.VehicleId} \n" +
-                  $"VehicleName: {vehicle.VehicleName} \n" +
-                  $"VehicleSpeed: {vehicle.VehicleSpeed} \n" +
-                  $"VehicleAbility: {vehicle.VehicleAbility} \n" +
-                  $"VehicleType: {vehicle.VehicleType} \n" +
-                  $"VehicleDescription: {vehicle.VehicleDescription} \n" +
-                  $"VehicleAttackDamage: {vehicle.VehicleAttackDamage} \n" +
-                  $"VehicleHealth: {vehicle.VehicleHealth} \n"
-                  );
-            PressAnyKeyToContinue();
-            ManageVehicles();
+
+            WriteLine("|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"| Vehicle Id: {vehicle.VehicleId} ||  Vehicle Name: {vehicle.VehicleName}                                    \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Vehicle Speed: {vehicle.VehicleSpeed} ||  Vehicle Description: {vehicle.VehicleDescription}                  \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Vehicle Ability: {vehicle.VehicleAbility}  ||  Vehicle Type: {vehicle.VehicleType}\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Vehicle Attack Damage: {vehicle.VehicleAttackDamage}  ||  Vehicle Health: {vehicle.VehicleHealth}\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n");
+            WriteLine("  ");
         }
     }
 
@@ -3819,6 +5271,328 @@ public class ProgramUI
             PressAnyKeyToContinue();
             ManageVehicles();
         }
+    }
+
+    private void ManageCharacterClasses()
+    {
+        Console.Clear();
+        ForegroundColor = ConsoleColor.White;
+        WriteLine("|=======================================|\n" +
+                    "|                                       |\n" +
+                    "|  What would you like to do with the   |\n" +
+                    "|        Character Classes?             |\n" +
+                    "|                                       |\n" +
+                    "|=======================================|\n" +
+                    "|                                       |");
+        ConsoleKeyInfo key;
+        int option = 1;
+        bool isSelected = false;
+        (int left, int top) = Console.GetCursorPosition();
+        string color = "👻\u001b[35m";
+
+            while(!isSelected)
+            {   Console.SetCursorPosition(left, top);
+                WriteLine($"|{(option == 1 ? color : "  ")}1. View All Character Classes\u001b[37m        |");
+                WriteLine($"|{(option == 2 ? color : "  ")}2. View Character Class By Id\u001b[37m        |");
+                WriteLine($"|{(option == 3 ? color : "  ")}3. Update Existing Character Class\u001b[37m   |");
+                WriteLine($"|{(option == 4 ? color : "  ")}4. Add a New Character Class\u001b[37m         |");
+                WriteLine($"|{(option == 5 ? color : "  ")}5. Delete a Character Class\u001b[37m          |");
+                WriteLine($"|{(option == 6 ? color : "  ")}6. Return to Main Menu\u001b[37m               |");
+                WriteLine("|                                       |\u001b[37m");
+                WriteLine("|=======================================|\u001b[37m");
+            try
+            {
+                key = Console.ReadKey(true); 
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        option = (option == 6 ? 1 : option + 1);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        option = (option == 1 ? 6 : option -1);
+                        break;
+
+                    case ConsoleKey.Enter:
+                        isSelected = true;
+                        break;
+
+                    default:
+                        WriteLine("Invalid Selection Please Try Again");
+                        PressAnyKeyToContinue();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Bad selection.. Press any key to continue");
+                Console.ReadKey();
+            }
+                
+            }            
+        
+        try
+        {
+            var userInput = option;
+            switch (userInput)
+            {
+                case 1:
+                    ViewAllCharacterClasses();
+                    break;
+
+                case 2:
+                    ViewCharacterClassById();
+                    break;
+
+                case 3:
+                    UpdateExistingCharacterClass();
+                    break;
+
+                case 4:
+                    AddANewCharacterClass();
+                    break;
+
+                case 5:
+                    DeleteExistingCharacterClass();
+                    break;
+
+                case 6:
+                    ManageGameItemDetails();
+                    break;
+
+                default:
+                    System.Console.WriteLine("Invalid Entry Please Try Again");
+                    PressAnyKeyToContinue();
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Bad selection.. Press any key to continue");
+            Console.ReadKey();
+        }
+    }
+
+    private void ViewCharacterClassById()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkBlue;
+        WriteLine("Please enter a Character Class Id to look up a Character.");
+        var characterClassId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.GetAsync($"http://localhost:5211/api/Consumable/{characterClassId}").Result;
+        if (response.IsSuccessStatusCode)
+        {
+            CharacterClassListUI characterClass = response.Content.ReadAsAsync<CharacterClassListUI>().Result;
+
+            WriteLine("|=============================================|\n" +
+                      "|                                             |\n" +
+                      $"| Here is the information on the Character    |\n" +
+                      $"|  Class with ID: {characterClassId}          |\n" +
+                      "|                                             |\n" +
+                      "|=============================================|\n");
+
+            WriteLine("  ");
+
+             WriteLine("|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"| Character Class Id: {characterClass.CharacterClassId} ||  Character Class Name: {characterClass.CharacterClassName}                                    \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|Character Class Description:                                                                                                                                             |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|{characterClass.CharacterClassDescription} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Character Class Special Ability: {characterClass.CharacterClassSpecialAbility}  \n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"{characterClass.SpecialAbilityDescription} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Is an Attack: {characterClass.SpecialAbilityIsAnAttack}  ||  Special Ability Heals: {characterClass.SpecialAbilityHeals} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Provides Defense: {characterClass.SpecialAbilityProvidesDefense}  ||  Special Ability Provides Status Effect: {characterClass.SpecialAbilityProvidesStatusEffect} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Damage Amount: {characterClass.SpecialAbilityDamage}  ||  Special Ability Healing Amount: {characterClass.SpecialAbilityHealingAmount} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n" +
+                          "|                                                                                                                                                                         |\n" +
+                          $"|Special Ability Defense Amount: {characterClass.SpeacialAbilityDefenseAmount}  ||  Special Ability Duration: {characterClass.SpecialAbilityDuration} \n" +
+                          "|                                                                                                                                                                         |\n" +
+                          "|=========================================================================================================================================================================|\n");
+        }
+        
+        PressAnyKeyToContinue();
+        ManageCharacterClasses();
+    }
+
+    private void DeleteExistingCharacterClass()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.Green;
+        WriteLine("Please enter the Character Class Id of the Class you want to delete:");
+        int classId = int.Parse(Console.ReadLine()!);
+
+        HttpClient httpClient = new HttpClient();
+
+        HttpResponseMessage response = httpClient.DeleteAsync($"http://localhost:5211/api/Vehicle/{classId}").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            WriteLine("Character Class was deleted successfully.");
+        }
+        else
+        {
+            WriteLine("Failed to delete the Character Class. Status Code: " + response.StatusCode);
+        }
+
+        PressAnyKeyToContinue();
+        ManageCharacterClasses();
+    }
+
+    private void UpdateExistingCharacterClass()
+    {
+
+    }
+
+    private void AddANewCharacterClass()
+    {
+        Clear();
+        ForegroundColor = ConsoleColor.DarkYellow;
+        WriteLine("Please Enter the details for the new Character Class in the following Prompts:");
+        PressAnyKeyToContinue();
+        Clear();
+
+        Write("Pleass enter a name for the Character Class: ");
+        string characterClassName = ReadLine()!;
+        Clear();
+
+        Write("Please enter a Description for the Character Class: ");
+        string characterClassDescription = ReadLine()!;
+        Clear();
+
+        Write("Please enter a Character Class Special Ability: ");
+        string characterClassSpecialAbility = Console.ReadLine();
+        Clear();
+
+        Write("Please enter a desccription for the special ability: ");
+        string specialAbilityDescription = Console.ReadLine();
+        Clear();
+
+        Write("Please enter true or false for if Special Ability is an Attack: ");
+        bool specialAbilityIsAnAttack = bool.Parse(Console.ReadLine()!);
+        Clear();
+
+        Write("Please enter true or false for if Special Ability Heals: ");
+        bool specialAbilityHeals = bool.Parse(Console.ReadLine()!);
+        Clear();
+
+        Write("Please enter true or false for if Special Ability Provides Defense: ");
+        bool specialAbilityProvidesDefense = bool.Parse(Console.ReadLine()!);
+        Clear();
+
+        Write("Please enter true or false for if Special Ability Provides a Status Effect: ");
+        bool specialAbilityProvidesStatusEffect = bool.Parse(Console.ReadLine()!);
+        Clear();
+
+        Write("Please enter a value for the Amount of Damage the Special Ability does : ");
+        int specialAbilityDamage = int.Parse(Console.ReadLine()!);
+        Clear();
+
+        Write("Please enter a value for the Amount of Healing the Special Ability does: ");
+        int specialAbilityHealingAmount = int.Parse(Console.ReadLine()!);
+        Clear();
+
+        Write("Please enter a value for the Amount of Defense the Special Ability provides: ");
+        int speacialAbilityDefenseAmount = int.Parse(Console.ReadLine()!);
+        Clear();
+
+        Write("Please enter how long the Special Ability Lasts: ");
+        string specialAbilityDuration = Console.ReadLine();
+
+        CharacterClassCreate characterClassCreation = new CharacterClassCreate
+        {
+            CharacterClassName = characterClassName,
+            CharacterClassDescription = characterClassDescription,
+            CharacterClassSpecialAbility = characterClassSpecialAbility,
+            SpecialAbilityDescription = specialAbilityDescription,
+            SpecialAbilityIsAnAttack = specialAbilityIsAnAttack,
+            SpecialAbilityHeals = specialAbilityHeals,
+            SpecialAbilityProvidesDefense = specialAbilityProvidesDefense,
+            SpecialAbilityProvidesStatusEffect = specialAbilityProvidesStatusEffect,
+            SpecialAbilityDamage = specialAbilityDamage,
+            SpecialAbilityHealingAmount = specialAbilityHealingAmount,
+            SpeacialAbilityDefenseAmount = speacialAbilityDefenseAmount,
+            SpecialAbilityDuration = specialAbilityDuration
+        };
+
+        var createClass = new StringContent(JsonConvert.SerializeObject(characterClassCreation), Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = httpClient.PostAsync("http://localhost:5211/api/CharacterClass", createClass).Result;
+        if (response.IsSuccessStatusCode)
+        {
+            CharacterClassListUI classCreated = response.Content.ReadAsAsync<CharacterClassListUI>().Result;
+
+            WriteLine("|=============================================|\n" +
+                          "|                                             |\n" +
+                          $"| Here is the information on the Character   |\n" +
+                          "|  Class that was created.                    |\n" +
+                          "|                                             |\n" +
+                          "|=============================================|\n");
+                    
+            WriteLine("  ");
+            WriteLine("|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"| Character Class Id: {classCreated.CharacterClassId} ||  Character Class Name: {classCreated.CharacterClassName}                                    \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|Character Class Description:                                                                                                                                             |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|{classCreated.CharacterClassDescription} \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Character Class Special Ability: {classCreated.CharacterClassSpecialAbility}  \n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"{classCreated.SpecialAbilityDescription} \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Special Ability Is an Attack: {classCreated.SpecialAbilityIsAnAttack}  ||  Special Ability Heals: {classCreated.SpecialAbilityHeals} \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Special Ability Provides Defense: {classCreated.SpecialAbilityProvidesDefense}  ||  Special Ability Provides Status Effect: {classCreated.SpecialAbilityProvidesStatusEffect} \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Special Ability Damage Amount: {classCreated.SpecialAbilityDamage}  ||  Special Ability Healing Amount: {classCreated.SpecialAbilityHealingAmount} \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n" +
+                      "|                                                                                                                                                                         |\n" +
+                      $"|Special Ability Defense Amount: {classCreated.SpeacialAbilityDefenseAmount}  ||  Special Ability Duration: {classCreated.SpecialAbilityDuration} \n" +
+                      "|                                                                                                                                                                         |\n" +
+                      "|=========================================================================================================================================================================|\n");
+                WriteLine("  ");
+        }
+
+        PressAnyKeyToContinue();
+        ManageCharacterClasses();
     }
 
     private bool ExitApplication()

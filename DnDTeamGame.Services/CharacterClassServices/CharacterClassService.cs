@@ -38,10 +38,10 @@ namespace DnDTeamGame.Services.CharacterClassServices
             return null;
         }
 
-        public async Task<IEnumerable<CharacterClassList>> GetAllCharacterClassesAsync()
+        public async Task<IEnumerable<CharacterClassDetail>> GetAllCharacterClassesAsync()
         {
             var characterClasses = await _dbContext.CharacterClasses
-                .Select(entity => _mapper.Map<CharacterClassEntity, CharacterClassList>(entity))
+                .Select(entity => _mapper.Map<CharacterClassEntity, CharacterClassDetail>(entity))
                 .ToListAsync();
 
             return characterClasses;
