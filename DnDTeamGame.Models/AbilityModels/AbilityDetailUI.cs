@@ -32,12 +32,15 @@ namespace DnDTeamGame.Models.AbilityModels
         [JsonProperty("AbilityEffectAttack")]
         [JsonPropertyName("AbilityEffectAttack")]
         public bool AbilityEffectAttack { get; set; }
+
         [JsonProperty("AbilityEffectHealthEnhancement")]
         [JsonPropertyName("AbilityEffectHealthEnhancement")]
         public bool AbilityEffectHealthEnhancement { get; set; }
+
         [JsonProperty("AbilityEffectDefenseEnhancement")]
         [JsonPropertyName("AbilityEffectDefenseEnhancement")]
         public bool AbilityEffectDefenseEnhancement { get; set; }
+
         [JsonProperty("AbilityHasStatusEffect")]
         [JsonPropertyName("AbilityHasStatusEffect")]
         public bool AbilityHasStatusEffect { get; set; }
@@ -46,6 +49,7 @@ namespace DnDTeamGame.Models.AbilityModels
         [JsonProperty("AbilityDamageSingleEnemy")]
         [JsonPropertyName("AbilityDamageSingleEnemy")]
         public bool AbilityDamageSingleEnemy { get; set; }
+        
         [JsonProperty("AbilityDamageMultipleEnemy")]
         [JsonPropertyName("AbilityDamageMultipleEnemy")]
         public bool AbilityDamageMultipleEnemy { get; set; }

@@ -110,11 +110,13 @@ public class CharacterService : ICharacterService
     {
         List<CharacterListItem> characters = await _dbContext.Characters
             .Where(entity => entity.UserId == userId)
+            .Include((c => c.CharacterClass))
             .Select(entity => new CharacterListItem
             {
                 CharacterId = entity.CharacterId,
                 CharacterName = entity.CharacterName,
                 CharacterDescription = entity.CharacterDescription,
+                ClassBackstoryForCharacter = entity.CharacterClass.ClassBackstoryForCharacter,
                 DateCreated = entity.DateCreated
             })
             .ToListAsync();
@@ -171,6 +173,7 @@ public class CharacterService : ICharacterService
             HairStyleName = entity.HairStyle.HairStyleName,
             CharacterClassName = entity.CharacterClass.CharacterClassName,
             CharacterClassDescription = entity.CharacterClass.CharacterClassDescription,
+            ClassBackstoryForCharacter = entity.CharacterClass.ClassBackstoryForCharacter,
 
             //* ICollection properties of the CharacterEntity
             AbilityName = entity.AbilitiesList.Select(a => a.AbilityName).ToList(),
